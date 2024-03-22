@@ -7,12 +7,25 @@
 
     <fragment
         android:id="@+id/myStockFragment"
-        android:name="com.yes.tfgapp.views.MyStockFragment"
+        android:name="com.yes.tfgapp.ui.mystock.MyStockFragment"
         android:label="fragment_my_stock"
         tools:layout="@layout/fragment_my_stock" />
     <fragment
         android:id="@+id/shoppingListFragment"
-        android:name="com.yes.tfgapp.views.ShoppingListFragment"
+        android:name="com.yes.tfgapp.ui.shoppinglist.ShoppingListFragment"
         android:label="fragment_shopping_list"
-        tools:layout="@layout/fragment_shopping_list" />
+        tools:layout="@layout/fragment_shopping_list" >
+        <action
+            android:id="@+id/action_shoppingListFragment_to_addShoppingListFragment"
+            app:destination="@id/addShoppingListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addShoppingListFragment"
+        android:name="com.yes.tfgapp.ui.shoppinglist.AddShoppingListFragment"
+        android:label="fragment_add_shopping_list"
+        tools:layout="@layout/fragment_add_shopping_list" >
+        <action
+            android:id="@+id/action_addShoppingListFragment_to_shoppingListFragment"
+            app:destination="@id/shoppingListFragment" />
+    </fragment>
 </navigation>

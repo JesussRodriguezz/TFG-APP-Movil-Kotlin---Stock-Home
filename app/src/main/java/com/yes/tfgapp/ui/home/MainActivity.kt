@@ -1,16 +1,20 @@
-package com.yes.tfgapp
+package com.yes.tfgapp.ui.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.yes.tfgapp.databinding.ActivityMainBinding
+import com.yes.tfgapp.R
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    private lateinit var tvTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,5 +31,11 @@ class MainActivity : AppCompatActivity() {
         val navHost= supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHost.navController
         binding.bottomNavView.setupWithNavController(navController)
+
+        tvTitle = binding.tvTitleToolbar
+    }
+
+    fun setToolbarTitle(title: String) {
+        tvTitle.text = title
     }
 }
