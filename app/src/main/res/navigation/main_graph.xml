@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/shoppingListFragment">
+
+    <fragment
+        android:id="@+id/myStockFragment"
+        android:name="com.yes.tfgapp.views.MyStockFragment"
+        android:label="fragment_my_stock"
+        tools:layout="@layout/fragment_my_stock" />
+    <fragment
+        android:id="@+id/shoppingListFragment"
+        android:name="com.yes.tfgapp.views.ShoppingListFragment"
+        android:label="fragment_shopping_list"
+        tools:layout="@layout/fragment_shopping_list" />
+</navigation>
