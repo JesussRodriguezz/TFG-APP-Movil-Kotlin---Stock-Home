@@ -16,16 +16,16 @@
         android:label="fragment_shopping_list"
         tools:layout="@layout/fragment_shopping_list" >
         <action
-            android:id="@+id/action_shoppingListFragment_to_addShoppingListFragment"
-            app:destination="@id/addShoppingListFragment" />
+            android:id="@+id/action_shoppingListFragment_to_shoppingListDetailFragment"
+            app:destination="@id/shoppingListDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addShoppingListFragment"
-        android:name="com.yes.tfgapp.ui.shoppinglist.AddShoppingListFragment"
-        android:label="fragment_add_shopping_list"
-        tools:layout="@layout/fragment_add_shopping_list" >
-        <action
-            android:id="@+id/action_addShoppingListFragment_to_shoppingListFragment"
-            app:destination="@id/shoppingListFragment" />
+        android:id="@+id/shoppingListDetailFragment"
+        android:name="com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailFragment"
+        android:label="fragment_shopping_list_detail"
+        tools:layout="@layout/fragment_shopping_list_detail" >
+        <argument
+            android:name="CurrentShoppingList"
+            app:argType="com.yes.tfgapp.domain.model.ShoppingListModel" />
     </fragment>
 </navigation>
