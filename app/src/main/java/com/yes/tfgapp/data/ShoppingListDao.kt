@@ -23,6 +23,4 @@ interface ShoppingListDao {
     @Query("SELECT * FROM shopping_list ORDER BY id ASC")
     fun readAllData(): LiveData<List<ShoppingListModel>>
 
-    @Query("DELETE FROM shopping_list WHERE id = :id")
-    abstract fun deleteShoppingListById(id: Int)
 }

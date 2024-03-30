@@ -19,10 +19,6 @@ class ShoppingListRepository(private val shoppingListDao: ShoppingListDao) {
         shoppingListDao.deleteShoppingList(shoppingList)
     }
 
-    fun deleteShoppingListById(id: Int) {
-        shoppingListDao.deleteShoppingListById(id)
-
-    }
 
 
 }
