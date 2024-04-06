@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/primaryGrey">
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvProductName"
         android:text="Product Name"
         style="@style/TitleToolbar"
+        android:textSize="20sp"
         android:textColor="@color/black"
-        android:layout_margin="58dp"/>
+        android:paddingVertical="8dp"
+        android:paddingLeft="16dp"/>
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

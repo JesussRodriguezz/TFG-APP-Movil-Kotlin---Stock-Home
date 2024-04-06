@@ -12,9 +12,9 @@ class ProductRepository(private val productDao: ProductDao) {
         val fixedProducts= FixedProducts.entries
         for(product in fixedProducts){
             val productExists= productDao.getProductById(product.id)
-            val product = ProductModel(product.id, product.name, product.category)
+            val prod = ProductModel(product.id, product.product_name, product.category_id)
             if(productExists==null){
-                productDao.addProduct(product)
+                productDao.addProduct(prod)
             }
         }
     }
@@ -30,13 +30,13 @@ class ProductRepository(private val productDao: ProductDao) {
         productDao.deleteProduct(product)
     }
 
-    fun productsByCategory(category: CategoryModel): LiveData<List<ProductModel>> {
+    /*fun productsByCategory(category: CategoryModel): LiveData<List<ProductModel>> {
 
         val example = productDao.productsByCategoryNoLive(category.name)
         println("AAA $example")
 
         return productDao.productsByCategory(category.name)
-    }
+    }*/
 
 
 

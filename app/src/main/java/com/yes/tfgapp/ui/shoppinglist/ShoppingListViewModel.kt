@@ -19,7 +19,8 @@ class ShoppingListViewModel(application: Application): AndroidViewModel(applicat
     private val repository: ShoppingListRepository
 
     private val productRepository: ProductRepository
-    private val cateogoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository
+
 
     init {
         val shoppingListDao = AppDataBase.getDatabase(application).shoppingListDao()
@@ -30,16 +31,25 @@ class ShoppingListViewModel(application: Application): AndroidViewModel(applicat
         productRepository = ProductRepository(productDao)
 
         val categoryDao = AppDataBase.getDatabase(application).categoryDao()
-        cateogoryRepository = CategoryRepository(categoryDao)
+        categoryRepository = CategoryRepository(categoryDao)
 
         val firstTime = sharedPreferences.getBoolean("firstTime", true)
         if (firstTime) {
             viewModelScope.launch(Dispatchers.IO) {
+                categoryRepository.addFixedCategories()
                 productRepository.addFixedProducts()
-                cateogoryRepository.addFixedCategories()
             }
             sharedPreferences.edit().putBoolean("firstTime", false).apply()
         }
+
+        //Hacemos que todas las categorias inicialmente esten deseleccionadas
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryRepository.updateAllCategories(false)
+        }
+
+
+
+
     }
 
     fun addShoppingList(shoppingList: ShoppingListModel){

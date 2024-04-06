@@ -33,4 +33,9 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
         categoryDao.updateCategories(updatedCategories)
 
     }
+
+    fun updateAllCategories(isSelected: Boolean) {
+        categoryDao.updateAllCategories(isSelected)
+
+    }
 }

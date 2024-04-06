@@ -28,5 +28,8 @@ interface CategoryDao {
     @Update
     suspend fun updateCategories(updatedCategories: List<CategoryModel>)
 
+    @Query("UPDATE category SET isSelected = :selected")
+    fun updateAllCategories(selected: Boolean)
+
 
 }

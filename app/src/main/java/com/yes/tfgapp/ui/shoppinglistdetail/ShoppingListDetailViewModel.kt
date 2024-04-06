@@ -48,16 +48,22 @@ class ShoppingListDetailViewModel(application: Application): AndroidViewModel(ap
         }
     }
 
-    fun updateProductsByCategory(category: CategoryModel): LiveData<List<ProductModel>> {
-        readProductsByCategory = productRepository.productsByCategory(category)
-
-
-        return readProductsByCategory!!
-    }
-
     fun updateCategories(updatedCategories: List<CategoryModel>) {
         viewModelScope.launch(Dispatchers.IO) {
             categoryRepository.updateCategories(updatedCategories)
+        }
+
+    }
+
+    fun addCategory(category: CategoryModel){
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryRepository.addCategory(category)
+        }
+    }
+
+    fun deleteCategory(category: CategoryModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            categoryRepository.deleteCategory(category)
         }
 
     }

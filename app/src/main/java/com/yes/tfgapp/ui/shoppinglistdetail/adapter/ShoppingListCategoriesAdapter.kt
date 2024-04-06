@@ -8,28 +8,27 @@ import com.yes.tfgapp.databinding.CategoryListRowBinding
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.R
 
-class ShoppingListCategoriesAdapter(private val onItemSelected:(Int)-> Unit ): RecyclerView.Adapter<ShoppingListCategoriesAdapter.ShoppingListCategoriesViewHolder>() {
+class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)-> Unit, private val onConfigureSelected:(CategoryModel)->Unit ): RecyclerView.Adapter<ShoppingListCategoriesAdapter.ShoppingListCategoriesViewHolder>() {
 
-    var categoriesList = emptyList<CategoryModel>()
+    private var categoriesList = emptyList<CategoryModel>()
 
     inner class ShoppingListCategoriesViewHolder(private val binding:CategoryListRowBinding) : RecyclerView.ViewHolder(binding.root)  {
-        fun bind(currentItem: CategoryModel, onItemSelected: (Int) -> Unit){
-
-
-            val color = if(currentItem.isSelected){
-                R.color.accentRed
-            }else{
-                R.color.primaryGrey
-            }
-
-            binding.cvCategory.setBackgroundColor(ContextCompat.getColor(binding.cvCategory.context, color))
-
-            //binding.cvCategory.isSelected = currentItem.isSelected
+        fun bind(currentItem: CategoryModel, onItemSelected: (CategoryModel) -> Unit, onConfigureSelected: (CategoryModel) -> Unit){
+            binding.cvCategory.isSelected = currentItem.isSelected
             binding.tvCategoryName.text = currentItem.name
+            val color = if(currentItem.isSelected){
+                R.color.white
+            }else{
+                R.color.black
+            }
+            binding.tvCategoryName.setTextColor(ContextCompat.getColor(binding.tvCategoryName.context, color))
             binding.root.setOnClickListener {
-                onItemSelected(layoutPosition)
+                    onItemSelected(currentItem)
             }
 
+            binding.ibSettingsCategory.setOnClickListener {
+                onConfigureSelected(currentItem)
+            }
         }
     }
 
@@ -47,10 +46,10 @@ class ShoppingListCategoriesAdapter(private val onItemSelected:(Int)-> Unit ): R
 
     override fun onBindViewHolder(holder: ShoppingListCategoriesViewHolder, position: Int) {
         val currentItem = categoriesList[position]
-        holder.bind(currentItem, onItemSelected)
+        holder.bind(currentItem, onItemSelected, onConfigureSelected)
     }
 
-    fun setData(categories: List<CategoryModel>){
+    fun setCategoriesList(categories: List<CategoryModel>){
         this.categoriesList = categories
         notifyDataSetChanged()
     }

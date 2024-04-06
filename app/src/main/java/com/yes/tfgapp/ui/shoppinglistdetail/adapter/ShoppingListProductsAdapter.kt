@@ -2,18 +2,29 @@ package com.yes.tfgapp.ui.shoppinglistdetail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.CategoryListRowBinding
 import com.yes.tfgapp.databinding.ProductListRowBinding
 import com.yes.tfgapp.domain.model.ProductModel
 
 class ShoppingListProductsAdapter(): RecyclerView.Adapter<ShoppingListProductsAdapter.ShoppingListProductsViewHolder>(){
 
-    var productsList = emptyList<ProductModel>()
+    private var productsList = emptyList<ProductModel>()
 
     inner class ShoppingListProductsViewHolder(private val binding: ProductListRowBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(currentItem: ProductModel) {
-            binding.tvProductName.text = currentItem.name + " - " + currentItem.category
+
+            val backgroundColor = if(adapterPosition % 2 == 0){
+                R.color.primaryGrey
+            }else{
+                R.color.primaryWhite
+            }
+
+            binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, backgroundColor))
+            binding.tvProductName.text = currentItem.name
         }
 
     }
@@ -35,8 +46,8 @@ class ShoppingListProductsAdapter(): RecyclerView.Adapter<ShoppingListProductsAd
         holder.bind(currentItem)
     }
 
-    fun setData(products: List<ProductModel>){
+    fun setProductList(products: List<ProductModel>){
         this.productsList = products
-        notifyDataSetChanged()
     }
+
 }

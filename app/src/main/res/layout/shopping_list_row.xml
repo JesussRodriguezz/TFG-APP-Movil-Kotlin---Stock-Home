@@ -9,12 +9,13 @@
     app:cardBackgroundColor="@color/primaryGrey"
     app:cardCornerRadius="24dp">
 
+    <!--
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top"
         android:scaleType="centerCrop"
-        android:src="@drawable/prueba2" />
+        android:src="@drawable/prueba2" />-->
 
 
     <LinearLayout
@@ -53,7 +54,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_settings"
-                android:tint="@color/accentRed" />
+                app:tint="@color/accentRed" />
 
         </LinearLayout>
 

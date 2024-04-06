@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView"
         android:layout_marginVertical="16dp"
-        android:scrollbars="horizontal"
+        android:scrollbars="none"
         android:layout_marginLeft="12dp"/>
 
     <Button
@@ -72,8 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         android:layout_marginVertical="16dp"
-        android:scrollbars="horizontal"
-        android:layout_marginLeft="12dp"/>
+        android:scrollbars="horizontal"/>
 
 
 
