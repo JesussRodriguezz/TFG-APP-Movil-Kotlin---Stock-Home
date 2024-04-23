@@ -1,4 +1,4 @@
-package com.yes.tfgapp.ui.shoppinglistdetail.adapter
+package com.yes.tfgapp.ui.shoppinglistadditems.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -5,67 +5,50 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.yes.tfgapp.data.AppDataBase
-import com.yes.tfgapp.data.CategoryRepository
 import com.yes.tfgapp.data.ProductRepository
-import com.yes.tfgapp.data.ShoppingListRepository
-import com.yes.tfgapp.domain.model.CategoryModel
+import com.yes.tfgapp.data.ProductShoppingListRepository
 import com.yes.tfgapp.domain.model.ProductModel
+import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ShoppingListDetailViewModel(application: Application): AndroidViewModel(application){
-    private val sharedPreferences = application.getSharedPreferences("sharedPrefs", Application.MODE_PRIVATE)
+class ShoppingListDetailViewModel(aplication: Application, currentShoppingList: ShoppingListModel): AndroidViewModel(aplication){
 
-    private val shoppingListRepository: ShoppingListRepository
+
+    private val productShoppingListRepository: ProductShoppingListRepository
     private val productRepository: ProductRepository
-    private val categoryRepository: CategoryRepository
 
-    val readAllDataProduct: LiveData<List<ProductModel>>
-    var readProductsByCategory: LiveData<List<ProductModel>>? = null
+    val readAllDataProductShoppingList: LiveData<List<ProductShoppingListModel>>
 
-    val readAllDataCategory: LiveData<List<CategoryModel>>
+    val readAllDataProductBoughtShoppingList: LiveData<List<ProductShoppingListModel>>
 
+    init{
+        val productShoppingListDao = AppDataBase.getDatabase(aplication).productShoppingListDao()
+        productShoppingListRepository = ProductShoppingListRepository(productShoppingListDao)
 
-    init {
-
-        val shoppingListDao = AppDataBase.getDatabase(application).shoppingListDao()
-        shoppingListRepository = ShoppingListRepository(shoppingListDao)
-        val productDao = AppDataBase.getDatabase(application).productDao()
+        val productDao = AppDataBase.getDatabase(aplication).productDao()
         productRepository = ProductRepository(productDao)
-        readAllDataProduct = productRepository.readAllData
 
-        val categoryDao = AppDataBase.getDatabase(application).categoryDao()
-        categoryRepository = CategoryRepository(categoryDao)
-        readAllDataCategory = categoryRepository.readAllData
-
-
+        readAllDataProductShoppingList = productShoppingListRepository.getProductsForShoppingList(currentShoppingList.id)
+        readAllDataProductBoughtShoppingList= productShoppingListRepository.getProductsBoughtForShoppingList(currentShoppingList.id)
     }
 
-    fun updateCategory(category: CategoryModel){
+    fun getProductsForShoppingList(productShoppingList: List<ProductShoppingListModel>): LiveData<List<ProductModel>> {
+        val productIds = productShoppingList.map { it.productId }
+        return productRepository.getProductsById(productIds)
+    }
+
+    fun updateProductIsBought(productShoppingList: ProductShoppingListModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            categoryRepository.updateCategory(category)
+            productShoppingListRepository.updateProductShoppingListBoughtProduct(productShoppingList)
         }
     }
 
-    fun updateCategories(updatedCategories: List<CategoryModel>) {
+    fun updateProductIsNotBought(productShoppingList: ProductShoppingListModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            categoryRepository.updateCategories(updatedCategories)
+            productShoppingListRepository.updateProductShoppingListNotBoughtProduct(productShoppingList)
         }
-
-    }
-
-    fun addCategory(category: CategoryModel){
-        viewModelScope.launch(Dispatchers.IO) {
-            categoryRepository.addCategory(category)
-        }
-    }
-
-    fun deleteCategory(category: CategoryModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            categoryRepository.deleteCategory(category)
-        }
-
     }
 
 }

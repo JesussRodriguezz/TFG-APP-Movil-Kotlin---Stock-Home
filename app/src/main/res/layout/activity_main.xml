@@ -15,6 +15,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/primaryDark">
 
+        <ImageButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/ibBackArrow"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back_arrow_big"
+            app:tint="@color/white"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:visibility="invisible"/>
+
+
         <TextView
             android:id="@+id/tvTitleToolbar"
             android:layout_width="wrap_content"

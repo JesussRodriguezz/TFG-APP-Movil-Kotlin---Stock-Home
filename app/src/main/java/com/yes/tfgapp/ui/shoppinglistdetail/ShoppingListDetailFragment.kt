@@ -1,48 +1,44 @@
 package com.yes.tfgapp.ui.shoppinglistdetail
 
-import android.app.Dialog
+import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.FragmentShoppingListDetailBinding
-import com.yes.tfgapp.domain.model.CategoryModel
+import com.yes.tfgapp.domain.model.ProductModel
+import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
-import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
-import com.yes.tfgapp.ui.shoppinglistdetail.adapter.ShoppingListCategoriesAdapter
-import com.yes.tfgapp.ui.shoppinglistdetail.adapter.ShoppingListProductsAdapter
+import com.yes.tfgapp.ui.shoppinglistdetail.adapter.ShoppingListDetailAdapter
+import com.yes.tfgapp.ui.shoppinglistdetail.adapter.ShoppingListDetailBoughtAdapter
+import java.util.Timer
+import kotlin.concurrent.schedule
+
 
 class ShoppingListDetailFragment : Fragment() {
 
 
     private val args: ShoppingListDetailFragmentArgs by navArgs()
-
-    private lateinit var _binding: FragmentShoppingListDetailBinding
-    private val binding get() = _binding!!
-
+    private lateinit var _binding : FragmentShoppingListDetailBinding
     private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
 
-    val categoriesAdapter = ShoppingListCategoriesAdapter(
-        onItemSelected = { position -> updateCategories(position) },
-        onConfigureSelected = { category -> configureCategories(category) })
-    val productsAdapter = ShoppingListProductsAdapter()
+
+
 
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).setToolbarTitle(args.CurrentShoppingList.name)
+        (activity as MainActivity).setToolbarTitle(args.currentShoppingList.name)
+        (activity as MainActivity).activeButtonBack()
     }
 
     override fun onCreateView(
@@ -52,129 +48,70 @@ class ShoppingListDetailFragment : Fragment() {
         _binding = FragmentShoppingListDetailBinding.inflate(inflater, container, false)
         initUI()
         initListeners()
-        return binding.root
-    }
-
-    private fun initUI() {
-        mShoppingListDetailViewModel =
-            ViewModelProvider(this).get(ShoppingListDetailViewModel::class.java)
-
-
-        val categoriesRecyclerView = binding.rvCategories
-        categoriesRecyclerView.layoutManager =
-            GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
-        categoriesRecyclerView.adapter = categoriesAdapter
-
-        //CAMBIAR CATEGORIES LIST PARA QUE SEA UNA VARIABLE PRIVADA Y CREAR UNA FUNCIÓN QUE ACTUALICE ESA VARIABLE
-        mShoppingListDetailViewModel.readAllDataCategory.observe(viewLifecycleOwner, { categories ->
-            //categoriesAdapter.categoriesList = categories
-            categoriesAdapter.setCategoriesList(categories)
-            categoriesAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
-        })
-
-
-        val productsRecyclerView = binding.rvProducts
-        productsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        productsRecyclerView.adapter = productsAdapter
-
-        mShoppingListDetailViewModel.readAllDataProduct.observe(viewLifecycleOwner, { products ->
-            //productsAdapter.productsList = products
-            productsAdapter.setProductList(products)
-            productsAdapter.notifyDataSetChanged()
-        })
-
-        //El rollo no es que con observe tengas que asignarle ese valor todo el rato, el observe solo actualiza una variable cuando cambia.
-        //Para nuestro caso tenemos que tener en el adapter una variable (categoriesList) que primero la inicialicemos con el observer readAllData
-        //y luego cuando queramos cambiarla, simplemente le asignamos el nuevo valor y llamamos a notifyDataSetChanged() para que se actualice la vista.
-
+        return _binding.root
     }
 
     private fun initListeners() {
-        binding.btnCreateList.setOnClickListener {
-            val dialog = Dialog(requireContext())
-            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            dialog.setContentView(R.layout.dialog_new_category)
-            dialog.show()
+        this._binding.fabAddProducts.setOnClickListener{
+            val action = ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(args.currentShoppingList)
+            _binding.root.findNavController().navigate(action)
+        }
+    }
 
-            val btnSaveCategory = dialog.findViewById<View>(R.id.btnCreateCategory)
-            btnSaveCategory.setOnClickListener {
-                val newCategoryName =
-                    dialog.findViewById<TextInputEditText>(R.id.etNewCategoryName).text.toString()
+    private fun initUI() {
+        val myProductsAdapter = ShoppingListDetailAdapter(args.currentShoppingList){
+                product -> setProductIsBought(product)
+        }
+        val myProductsBoughtAdapter = ShoppingListDetailBoughtAdapter(args.currentShoppingList){
+            product -> setProductIsNotBought(product)
+        }
 
-                if (!newCategoryName.isEmpty()) {
-                    val newCategory = CategoryModel(0, newCategoryName, false)
-                    mShoppingListDetailViewModel.addCategory(newCategory)
-                    Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG)
-                        .show()
-                    dialog.hide()
-                } else {
-                    Toast.makeText(requireContext(), "Please fill the name", Toast.LENGTH_LONG)
-                        .show()
-                }
+        mShoppingListDetailViewModel = ViewModelProvider(this, ShoppingListDetailViewModelFactory(requireActivity().application, args.currentShoppingList)).get(ShoppingListDetailViewModel::class.java)
+        val myProductsRecyclerView=_binding.rvShoppingListDetailProductsToBuy
+        myProductsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        myProductsRecyclerView.adapter = myProductsAdapter
+
+        val myProductsBoughtRecyclerView= _binding.rvShoppingListDetailBoughtProducts
+        myProductsBoughtRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        myProductsBoughtRecyclerView.adapter = myProductsBoughtAdapter
+
+        mShoppingListDetailViewModel.readAllDataProductShoppingList.observe(viewLifecycleOwner, { productShoppingList ->
+            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner, { products ->
+                myProductsAdapter.setData(products)
+            })
+        })
+
+        mShoppingListDetailViewModel.readAllDataProductBoughtShoppingList.observe(viewLifecycleOwner, { productShoppingList ->
+            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner, { products ->
+                myProductsBoughtAdapter.setData(products)
+            })
+        })
+    }
 
 
+
+    inner class ShoppingListDetailViewModelFactory(private val application: Application, private val currentShoppingList: ShoppingListModel) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ShoppingListDetailViewModel::class.java)) {
+                return ShoppingListDetailViewModel(application, currentShoppingList) as T
             }
-
-
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 
-    private fun updateCategories(category: CategoryModel) {
-        // Cambia el estado de is selected de la categoría
-        val updatedCategory = category.copy(isSelected = !category.isSelected)
-        mShoppingListDetailViewModel.updateCategory(updatedCategory)
-
-        // Cambia el resto de categorías a no seleccionadas
-        mShoppingListDetailViewModel.readAllDataCategory.value?.map {
-            if (it.id == updatedCategory.id) {
-                updatedCategory // Mantén la categoría actualizada
-            } else {
-                it.copy(isSelected = false) // Cambia el resto de las categorías a no seleccionadas
-            }
-        }?.let { updatedCategories ->
-            mShoppingListDetailViewModel.updateCategories(updatedCategories)
+    private fun setProductIsBought(productShoppingList: ProductShoppingListModel){
+        Timer("SettingUp", false).schedule(100) {
+            mShoppingListDetailViewModel.updateProductIsBought(productShoppingList)
         }
-
-        updateProducts(updatedCategory)
     }
 
+    private fun setProductIsNotBought(product: ProductShoppingListModel) {
 
-    private fun configureCategories(category: CategoryModel) {
-        val dialog = Dialog(requireContext())
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setContentView(R.layout.dialog_configure_category)
-        dialog.show()
-        val textInputLayout: TextInputLayout = dialog.findViewById(R.id.tilUpdateNameCategory)
-        textInputLayout.hint = category.name
-
-        val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChangesCategory)
-        btnSaveChanges.setOnClickListener {
-            val newName = dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameCategory).text.toString()
-            val newCategory = CategoryModel(category.id, newName, category.isSelected)
-            mShoppingListDetailViewModel.updateCategory(newCategory)
-            dialog.hide()
-        }
-        val btnDeleteCategory= dialog.findViewById<ImageButton>(R.id.ibDeleteCategory)
-        btnDeleteCategory.setOnClickListener {
-            mShoppingListDetailViewModel.deleteCategory(category)
-            dialog.hide()
+        Timer("SettingUp", false).schedule(100) {
+            mShoppingListDetailViewModel.updateProductIsNotBought(product)
         }
 
     }
 
-    private fun updateProducts(category: CategoryModel) {
 
-        if (category.isSelected) {
-            val selectedTasks =
-                mShoppingListDetailViewModel.readAllDataProduct.value?.filter { it.categoryId == category.id }
-
-            productsAdapter.setProductList(selectedTasks!!)
-            productsAdapter.notifyDataSetChanged()
-        } else {
-            productsAdapter.setProductList(mShoppingListDetailViewModel.readAllDataProduct.value!!)
-            productsAdapter.notifyDataSetChanged()
-        }
-
-
-    }
 }

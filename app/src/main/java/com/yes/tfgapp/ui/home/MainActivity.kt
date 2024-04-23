@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         initUI()
     }
 
+
     private fun initUI() {
         initNavigation()
     }
@@ -37,5 +38,25 @@ class MainActivity : AppCompatActivity() {
 
     fun setToolbarTitle(title: String) {
         tvTitle.text = title
+    }
+
+    fun activeButtonBack() {
+        binding.ibBackArrow.visibility = android.view.View.VISIBLE
+        binding.ibBackArrow.setOnClickListener {
+            //onBackPressed()
+            navController.popBackStack()
+        }
+    }
+
+    fun hideButtonBack() {
+        binding.ibBackArrow.visibility = android.view.View.INVISIBLE
+    }
+
+    fun hideBottomNav() {
+        binding.bottomNavView.visibility = android.view.View.GONE
+    }
+
+    fun showBottomNav() {
+        binding.bottomNavView.visibility = android.view.View.VISIBLE
     }
 }

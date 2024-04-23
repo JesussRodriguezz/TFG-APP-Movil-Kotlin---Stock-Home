@@ -34,6 +34,7 @@ class ShoppingListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).setToolbarTitle("Lista de la compra")
+        (activity as MainActivity).hideButtonBack()
     }
 
     override fun onCreateView(

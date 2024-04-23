@@ -7,7 +7,15 @@
     <color name="primaryDark">#333333</color>
     <color name="primaryWhite">#f6f6f6</color>
     <color name="accentRed">#990100</color>
+    <color name="accentGreen">#926BD86B</color>
 
     <color name="red">#FF0000</color>
     <color name="transparente">#00FFFFFF</color>
+
+    <!--Colores para la bar de la lista de compra-->
+    <color name="progress1" >#756C6C</color>
+    <color name="progress2" >#CF911F</color>
+    <color name="progress3" >#CCCC21</color>
+    <color name="progress4" >#187A18</color>
+    <color name="progress5" >#1C1C91</color>
 </resources>

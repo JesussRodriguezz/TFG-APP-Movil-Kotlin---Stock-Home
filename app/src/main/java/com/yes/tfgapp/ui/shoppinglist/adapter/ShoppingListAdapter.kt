@@ -2,11 +2,14 @@ package com.yes.tfgapp.ui.shoppinglist.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.databinding.ShoppingListRowBinding
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import androidx.navigation.findNavController
+import com.yes.tfgapp.R
 import com.yes.tfgapp.ui.shoppinglist.ShoppingListFragmentDirections
+import kotlin.math.roundToInt
 
 class ShoppingListAdapter(
     private val onClickOpenConfiguration:(ShoppingListModel)->Unit
@@ -17,15 +20,35 @@ class ShoppingListAdapter(
     inner class ShoppingListViewHolder(private val binding: ShoppingListRowBinding) : RecyclerView.ViewHolder(binding.root)  {
         fun bind(currentItem: ShoppingListModel, onClickOpenConfiguration: (ShoppingListModel) -> Unit) {
             binding.tvShoppingListName.text = currentItem.name
+            binding.tvShoppingListNumBoughtItems.text=currentItem.quantityBought.toString()
             binding.tvShoppingListNumItems.text=currentItem.quantity.toString()
 
+            val percentage = if (currentItem.quantity != 0) {
+                (currentItem.quantityBought.toDouble() / currentItem.quantity.toDouble() * 100).roundToInt()
+            } else {
+                0
+            }
+            val progressBarColor = when {
+                percentage == 100 -> R.color.progress5
+                percentage >= 75 -> R.color.progress4
+                percentage >= 50 -> R.color.progress3
+                percentage >= 25 -> R.color.progress2
+                else -> R.color.progress1
+            }
+            binding.progressBar.setDividerColorResource(progressBarColor)
             binding.ibSettings.setOnClickListener {
                 onClickOpenConfiguration(currentItem)
             }
 
             binding.root.setOnClickListener {
-                val action = ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListDetailFragment(currentItem)
-                binding.root.findNavController().navigate(action)
+                val action_to_add_items = ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListAddItemsFragment(currentItem)
+                val action_to_detail= ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListDetailFragment(currentItem)
+
+                if(currentItem.quantity>0){
+                    binding.root.findNavController().navigate(action_to_detail)
+                }else{
+                    binding.root.findNavController().navigate(action_to_add_items)
+                }
             }
         }
 

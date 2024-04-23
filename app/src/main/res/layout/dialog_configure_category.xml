@@ -18,9 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tilUpdateNameCategory"
-        style="@style/TitleToolbar"
-        android:textColor="@color/primaryDark"
-        android:textStyle="bold"
+        style="@style/TitleToolbarDark"
         android:layout_marginVertical="8dp"
         />
 
@@ -47,7 +45,8 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:padding="16dp"
-            android:textSize="18sp" />
+            style="@style/TextInputEditTextStyle"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -75,11 +74,13 @@
 
         <Button
             android:id="@+id/btnSaveChangesCategory"
+            style="@style/SmallButtonTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accentRed"
             android:text="Guardar cambios"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            />
 
     </LinearLayout>
 

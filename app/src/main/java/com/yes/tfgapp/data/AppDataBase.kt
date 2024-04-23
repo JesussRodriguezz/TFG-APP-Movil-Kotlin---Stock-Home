@@ -6,14 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
+import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 
-@Database(entities = [ShoppingListModel::class, ProductModel::class,CategoryModel::class], version = 1, exportSchema = false)
+@Database(entities = [ShoppingListModel::class, ProductModel::class,CategoryModel::class, ProductShoppingListModel::class ], version = 1, exportSchema = false)
 abstract class AppDataBase: RoomDatabase(){
     abstract fun shoppingListDao(): ShoppingListDao
     abstract fun productDao(): ProductDao
 
     abstract fun categoryDao(): CategoryDao
+
+    abstract fun productShoppingListDao(): ProductShoppingListDao
 
     companion object {
         @Volatile

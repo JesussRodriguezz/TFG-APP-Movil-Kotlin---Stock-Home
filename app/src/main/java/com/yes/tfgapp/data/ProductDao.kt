@@ -26,6 +26,13 @@ interface ProductDao {
     @Query("SELECT * FROM product ORDER BY id ASC")
     fun readAllData(): LiveData<List<ProductModel>>
 
+    @Query("SELECT * FROM product WHERE id = :productId")
+    abstract fun getProduct(productId: Int): ProductModel
+
+
+    @Query("SELECT * FROM product WHERE id IN (:productIds)")
+    fun getProductsById(productIds: List<Int>): LiveData<List<ProductModel>>
+
     //@Query("SELECT * FROM product WHERE category = :name")
     //fun productsByCategory(name: String): LiveData<List<ProductModel>>
 

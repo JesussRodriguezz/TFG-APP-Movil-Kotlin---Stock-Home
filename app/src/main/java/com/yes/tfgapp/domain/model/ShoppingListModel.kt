@@ -11,5 +11,6 @@ data class ShoppingListModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val quantity: Int
+    val quantity: Int,
+    val quantityBought: Int = 0
 ): Parcelable

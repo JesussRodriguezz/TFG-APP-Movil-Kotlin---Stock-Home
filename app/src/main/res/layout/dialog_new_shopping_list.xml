@@ -10,13 +10,11 @@
 
     <TextView
         android:id="@+id/tvTitleDialogNewShoppingList"
-        style="@style/TitleToolbar"
+        style="@style/TitleToolbarDark"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:text="Nueva lista de la compra"
-        android:textColor="@color/primaryDark"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tilNewListName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,13 +43,14 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:padding="16dp"
-            android:textSize="18sp" />
+            style="@style/TextInputEditTextStyle"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 
 
     <Button
         android:id="@+id/btnCreateList"
+        style="@style/SmallButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

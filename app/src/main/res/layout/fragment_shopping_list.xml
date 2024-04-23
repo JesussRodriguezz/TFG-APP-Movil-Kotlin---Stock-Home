@@ -21,13 +21,11 @@
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/extended_fab"
+        style="@style/SmallButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:fontFamily="@font/roboto_bold"
         android:text="NUEVA LISTA"
-        android:textColor="@color/white"
-        android:textSize="15dp"
         app:backgroundTint="@color/accentRed"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/white"
