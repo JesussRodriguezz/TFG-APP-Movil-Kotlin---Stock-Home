@@ -5,8 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.yes.tfgapp.data.AppDataBase
-import com.yes.tfgapp.data.ProductRepository
-import com.yes.tfgapp.data.ProductShoppingListRepository
+import com.yes.tfgapp.data.repository.ProductRepository
+import com.yes.tfgapp.data.repository.ProductShoppingListRepository
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel

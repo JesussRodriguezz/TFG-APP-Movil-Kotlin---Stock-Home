@@ -1,6 +1,7 @@
-package com.yes.tfgapp.data
+package com.yes.tfgapp.data.repository
 
 import androidx.lifecycle.LiveData
+import com.yes.tfgapp.data.dao.CategoryDao
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.FixedCategories
 

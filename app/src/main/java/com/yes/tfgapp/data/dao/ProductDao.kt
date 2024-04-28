@@ -1,9 +1,10 @@
-package com.yes.tfgapp.data
+package com.yes.tfgapp.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.yes.tfgapp.domain.model.ProductModel
@@ -13,6 +14,9 @@ interface ProductDao {
 
     @Insert
     suspend fun addProduct(product: ProductModel)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertProduct(product: ProductModel): Long
 
     @Update
     suspend fun updateProduct(product: ProductModel)

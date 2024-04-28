@@ -19,7 +19,7 @@ import kotlinx.android.parcel.Parcelize
 )
 data class ProductModel(
     @PrimaryKey(autoGenerate = true)
-    val id:Int,
+    val id:Int = 0,
     val name: String,
-    val categoryId: Int
+    val categoryId: Int = 7
 ): Parcelable

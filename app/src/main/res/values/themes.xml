@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
     <style name="Base.Theme.TFGapp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -41,6 +41,11 @@
         <item name="android:background">@drawable/shape_search_bar</item>
         <item name="android:padding">0dp</item>
         <item name="android:layout_margin">0dp</item>
+    </style>
+
+    <style name="image_rounded" >
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 

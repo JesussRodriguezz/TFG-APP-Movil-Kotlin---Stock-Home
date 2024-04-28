@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.shoppinglistadditems.ShoppingListAddItemsFragment">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        />
+
     <TextView
         android:id="@+id/shoppingListName2"
         style="@style/TitleToolbarDark"
@@ -29,14 +40,92 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/shoppingListName2" />
 
+    <LinearLayout
+        android:id="@+id/llSearchSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchView">
+
+        <TextView
+            android:id="@+id/tvCategory"
+            style="@style/ProductsListTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="Búsqueda" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/llSearchSelectorButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchView"
+            android:layout_marginRight="16dp"
+            >
+
+            <Button
+                android:id="@+id/btnLocalSearch"
+                style="@style/SmallButtonTextStyle"
+                android:layout_width="108dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:backgroundTint="@color/accentRed"
+                android:includeFontPadding="false"
+                android:text="Local"
+                android:textSize="16dp"
+                android:layout_marginRight="8dp"/>
+
+            <Button
+                android:id="@+id/btnExternalSearch"
+                style="@style/SmallButtonTextStyle"
+                android:layout_width="108dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:backgroundTint="@color/primaryGrey"
+                android:textColor="@color/black"
+                android:includeFontPadding="false"
+                android:text="Externa"
+                android:textSize="16dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginVertical="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llSearchSelector"
+        tools:ignore="MissingConstraints" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProductsSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProductsSearchApi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

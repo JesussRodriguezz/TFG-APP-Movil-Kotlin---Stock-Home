@@ -14,7 +14,7 @@ class ShoppingListProductsAdapter(private val onAddProductToList: (ProductModel)
 
     inner class ShoppingListProductsViewHolder(private val binding: ProductListRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentItem: ProductModel, onAddProductToList: (ProductModel) -> Unit/*, currentShoppingList: ShoppingListModel*/){
+        fun bind(currentItem: ProductModel, onAddProductToList: (ProductModel) -> Unit){
 
             val backgroundColor = if(adapterPosition % 2 == 0){
                 R.color.primaryGrey
@@ -26,11 +26,6 @@ class ShoppingListProductsAdapter(private val onAddProductToList: (ProductModel)
             binding.tvProductName.text = currentItem.name
 
             binding.ibAddProductToList.setOnClickListener{
-                //val productShoppingList= ProductShoppingListModel(
-                //    shoppingListId = 0,
-                //    productId = currentItem.id
-                //)
-                //onAddProductToList(productShoppingList)
                 onAddProductToList(currentItem)
             }
         }

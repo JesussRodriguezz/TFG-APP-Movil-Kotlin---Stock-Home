@@ -1,7 +1,7 @@
-package com.yes.tfgapp.data
+package com.yes.tfgapp.data.repository
 
 import androidx.lifecycle.LiveData
-import com.yes.tfgapp.domain.model.CategoryModel
+import com.yes.tfgapp.data.dao.ProductDao
 import com.yes.tfgapp.domain.model.FixedProducts
 import com.yes.tfgapp.domain.model.ProductModel
 
@@ -20,6 +20,10 @@ class ProductRepository(private val productDao: ProductDao) {
     }
     suspend fun addProduct(product: ProductModel){
         productDao.addProduct(product)
+    }
+
+    fun insertProduct(product: ProductModel): Long {
+        return productDao.insertProduct(product)
     }
 
     suspend fun updateProduct(product: ProductModel){

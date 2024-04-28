@@ -10,8 +10,6 @@ enum class FixedCategories(
     COMIDA(4,"Comida"),
     BEBIDAS(5,"Bebidas"),
     LIMPIEZA(6,"Limpieza"),
-    OTROS(7,"Otros"),
-    OTHERS(8,"Others"),
-    OTRO(9,"Otro")
+    OTHERS(7,"Otros")
 
 }

@@ -1,4 +1,4 @@
-package com.yes.tfgapp.data
+package com.yes.tfgapp.data.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

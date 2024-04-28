@@ -1,7 +1,7 @@
-package com.yes.tfgapp.data
+package com.yes.tfgapp.data.repository
 
 import androidx.lifecycle.LiveData
-import com.yes.tfgapp.domain.model.ProductModel
+import com.yes.tfgapp.data.dao.ProductShoppingListDao
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
 
 class ProductShoppingListRepository(private val productShoppingListDAO: ProductShoppingListDao){

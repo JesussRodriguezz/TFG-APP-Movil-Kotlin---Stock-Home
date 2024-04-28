@@ -5,9 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.yes.tfgapp.data.AppDataBase
-import com.yes.tfgapp.data.ProductRepository
-import com.yes.tfgapp.data.CategoryRepository
-import com.yes.tfgapp.data.ShoppingListRepository
+import com.yes.tfgapp.data.repository.ProductRepository
+import com.yes.tfgapp.data.repository.CategoryRepository
+import com.yes.tfgapp.data.repository.ShoppingListRepository
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

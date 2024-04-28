@@ -69,8 +69,14 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
     //kotlin components
-
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
+    //retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //picasso
+    implementation("com.squareup.picasso:picasso:2.8")
 }

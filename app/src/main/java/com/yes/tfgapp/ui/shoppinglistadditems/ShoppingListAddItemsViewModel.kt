@@ -3,12 +3,13 @@ package com.yes.tfgapp.ui.shoppinglistadditems
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.yes.tfgapp.data.AppDataBase
-import com.yes.tfgapp.data.CategoryRepository
-import com.yes.tfgapp.data.ProductRepository
-import com.yes.tfgapp.data.ProductShoppingListRepository
-import com.yes.tfgapp.data.ShoppingListRepository
+import com.yes.tfgapp.data.repository.CategoryRepository
+import com.yes.tfgapp.data.repository.ProductRepository
+import com.yes.tfgapp.data.repository.ProductShoppingListRepository
+import com.yes.tfgapp.data.repository.ShoppingListRepository
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
@@ -28,8 +29,14 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
 
     val readAllDataCategory: LiveData<List<CategoryModel>>
 
+    private val allProductsLiveData: LiveData<List<ProductModel>>
+    private var allProducts: List<ProductModel> = emptyList()
+
+    val productIdLiveData = MutableLiveData<Long>()
+
 
     init {
+
 
         val shoppingListDao = AppDataBase.getDatabase(application).shoppingListDao()
         shoppingListRepository = ShoppingListRepository(shoppingListDao)
@@ -43,6 +50,12 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
 
         val productShoppingListDato = AppDataBase.getDatabase(application).productShoppingListDao()
         productShoppingListRepository = ProductShoppingListRepository(productShoppingListDato)
+
+        allProductsLiveData= productRepository.readAllData
+
+        allProductsLiveData.observeForever { products ->
+            allProducts = products ?: emptyList()
+        }
 
 
     }
@@ -77,5 +90,28 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
             productShoppingListRepository.addProductShoppingList(productShoppingList)
         }
     }
+
+    fun filterProducts(text: String?): List<ProductModel> {
+        println("All products: $allProducts")
+        return if (!text.isNullOrEmpty()) {
+            allProducts.filter { it.name.contains(text, ignoreCase = true) }
+        } else {
+            emptyList()
+        }
+    }
+
+    fun addProduct(product: ProductModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val productId = productRepository.insertProduct(product)  // Asegúrate de que esto devuelva un Long
+            productIdLiveData.postValue(productId)  // Emite el ID
+        }
+    }
+
+   override fun onCleared() {
+        //remove observer
+        allProductsLiveData.removeObserver {  }
+
+        super.onCleared()
+   }
 
 }

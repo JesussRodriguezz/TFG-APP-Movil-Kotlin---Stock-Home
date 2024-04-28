@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.yes.tfgapp.data.dao.CategoryDao
+import com.yes.tfgapp.data.dao.ProductDao
+import com.yes.tfgapp.data.dao.ProductShoppingListDao
+import com.yes.tfgapp.data.dao.ShoppingListDao
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
