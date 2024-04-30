@@ -44,6 +44,11 @@ class ProductRepository(private val productDao: ProductDao) {
 
     }
 
+    fun findProductByName(name: String): ProductModel {
+        return productDao.findProductByName(name)
+
+    }
+
     /*fun productsByCategory(category: CategoryModel): LiveData<List<ProductModel>> {
 
         val example = productDao.productsByCategoryNoLive(category.name)

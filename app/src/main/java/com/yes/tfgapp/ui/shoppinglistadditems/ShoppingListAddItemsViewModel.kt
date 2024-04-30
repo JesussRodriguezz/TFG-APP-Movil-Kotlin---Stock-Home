@@ -102,8 +102,15 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
 
     fun addProduct(product: ProductModel) {
         viewModelScope.launch(Dispatchers.IO) {
-            val productId = productRepository.insertProduct(product)  // Asegúrate de que esto devuelva un Long
-            productIdLiveData.postValue(productId)  // Emite el ID
+            val existingProduct = productRepository.findProductByName(product.name)
+            if (existingProduct == null) {
+                // El producto no existe, insertar en la base de datos
+                val productId = productRepository.insertProduct(product)
+                productIdLiveData.postValue(productId)
+            } else {
+                // El producto ya existe, opcionalmente actualizar o simplemente usar el ID existente
+                productIdLiveData.postValue(existingProduct.id.toLong())
+            }
         }
     }
 

@@ -170,13 +170,16 @@ class SearchProductsFragment : Fragment() {
         binding.progressBar.isVisible = true
         CoroutineScope(Dispatchers.IO).launch {
             val myResponse: Response<ProductSearchResponse> =
-                retrofit.create(ProductsApiService::class.java).searchProducts(query.orEmpty())
+                retrofit.create(ProductsApiService::class.java).searchProductsv2(query.orEmpty())
             if (myResponse.isSuccessful) {
                 val response: ProductSearchResponse? = myResponse.body()
                 if (response != null) {
-                    Log.i("yes", "Funciona: contenido : ${response.toString()}")
+                    Log.i("yes", "Funciona: contenido : ${response}")
                     (activity as MainActivity).runOnUiThread {
-                        productSearchApiAdapter.setData(response.products)
+                        val filteredProducts = response.products.filter {
+                            !it.productName.isNullOrBlank() && it.productName.contains(query.orEmpty(), ignoreCase = true)
+                        }
+                        productSearchApiAdapter.setData(filteredProducts)
                         binding.progressBar.isVisible = false
                     }
                 }
@@ -222,6 +225,7 @@ class SearchProductsFragment : Fragment() {
         mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
     }
     private fun addExternalProductToList(product: ProductModel) {
+
         mShoppingListAddItemsViewModel.addProduct(product)
         observeProductIDAndAddToList()
     }
@@ -234,6 +238,7 @@ class SearchProductsFragment : Fragment() {
                     shoppingListId = this@SearchProductsFragment.args.CurrentShoppingList.id,
                     productId = productId.toInt()
                 )
+
                 mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
                 // Opcional: resetea el LiveData para evitar duplicados en futuras inserciones
                 mShoppingListAddItemsViewModel.productIdLiveData.value = null
@@ -252,7 +257,7 @@ class SearchProductsFragment : Fragment() {
 
         return Retrofit
             .Builder()
-            .baseUrl("https://world.openfoodfacts.org/")
+            .baseUrl("https://es.openfoodfacts.org/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
