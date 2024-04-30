@@ -21,6 +21,7 @@ class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)->
             }else{
                 R.color.black
             }
+            //binding.ivCategoryIcon.setImageResource(currentItem.icon)
             binding.tvCategoryName.setTextColor(ContextCompat.getColor(binding.tvCategoryName.context, color))
             binding.root.setOnClickListener {
                     onItemSelected(currentItem)

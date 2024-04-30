@@ -19,6 +19,7 @@ import com.yes.tfgapp.databinding.FragmentSearchProductsBinding
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
+import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchAdapter
 import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchApiAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListProductsAdapter
@@ -38,7 +39,7 @@ class SearchProductsFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchProductsBinding
     private var productsAdapter =
-        ShoppingListProductsAdapter { product -> addProductToList(product) }
+        ProductSearchAdapter { product -> addProductToList(product) }
     private var productSearchApiAdapter: ProductSearchApiAdapter =
         ProductSearchApiAdapter { product -> addProductToList(product) }
 
@@ -46,7 +47,6 @@ class SearchProductsFragment : Fragment() {
 
     var searchModeLocal: Boolean = true
     private lateinit var retrofit: Retrofit
-
 
 
     override fun onCreateView(
@@ -158,10 +158,6 @@ class SearchProductsFragment : Fragment() {
             }
         })
 
-        //mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner, { products ->
-        //    productsAdapter.setProductList(products)
-        //    productsAdapter.notifyDataSetChanged()
-        //})
 
     }
 
@@ -177,7 +173,10 @@ class SearchProductsFragment : Fragment() {
                     Log.i("yes", "Funciona: contenido : ${response}")
                     (activity as MainActivity).runOnUiThread {
                         val filteredProducts = response.products.filter {
-                            !it.productName.isNullOrBlank() && it.productName.contains(query.orEmpty(), ignoreCase = true)
+                            !it.productName.isNullOrBlank() && it.productName.contains(
+                                query.orEmpty(),
+                                ignoreCase = true
+                            )
                         }
                         productSearchApiAdapter.setData(filteredProducts)
                         binding.progressBar.isVisible = false
@@ -192,28 +191,18 @@ class SearchProductsFragment : Fragment() {
     }
 
     private fun filterProducts(text: String?) {
-        if (searchModeLocal) {
-            val filteredList = mShoppingListAddItemsViewModel.filterProducts(text)
-            productsAdapter.setProductList(filteredList)
-            productsAdapter.notifyDataSetChanged()
-        } else {
-
-        }
+        val filteredList = mShoppingListAddItemsViewModel.filterProducts(text)
+        productsAdapter.setProductList(filteredList)
+        productsAdapter.notifyDataSetChanged()
 
     }
 
 
     private fun addProductToList(product: ProductModel) {
-        if (this@SearchProductsFragment.args.CurrentShoppingList != null) {
-            println("Current shopping list: ${this@SearchProductsFragment.args.CurrentShoppingList.name}")
-        } else {
-            println("Current shopping list is null")
-        }
-
-        if (searchModeLocal) {
-            addLocalProductToList(product)
-        } else {
+        if (!searchModeLocal || product.categoryId==7) {
             addExternalProductToList(product)
+        } else {
+            addLocalProductToList(product)
         }
     }
 
@@ -224,6 +213,7 @@ class SearchProductsFragment : Fragment() {
         )
         mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
     }
+
     private fun addExternalProductToList(product: ProductModel) {
 
         mShoppingListAddItemsViewModel.addProduct(product)
@@ -245,7 +235,6 @@ class SearchProductsFragment : Fragment() {
             }
         }
     }
-
 
 
     private fun getRetrofit(): Retrofit {

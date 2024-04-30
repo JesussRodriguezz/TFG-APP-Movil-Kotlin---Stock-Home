@@ -92,12 +92,19 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
     }
 
     fun filterProducts(text: String?): List<ProductModel> {
-        println("All products: $allProducts")
-        return if (!text.isNullOrEmpty()) {
-            allProducts.filter { it.name.contains(text, ignoreCase = true) }
-        } else {
-            emptyList()
+
+        val productsToShow= mutableListOf<ProductModel>()
+        text?.let{
+            if(it.isNotEmpty()){
+                val temporalProduct =ProductModel(name=it)
+                productsToShow.add(temporalProduct)
+                productsToShow.addAll(allProducts.filter { product ->
+                    product.name.contains(it, ignoreCase = true)
+                })
+            }
         }
+        return productsToShow
+
     }
 
     fun addProduct(product: ProductModel) {

@@ -12,7 +12,7 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
         val fixedCategories= FixedCategories.entries
         for(categ in fixedCategories){
             val categoryExists= categoryDao.getCategoryById(categ.id)
-            val category = CategoryModel(categ.id, categ.cateogory_name)
+            val category = CategoryModel(categ.id, categ.cateogory_name,icon = categ.icon)
             if(categoryExists==null){
                 categoryDao.addCategory(category)
             }

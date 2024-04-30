@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/primaryGrey">
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/ivProductIcon"
+        android:src="@drawable/ic_panaderia"
+        android:layout_gravity="center_vertical"
+        />
+
+    <TextView
+        style="@style/ProductsListTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvProductName"
+        android:text="Product Name"
+        android:textColor="@color/black"
+        android:paddingVertical="8dp"
+        android:paddingLeft="16dp"/>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ibAddProductToList"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_add"
+        app:tint="@color/black"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="16dp"/>
+
+
+
+
+</LinearLayout>

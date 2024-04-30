@@ -161,7 +161,7 @@ class ShoppingListAddItemsFragment : Fragment() {
         val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChangesCategory)
         btnSaveChanges.setOnClickListener {
             val newName = dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameCategory).text.toString()
-            val newCategory = CategoryModel(category.id, newName, category.isSelected)
+            val newCategory = CategoryModel(category.id, newName, category.isSelected, icon=category.icon)
             mShoppingListAddItemsViewModel.updateCategory(newCategory)
             dialog.hide()
         }
