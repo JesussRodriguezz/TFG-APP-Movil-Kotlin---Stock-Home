@@ -1,24 +1,31 @@
 package com.yes.tfgapp.ui.searchproducts
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
 import com.yes.tfgapp.data.network.ProductsApiService
 import com.yes.tfgapp.data.network.response.ProductSearchResponse
 import com.yes.tfgapp.data.repository.ProductRepository
 import com.yes.tfgapp.databinding.FragmentSearchProductsBinding
+import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
+import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchAdapter
 import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchApiAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
@@ -38,8 +45,12 @@ class SearchProductsFragment : Fragment() {
     private val args: SearchProductsFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentSearchProductsBinding
-    private var productsAdapter =
-        ProductSearchAdapter { product -> addProductToList(product) }
+    private var productsAdapter : ProductSearchAdapter = ProductSearchAdapter(
+        onAddProductToList = { product -> addProductToList(product) },
+        getCategoryById = { id, callback -> getCategoryById(id, callback) },
+        changeCategory = {product -> changeCategory(product)}
+    )
+    private var chooseCategoryAdapter: ChooseCategoryAdapter = ChooseCategoryAdapter()
     private var productSearchApiAdapter: ProductSearchApiAdapter =
         ProductSearchApiAdapter { product -> addProductToList(product) }
 
@@ -65,73 +76,28 @@ class SearchProductsFragment : Fragment() {
             if (!searchModeLocal) {
                 binding.rvProductsSearch.isVisible = true
                 binding.rvProductsSearchApi.isVisible = false
-
                 searchModeLocal = true
-                binding.btnLocalSearch.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.accentRed
-                    )
-                )
-                binding.btnLocalSearch.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-                binding.btnExternalSearch.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.primaryGrey
-                    )
-                )
-                binding.btnExternalSearch.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
-                )
+                binding.btnLocalSearch.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.accentRed))
+                binding.btnLocalSearch.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                binding.btnExternalSearch.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.primaryGrey))
+                binding.btnExternalSearch.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
             }
-
         }
         binding.btnExternalSearch.setOnClickListener {
             if (searchModeLocal) {
                 binding.rvProductsSearch.isVisible = false
                 binding.rvProductsSearchApi.isVisible = true
                 searchModeLocal = false
-                binding.btnLocalSearch.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.primaryGrey
-                    )
-                )
-                binding.btnLocalSearch.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
-                )
-                binding.btnExternalSearch.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.accentRed
-                    )
-                )
-                binding.btnExternalSearch.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.white
-                    )
-                )
-
+                binding.btnLocalSearch.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.primaryGrey))
+                binding.btnLocalSearch.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                binding.btnExternalSearch.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.accentRed))
+                binding.btnExternalSearch.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
             }
-
         }
     }
 
     private fun initUI() {
 
-        //productSearchApiAdapter  = ProductSearchApiAdapter()
         binding.rvProductsSearchApi.setHasFixedSize(true)
         binding.rvProductsSearchApi.layoutManager = LinearLayoutManager(requireContext())
         binding.rvProductsSearchApi.adapter = productSearchApiAdapter
@@ -159,6 +125,17 @@ class SearchProductsFragment : Fragment() {
         })
 
 
+    }
+
+    fun getCategoryById(id: Int, callback: (CategoryModel?) -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val category = mShoppingListAddItemsViewModel.getCategoryById(id)
+                callback(category)  // Pasamos el resultado al callback
+            } catch (e: Exception) {
+                callback(null)  // En caso de error, podríamos pasar null o manejar el error de otra forma
+            }
+        }
     }
 
     private fun searchByProductName(query: String?) {
@@ -236,6 +213,41 @@ class SearchProductsFragment : Fragment() {
         }
     }
 
+    private fun changeCategory(product: ProductModel){
+
+        val dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        dialog.setContentView(R.layout.dialog_change_category)
+        //set the tvProductName
+        dialog.findViewById<TextView>(R.id.tvProductNameDialogChangeCategory).text = product.name
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                // El primer ítem (posición 0) ocupa 3 espacios (todo el ancho), los demás ítems ocupan 1
+                return if (position == 0) 3 else 1
+            }
+        }
+        dialog.findViewById<RecyclerView>(R.id.rvCategoriesDialogChangeCategory).layoutManager = layoutManager
+        dialog.findViewById<RecyclerView>(R.id.rvCategoriesDialogChangeCategory).adapter = chooseCategoryAdapter
+
+        mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner, { categories ->
+            chooseCategoryAdapter.setCategoriesList(categories)
+            chooseCategoryAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
+        })
+        dialog.show()
+
+
+        /**viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val category = mShoppingListAddItemsViewModel.getCategoryById(product.categoryId)
+
+            } catch (e: Exception) {
+                Log.e("yes", "Error al obtener la categoría del producto", e)
+            }
+        }*/
+
+    }
 
     private fun getRetrofit(): Retrofit {
         val okHttpClient = OkHttpClient.Builder()

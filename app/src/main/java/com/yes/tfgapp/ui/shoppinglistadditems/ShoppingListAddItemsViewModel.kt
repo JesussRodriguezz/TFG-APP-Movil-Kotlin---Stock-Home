@@ -128,4 +128,8 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
         super.onCleared()
    }
 
+    suspend fun getCategoryById(id: Int): CategoryModel {
+        return categoryRepository.getCategoryById(id)
+    }
+
 }

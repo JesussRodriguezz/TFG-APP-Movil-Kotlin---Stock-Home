@@ -20,7 +20,7 @@ interface CategoryDao {
     suspend fun deleteCategory(category: CategoryModel)
 
     @Query("SELECT * FROM category WHERE id = :id")
-    suspend fun getCategoryById(id: Int): CategoryModel?
+    suspend fun getCategoryById(id: Int): CategoryModel
 
     @Query("SELECT * FROM category ORDER BY id ASC")
     fun readAllData(): LiveData<List<CategoryModel>>

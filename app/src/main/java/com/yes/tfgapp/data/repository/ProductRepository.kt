@@ -2,7 +2,7 @@ package com.yes.tfgapp.data.repository
 
 import androidx.lifecycle.LiveData
 import com.yes.tfgapp.data.dao.ProductDao
-import com.yes.tfgapp.domain.model.FixedProducts
+import com.yes.tfgapp.domain.fixed.FixedProducts
 import com.yes.tfgapp.domain.model.ProductModel
 
 class ProductRepository(private val productDao: ProductDao) {

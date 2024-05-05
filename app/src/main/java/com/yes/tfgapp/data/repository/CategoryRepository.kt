@@ -3,7 +3,7 @@ package com.yes.tfgapp.data.repository
 import androidx.lifecycle.LiveData
 import com.yes.tfgapp.data.dao.CategoryDao
 import com.yes.tfgapp.domain.model.CategoryModel
-import com.yes.tfgapp.domain.model.FixedCategories
+import com.yes.tfgapp.domain.fixed.FixedCategories
 
 class CategoryRepository(private val categoryDao: CategoryDao) {
     val readAllData: LiveData<List<CategoryModel>> = categoryDao.readAllData()
@@ -38,5 +38,9 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
     fun updateAllCategories(isSelected: Boolean) {
         categoryDao.updateAllCategories(isSelected)
 
+    }
+
+    suspend fun getCategoryById(id: Int): CategoryModel {
+        return categoryDao.getCategoryById(id)
     }
 }
