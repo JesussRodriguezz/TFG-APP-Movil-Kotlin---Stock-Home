@@ -36,7 +36,7 @@
             android:layout_marginStart="5dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/primaryDark"
+            android:textColor="@color/cvtextname_colors"
             android:textSize="14sp"
             android:fontFamily="@font/roboto_medium"
             app:layout_constraintHorizontal_bias="0"

@@ -145,7 +145,6 @@ class ShoppingListAddItemsFragment : Fragment() {
         }?.let { updatedCategories ->
             mShoppingListAddItemsViewModel.updateCategories(updatedCategories)
         }
-
         updateProducts(updatedCategory)
     }
 

@@ -27,6 +27,7 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
     val readAllDataProduct: LiveData<List<ProductModel>>
     var readProductsByCategory: LiveData<List<ProductModel>>? = null
 
+
     val readAllDataCategory: LiveData<List<CategoryModel>>
 
     private val allProductsLiveData: LiveData<List<ProductModel>>

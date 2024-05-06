@@ -12,6 +12,6 @@ data class CategoryModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val isSelected : Boolean = false,
+    var isSelected : Boolean = false,
     val icon : Int = R.drawable.ic_panaderia
 ): Parcelable

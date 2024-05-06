@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -232,9 +233,17 @@ class SearchProductsFragment : Fragment() {
         dialog.findViewById<RecyclerView>(R.id.rvCategoriesDialogChangeCategory).adapter = chooseCategoryAdapter
 
         mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner, { categories ->
-            chooseCategoryAdapter.setCategoriesList(categories)
+            chooseCategoryAdapter.setCategoriesListModified(categories, product.categoryId)
             chooseCategoryAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
         })
+        dialog.findViewById<ImageButton>(R.id.ibBoughtProductDialogChangeCategory).setOnClickListener{
+            var categorySelected=chooseCategoryAdapter.selectedItemPosition
+            println("Category selected: $categorySelected")
+            //obten la categoria seleccionada
+            val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
+            println("Category selected: $category")
+
+        }
         dialog.show()
 
 
