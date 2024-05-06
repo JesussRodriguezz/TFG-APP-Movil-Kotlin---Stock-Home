@@ -202,14 +202,5 @@ class ShoppingListAddItemsFragment : Fragment() {
         println("ShoppingList: ${productShoppingList.shoppingListId}")
         println("ProductShoppingList is bought: ${productShoppingList.isBought}")
         mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
-
-        //println("Current quantity: ${this.args.CurrentShoppingList.quantity}")
-        //val newQuantity = this.args.CurrentShoppingList.quantity + 1
-        //println("New quantity: $newQuantity")
-
-        //val updatedShoppingList = this.args.CurrentShoppingList.copy(quantity = newQuantity)
-        //mShoppingListViewModel.updateShoppingList(updatedShoppingList)
-        
-
     }
 }

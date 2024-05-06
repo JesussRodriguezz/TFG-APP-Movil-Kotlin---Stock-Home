@@ -50,7 +50,7 @@ class SearchProductsFragment : Fragment() {
     private var productsAdapter : ProductSearchAdapter = ProductSearchAdapter(
         onAddProductToList = { product -> addProductToList(product) },
         getCategoryById = { id, callback -> getCategoryById(id, callback) },
-        changeCategory = {product -> changeCategory(product)}
+        changeCategory = {product,position -> changeCategory(product,position)}
     )
     private var chooseCategoryAdapter: ChooseCategoryAdapter = ChooseCategoryAdapter()
     private var productSearchApiAdapter: ProductSearchApiAdapter =
@@ -215,12 +215,15 @@ class SearchProductsFragment : Fragment() {
         }
     }
 
-    private fun changeCategory(product: ProductModel){
+    private fun changeCategory(product: ProductModel, position: Int){
 
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         dialog.setContentView(R.layout.dialog_change_category)
+        if(position == 0){
+            dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).isVisible = false
+        }
 
         //set the tvProductName
         dialog.findViewById<TextView>(R.id.tvProductNameDialogChangeCategory).text = product.name
@@ -241,12 +244,15 @@ class SearchProductsFragment : Fragment() {
 
         chooseCategoryAdapter.setFirstTimeClick()
 
-        dialog.findViewById<ImageButton>(R.id.ibBoughtProductDialogChangeCategory).setOnClickListener{
+        dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory).setOnClickListener{
             var categorySelected=chooseCategoryAdapter.selectedItemPosition
-            println("Category selected: $categorySelected")
-            //obten la categoria seleccionada
             val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
-            println("Category selected: $category")
+            val newProduct = product.copy(categoryId = category.id)
+            addLocalProductToList(newProduct)
+            println("Category: ${newProduct.categoryId}")
+            println("Product: ${newProduct.name}")
+
+
 
         }
 
@@ -255,20 +261,10 @@ class SearchProductsFragment : Fragment() {
             val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
             val newProduct = product.copy(categoryId = category.id)
             mShoppingListAddItemsViewModel.updateProduct(newProduct)
-
             // Notificar al adaptador que los datos han cambiado para que actualice la vista
             chooseCategoryAdapter.notifyDataSetChanged()
         }
 
-       /* mShoppingListAddItemsViewModel.productCategoryIdLiveData.observe(viewLifecycleOwner) { categoryId ->
-            if (categoryId != null) {
-                val newProduct = product.copy(categoryId = categoryId.toInt())
-                mShoppingListAddItemsViewModel.updateProduct(newProduct)
-                mShoppingListAddItemsViewModel.productCategoryIdLiveData.value = null
-                chooseCategoryAdapter.setCategoriesListModified(chooseCategoryAdapter.publicCategoriesList, product.categoryId)
-                chooseCategoryAdapter.notifyDataSetChanged()
-            }
-        }*/
         dialog.show()
 
         //cuando se cierre el dialogo, se actualiza la lista de productos
@@ -277,8 +273,6 @@ class SearchProductsFragment : Fragment() {
             productsAdapter.setProductList(filteredList)
             productsAdapter.notifyDataSetChanged()
         }
-
-
     }
 
     private fun getRetrofit(): Retrofit {

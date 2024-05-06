@@ -135,8 +135,22 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
         }
     }
 
+    fun updateAndAddProduct(product: ProductModel) {
 
+        viewModelScope.launch(Dispatchers.IO) {
+            /*productRepository.updateProduct(product)
+            val existingProduct = productRepository.findProductByName(product.name)
+            if (existingProduct == null) {
+                // El producto no existe, insertar en la base de datos
+                val productId = productRepository.insertProduct(product)
+                productIdLiveData.postValue(productId)
+            } else {
+                // El producto ya existe, opcionalmente actualizar o simplemente usar el ID existente
+                productIdLiveData.postValue(existingProduct.id.toLong())
+            }*/
+        }
 
+    }
 
 
 }

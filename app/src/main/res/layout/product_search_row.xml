@@ -1,49 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/primaryGrey">
 
 
-
     <TextView
+        android:id="@+id/tvProductName"
         style="@style/ProductsListTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvProductName"
-        android:text="Product Name"
-        android:textColor="@color/black"
         android:paddingVertical="8dp"
-        android:paddingLeft="16dp"/>
+        android:paddingLeft="16dp"
+        android:text="Product Name"
+        android:textColor="@color/black" />
 
     <Space
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <ImageView
+        android:id="@+id/ivProductIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:id="@+id/ivProductIcon"
-        tools:src="@drawable/ic_panaderia"
         android:layout_gravity="center_vertical"
-        />
+        tools:src="@drawable/ic_panaderia" />
 
     <ImageButton
+        android:id="@+id/ibAddProductToList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ibAddProductToList"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="16dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_add"
-        app:tint="@color/black"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="24dp"
-        />
-
-
+        app:tint="@color/black" />
 
 
 </LinearLayout>
