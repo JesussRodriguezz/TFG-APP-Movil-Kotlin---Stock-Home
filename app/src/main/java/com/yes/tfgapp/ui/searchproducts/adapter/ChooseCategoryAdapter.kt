@@ -27,15 +27,24 @@ class ChooseCategoryAdapter(): RecyclerView.Adapter<ChooseCategoryAdapter.Choose
 
         init {
             if(firstTimeClick){
-                val firstItem = categoriesList[0]
+                println("Entra en el if")
+                selectedItemPosition = 0
+                val firstItem = categoriesList[selectedItemPosition]
                 firstItem.isSelected = true
+                //marca el resto de categorias como no seleccionadas
+                for (i in 1 until categoriesList.size){
+                    categoriesList[i].isSelected = false
+                }
                 firstTimeClick = false
+                println("Item seleccionado: ${firstItem.name}")
             }
             binding.root.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val item = categoriesList[position]
                     val previousItem = categoriesList[selectedItemPosition]
+                    println("Desmarcamos el item: ${previousItem.name}")
+                    println("Marcamos el item: ${item.name}")
                     previousItem.isSelected = false  // Desmarcar el anterior
                     item.isSelected = true  // Marcar el actual
                     selectedItemPosition = position  // Actualizar la posición seleccionada
@@ -97,6 +106,10 @@ class ChooseCategoryAdapter(): RecyclerView.Adapter<ChooseCategoryAdapter.Choose
     fun setCategoriesList(categories: List<CategoryModel>){
         this.categoriesList = categories
         notifyDataSetChanged()
+    }
+
+    fun setFirstTimeClick(){
+        firstTimeClick = true
     }
 
     fun setCategoriesListModified(categories: List<CategoryModel>,myCategoryId: Int ){

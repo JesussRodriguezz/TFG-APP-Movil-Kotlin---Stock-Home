@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -220,6 +221,7 @@ class SearchProductsFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         dialog.setContentView(R.layout.dialog_change_category)
+
         //set the tvProductName
         dialog.findViewById<TextView>(R.id.tvProductNameDialogChangeCategory).text = product.name
         val layoutManager = GridLayoutManager(requireContext(), 3)
@@ -236,6 +238,9 @@ class SearchProductsFragment : Fragment() {
             chooseCategoryAdapter.setCategoriesListModified(categories, product.categoryId)
             chooseCategoryAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
         })
+
+        chooseCategoryAdapter.setFirstTimeClick()
+
         dialog.findViewById<ImageButton>(R.id.ibBoughtProductDialogChangeCategory).setOnClickListener{
             var categorySelected=chooseCategoryAdapter.selectedItemPosition
             println("Category selected: $categorySelected")
@@ -244,17 +249,35 @@ class SearchProductsFragment : Fragment() {
             println("Category selected: $category")
 
         }
-        dialog.show()
 
+        dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).setOnClickListener {
+            val categorySelected = chooseCategoryAdapter.selectedItemPosition
+            val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
+            val newProduct = product.copy(categoryId = category.id)
+            mShoppingListAddItemsViewModel.updateProduct(newProduct)
 
-        /**viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val category = mShoppingListAddItemsViewModel.getCategoryById(product.categoryId)
+            // Notificar al adaptador que los datos han cambiado para que actualice la vista
+            chooseCategoryAdapter.notifyDataSetChanged()
+        }
 
-            } catch (e: Exception) {
-                Log.e("yes", "Error al obtener la categoría del producto", e)
+       /* mShoppingListAddItemsViewModel.productCategoryIdLiveData.observe(viewLifecycleOwner) { categoryId ->
+            if (categoryId != null) {
+                val newProduct = product.copy(categoryId = categoryId.toInt())
+                mShoppingListAddItemsViewModel.updateProduct(newProduct)
+                mShoppingListAddItemsViewModel.productCategoryIdLiveData.value = null
+                chooseCategoryAdapter.setCategoriesListModified(chooseCategoryAdapter.publicCategoriesList, product.categoryId)
+                chooseCategoryAdapter.notifyDataSetChanged()
             }
         }*/
+        dialog.show()
+
+        //cuando se cierre el dialogo, se actualiza la lista de productos
+        dialog.setOnDismissListener {
+            val filteredList = mShoppingListAddItemsViewModel.filterProducts(binding.searchView.query.toString())
+            productsAdapter.setProductList(filteredList)
+            productsAdapter.notifyDataSetChanged()
+        }
+
 
     }
 

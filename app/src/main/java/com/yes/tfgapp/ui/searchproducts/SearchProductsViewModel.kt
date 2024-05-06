@@ -16,7 +16,7 @@ import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(application){
+class SearchProductsViewModel(application: Application): AndroidViewModel(application){
     private val sharedPreferences = application.getSharedPreferences("sharedPrefs", Application.MODE_PRIVATE)
 
     private val shoppingListRepository: ShoppingListRepository
@@ -25,11 +25,16 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
     private val productShoppingListRepository: ProductShoppingListRepository
 
     val readAllDataProduct: LiveData<List<ProductModel>>
+    var readProductsByCategory: LiveData<List<ProductModel>>? = null
+
+
     val readAllDataCategory: LiveData<List<CategoryModel>>
+
     private val allProductsLiveData: LiveData<List<ProductModel>>
     private var allProducts: List<ProductModel> = emptyList()
+
     val productIdLiveData = MutableLiveData<Long>()
-    val productCategoryIdLiveData = MutableLiveData<Int>()
+
 
     init {
 
@@ -117,12 +122,12 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
         }
     }
 
-   override fun onCleared() {
+    override fun onCleared() {
         //remove observer
         allProductsLiveData.removeObserver {  }
 
         super.onCleared()
-   }
+    }
 
     suspend fun getCategoryById(id: Int): CategoryModel {
         return categoryRepository.getCategoryById(id)
@@ -131,11 +136,8 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
     fun updateProduct(product: ProductModel){
         viewModelScope.launch(Dispatchers.IO) {
             productRepository.updateProduct(product)
-            productCategoryIdLiveData.postValue(product.categoryId)
         }
     }
-
-
 
 
 
