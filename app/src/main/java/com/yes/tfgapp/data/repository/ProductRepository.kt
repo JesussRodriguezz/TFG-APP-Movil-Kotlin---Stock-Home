@@ -12,7 +12,7 @@ class ProductRepository(private val productDao: ProductDao) {
         val fixedProducts= FixedProducts.entries
         for(product in fixedProducts){
             val productExists= productDao.getProductById(product.id)
-            val prod = ProductModel(product.id, product.product_name, product.category_id)
+            val prod = ProductModel(product.id, product.productName, product.categoryId)
             if(productExists==null){
                 productDao.addProduct(prod)
             }

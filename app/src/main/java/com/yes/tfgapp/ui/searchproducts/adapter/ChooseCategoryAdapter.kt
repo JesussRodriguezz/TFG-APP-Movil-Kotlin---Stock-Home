@@ -2,18 +2,14 @@ package com.yes.tfgapp.ui.searchproducts.adapter
 
 import android.content.Context
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
-import com.yes.tfgapp.databinding.CategoryListRowBinding
 import com.yes.tfgapp.databinding.ChooseCategoryRowBinding
 import com.yes.tfgapp.domain.model.CategoryModel
-import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListCategoriesAdapter
 
-class ChooseCategoryAdapter(): RecyclerView.Adapter<ChooseCategoryAdapter.ChooseCategoryViewHolder>(){
+class ChooseCategoryAdapter: RecyclerView.Adapter<ChooseCategoryAdapter.ChooseCategoryViewHolder>(){
 
     private var categoriesList = emptyList<CategoryModel>()
     var publicCategoriesList = emptyList<CategoryModel>()

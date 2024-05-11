@@ -2,7 +2,6 @@ package com.yes.tfgapp.ui.shoppinglist.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.databinding.ShoppingListRowBinding
 import com.yes.tfgapp.domain.model.ShoppingListModel
@@ -41,13 +40,13 @@ class ShoppingListAdapter(
             }
 
             binding.root.setOnClickListener {
-                val action_to_add_items = ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListAddItemsFragment(currentItem)
-                val action_to_detail= ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListDetailFragment(currentItem)
+                val actionToAddItems = ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListAddItemsFragment(currentItem)
+                val actionToDetail= ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListDetailFragment(currentItem)
 
                 if(currentItem.quantity>0){
-                    binding.root.findNavController().navigate(action_to_detail)
+                    binding.root.findNavController().navigate(actionToDetail)
                 }else{
-                    binding.root.findNavController().navigate(action_to_add_items)
+                    binding.root.findNavController().navigate(actionToAddItems)
                 }
             }
         }

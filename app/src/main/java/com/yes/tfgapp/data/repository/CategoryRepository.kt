@@ -10,9 +10,9 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
 
     suspend fun addFixedCategories(){
         val fixedCategories= FixedCategories.entries
-        for(categ in fixedCategories){
-            val categoryExists= categoryDao.getCategoryById(categ.id)
-            val category = CategoryModel(categ.id, categ.cateogory_name,icon = categ.icon)
+        for(c in fixedCategories){
+            val categoryExists= categoryDao.getCategoryById(c.id)
+            val category = CategoryModel(c.id, c.categoryName,icon = c.icon)
             if(categoryExists==null){
                 categoryDao.addCategory(category)
             }

@@ -12,11 +12,11 @@ import com.yes.tfgapp.domain.model.ShoppingListModel
 @Dao
 interface ShoppingListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addShoppingList(shoppingList: ShoppingListModel): Unit
+    suspend fun addShoppingList(shoppingList: ShoppingListModel)
     @Update
-    suspend fun updateShoppingList(shoppingList: ShoppingListModel): Unit
+    suspend fun updateShoppingList(shoppingList: ShoppingListModel)
     @Delete
-    suspend fun deleteShoppingList(shoppingList: ShoppingListModel): Unit
+    suspend fun deleteShoppingList(shoppingList: ShoppingListModel)
     @Query("SELECT * FROM shopping_list ORDER BY id ASC")
     fun readAllData(): LiveData<List<ShoppingListModel>>
 

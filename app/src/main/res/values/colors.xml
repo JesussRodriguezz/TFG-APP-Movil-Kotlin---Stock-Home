@@ -10,7 +10,7 @@
     <color name="accentGreen">#926BD86B</color>
 
     <color name="red">#FF0000</color>
-    <color name="transparente">#00FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 
     <!--Colores para la bar de la lista de compra-->
     <color name="progress1" >#756C6C</color>

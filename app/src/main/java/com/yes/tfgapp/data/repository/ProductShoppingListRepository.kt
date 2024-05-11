@@ -6,7 +6,6 @@ import com.yes.tfgapp.domain.model.ProductShoppingListModel
 
 class ProductShoppingListRepository(private val productShoppingListDAO: ProductShoppingListDao) {
 
-    //val readAllData: List<ProductShoppingListModel> = productShoppingListDAO.readAllData()
 
     suspend fun addProductShoppingList(productShoppingList: ProductShoppingListModel) {
         val existingProductShoppingList = productShoppingListDAO.getProductShoppingList(

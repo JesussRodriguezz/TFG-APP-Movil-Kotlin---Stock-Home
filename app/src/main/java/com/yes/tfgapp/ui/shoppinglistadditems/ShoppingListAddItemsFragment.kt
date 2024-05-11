@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -37,10 +36,10 @@ class ShoppingListAddItemsFragment : Fragment() {
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
     private lateinit var mShoppingListViewModel: ShoppingListViewModel
 
-    val categoriesAdapter = ShoppingListCategoriesAdapter(
+    private val categoriesAdapter = ShoppingListCategoriesAdapter(
         onItemSelected = { position -> updateCategories(position) },
         onConfigureSelected = { category -> configureCategories(category)})
-    val productsAdapter = ShoppingListProductsAdapter { product -> addProductToList(product) }
+    private val productsAdapter = ShoppingListProductsAdapter { product -> addProductToList(product) }
 
 
 
@@ -53,7 +52,7 @@ class ShoppingListAddItemsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentShoppingListAddItemsBinding.inflate(inflater, container, false)
         initUI()
         initListeners()
@@ -72,20 +71,20 @@ class ShoppingListAddItemsFragment : Fragment() {
             GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
         categoriesRecyclerView.adapter = categoriesAdapter
 
-        mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner, { categories ->
+        mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner) { categories ->
             categoriesAdapter.setCategoriesList(categories)
             categoriesAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
-        })
+        }
 
 
         val productsRecyclerView = binding.rvProducts
         productsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         productsRecyclerView.adapter = productsAdapter
 
-        mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner, { products ->
+        mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner){ products ->
             productsAdapter.setProductList(products)
             productsAdapter.notifyDataSetChanged()
-        })
+        }
 
         binding.btnSearchView.setOnClickListener{
             val action = ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(args.CurrentShoppingList)
@@ -106,7 +105,7 @@ class ShoppingListAddItemsFragment : Fragment() {
                 val newCategoryName =
                     dialog.findViewById<TextInputEditText>(R.id.etNewCategoryName).text.toString()
 
-                if (!newCategoryName.isEmpty()) {
+                if (newCategoryName.isNotEmpty()) {
                     val newCategory = CategoryModel(0, newCategoryName, false)
                     mShoppingListAddItemsViewModel.addCategory(newCategory)
                     Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG)

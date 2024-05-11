@@ -22,7 +22,7 @@
         style="@style/TitleToolbarDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Añadir productos"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
             style="@style/ProductsListTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:text="Búsqueda" />
 
         <Space
@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchView"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             >
 
             <Button
@@ -85,8 +85,8 @@
                 android:backgroundTint="@color/accentRed"
                 android:includeFontPadding="false"
                 android:text="Local"
-                android:textSize="16dp"
-                android:layout_marginRight="8dp"/>
+                android:textSize="16sp"
+                android:layout_marginEnd="8dp"/>
 
             <Button
                 android:id="@+id/btnExternalSearch"
@@ -98,7 +98,7 @@
                 android:textColor="@color/black"
                 android:includeFontPadding="false"
                 android:text="Externa"
-                android:textSize="16dp"/>
+                android:textSize="16sp"/>
         </LinearLayout>
     </LinearLayout>
 

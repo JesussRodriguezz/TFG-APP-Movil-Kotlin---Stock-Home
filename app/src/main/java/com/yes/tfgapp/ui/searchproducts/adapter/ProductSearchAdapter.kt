@@ -5,11 +5,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
-import com.yes.tfgapp.databinding.ProductListRowBinding
 import com.yes.tfgapp.databinding.ProductSearchRowBinding
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
-import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListProductsAdapter
 
 class ProductSearchAdapter (private val onAddProductToList: (ProductModel,Int) -> Unit,private val getCategoryById: (Int, (CategoryModel?) -> Unit) -> Unit,private val changeCategory:(ProductModel,Int)->Unit): RecyclerView.Adapter<ProductSearchAdapter.ProductSearchViewHolder>(){
 

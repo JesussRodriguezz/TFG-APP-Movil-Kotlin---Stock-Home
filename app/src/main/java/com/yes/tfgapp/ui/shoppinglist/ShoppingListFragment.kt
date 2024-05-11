@@ -7,12 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -21,7 +18,6 @@ import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.FragmentShoppingListBinding
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.shoppinglist.adapter.ShoppingListAdapter
-import kotlin.math.log
 
 class ShoppingListFragment : Fragment() {
 
@@ -54,12 +50,12 @@ class ShoppingListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         mShoppingListViewModel = ViewModelProvider(this).get(ShoppingListViewModel::class.java)
-        mShoppingListViewModel.readAllData.observe(viewLifecycleOwner, { shoppingList ->
+        mShoppingListViewModel.readAllData.observe(viewLifecycleOwner){ shoppingList ->
             adapter.setData(shoppingList)
-        })
+        }
     }
 
-    fun onConfigureItem(shoppingList: ShoppingListModel) {
+    private fun onConfigureItem(shoppingList: ShoppingListModel) {
 
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -116,7 +112,7 @@ class ShoppingListFragment : Fragment() {
     }
 
     private fun inputCheck(name: String): Boolean {
-        return !(name.isEmpty())
+        return (name.isNotEmpty())
     }
 
 }

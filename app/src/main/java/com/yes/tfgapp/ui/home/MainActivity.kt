@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun dpToPx(context: Context, valueInDp: Float): Float {
+    private fun dpToPx(context: Context, valueInDp: Float): Float {
         val metrics = context.resources.displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics)
     }
@@ -67,9 +67,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun activeButtonBack() {
-        binding.ibBackArrow.visibility = android.view.View.VISIBLE
+        binding.ibBackArrow.visibility = View.VISIBLE
         binding.ibBackArrow.setOnClickListener {
-            //onBackPressed()
             navController.popBackStack()
         }
     }
@@ -78,11 +77,11 @@ class MainActivity : AppCompatActivity() {
         binding.ibBackArrow.visibility = View.INVISIBLE
     }
 
-    fun hideBottomNav() {
+    private fun hideBottomNav() {
         binding.bottomNavView.visibility = View.GONE
     }
 
-    fun showBottomNav() {
+    private fun showBottomNav() {
         binding.bottomNavView.apply {
             alpha = 0f // Configura la transparencia inicialmente a 0
             visibility = View.VISIBLE

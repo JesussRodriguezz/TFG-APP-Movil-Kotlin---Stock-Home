@@ -2,15 +2,15 @@ package com.yes.tfgapp.domain.fixed
 
 enum class FixedProducts(
     val id: Int = 0,
-    val product_name: String,
-    val category_id: Int
+    val productName: String,
+    val categoryId: Int
 ) {
-    Manzana(product_name="Manzana", category_id= FixedCategories.COMIDA.id),
-    Pera( product_name="Pera",category_id= FixedCategories.COMIDA.id),
-    Pan( product_name="Pan", category_id= FixedCategories.BEBIDAS.id),
-    Leche( product_name="Leche", category_id= FixedCategories.BEBIDAS.id),
-    Detergente( product_name="Detergente", category_id= FixedCategories.LIMPIEZA.id),
-    Lavavajillas( product_name="Lavavajillas", category_id= FixedCategories.LIMPIEZA.id),
+    Manzana(productName="Manzana", categoryId= FixedCategories.COMIDA.id),
+    Pera( productName="Pera",categoryId= FixedCategories.COMIDA.id),
+    Pan( productName="Pan", categoryId= FixedCategories.BEBIDAS.id),
+    Leche( productName="Leche", categoryId= FixedCategories.BEBIDAS.id),
+    Detergente( productName="Detergente", categoryId= FixedCategories.LIMPIEZA.id),
+    Lavavajillas( productName="Lavavajillas", categoryId= FixedCategories.LIMPIEZA.id),
 
 
 

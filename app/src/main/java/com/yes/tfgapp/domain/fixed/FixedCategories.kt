@@ -4,7 +4,7 @@ import com.yes.tfgapp.R
 
 enum class FixedCategories(
     val id: Int,
-    val cateogory_name: String,
+    val categoryName: String,
     val icon: Int
 ) {
     FOOD(1, "Frutas", R.drawable.nestea),

@@ -21,88 +21,49 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="4dp"
-            tools:src="@drawable/ic_panaderia"/>
+            tools:src="@drawable/ic_panaderia"
+            android:contentDescription="ivCategoryIcon" />
 
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tvCategoryName"
-            android:layout_height="wrap_content"
             android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="5dp"
             android:ellipsize="end"
+            android:fontFamily="@font/roboto_medium"
             android:maxLines="1"
             android:textColor="@color/primaryDark"
             android:textSize="14sp"
-            android:fontFamily="@font/roboto_medium"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintWidth_default="wrap"
-            app:layout_constraintWidth_max="100dp"
-            app:layout_constraintWidth_min="0dp"
-            tools:text="Category"
-            android:layout_gravity="center_vertical"
-
-            />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-
-        <ImageButton
-            android:id="@+id/ibSettingsCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:background="@color/transparente"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_three_points"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_gravity="center_vertical"
-            />
-
-
-
-    </LinearLayout>
-
-    <!--<androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/tvCategoryName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/primaryDark"
-            android:textSize="14sp"
-            android:fontFamily="@font/roboto_medium"
-            app:layout_constraintEnd_toStartOf="@id/ibSettingsCategory"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_default="wrap"
             app:layout_constraintWidth_max="100dp"
             app:layout_constraintWidth_min="0dp"
             tools:text="Category" />
 
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
         <ImageButton
             android:id="@+id/ibSettingsCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="5dp"
-            android:background="@color/transparente"
+            android:background="@color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_three_points"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="ibSettingsCategory" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    </LinearLayout>
 
 
 </androidx.cardview.widget.CardView>

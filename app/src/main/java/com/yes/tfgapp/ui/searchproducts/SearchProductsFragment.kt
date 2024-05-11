@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
 import com.yes.tfgapp.data.network.ProductsApiService
 import com.yes.tfgapp.data.network.response.ProductSearchResponse
-import com.yes.tfgapp.data.repository.ProductRepository
 import com.yes.tfgapp.databinding.FragmentSearchProductsBinding
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
@@ -31,7 +30,6 @@ import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchAdapter
 import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchApiAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
-import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListProductsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,7 +63,7 @@ class SearchProductsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSearchProductsBinding.inflate(inflater, container, false)
         initUI()
         initListeners()
@@ -124,7 +122,7 @@ class SearchProductsFragment : Fragment() {
         })
     }
 
-    fun getCategoryById(id: Int, callback: (CategoryModel?) -> Unit) {
+    private fun getCategoryById(id: Int, callback: (CategoryModel?) -> Unit) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val category = mShoppingListAddItemsViewModel.getCategoryById(id)
@@ -140,11 +138,11 @@ class SearchProductsFragment : Fragment() {
         binding.progressBar.isVisible = true
         CoroutineScope(Dispatchers.IO).launch {
             val myResponse: Response<ProductSearchResponse> =
-                retrofit.create(ProductsApiService::class.java).searchProductsv2(query.orEmpty())
+                retrofit.create(ProductsApiService::class.java).searchApiProducts(query.orEmpty())
             if (myResponse.isSuccessful) {
                 val response: ProductSearchResponse? = myResponse.body()
                 if (response != null) {
-                    Log.i("yes", "Funciona: contenido : ${response}")
+                    Log.i("yes", "Funciona: contenido : $response")
                     (activity as MainActivity).runOnUiThread {
                         val filteredProducts = response.products.filter {
                             !it.productName.isNullOrBlank() && it.productName.contains(
@@ -238,12 +236,14 @@ class SearchProductsFragment : Fragment() {
                 return if (position == 0) 3 else 1
             }
         }
-        dialog.findViewById<RecyclerView>(R.id.rvCategoriesDialogChangeCategory).layoutManager = layoutManager
-        dialog.findViewById<RecyclerView>(R.id.rvCategoriesDialogChangeCategory).adapter = chooseCategoryAdapter
-        mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner, { categories ->
+        val rvCategories = dialog.findViewById<RecyclerView>(R.id.rvCategoriesDialogChangeCategory)
+        rvCategories.layoutManager = layoutManager
+        rvCategories.adapter = chooseCategoryAdapter
+        mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner) { categories ->
             chooseCategoryAdapter.setCategoriesListModified(categories, product.categoryId)
             chooseCategoryAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
-        })
+        }
+
         chooseCategoryAdapter.setFirstTimeClick()
     }
 
@@ -256,7 +256,7 @@ class SearchProductsFragment : Fragment() {
     }
 
     private fun addProductWithNewCategory(product: ProductModel, position: Int) {
-        var categorySelected=chooseCategoryAdapter.selectedItemPosition
+        val categorySelected=chooseCategoryAdapter.selectedItemPosition
         val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
         val newProduct = product.copy(categoryId = category.id)
         mShoppingListAddItemsViewModel.updateProduct(newProduct)

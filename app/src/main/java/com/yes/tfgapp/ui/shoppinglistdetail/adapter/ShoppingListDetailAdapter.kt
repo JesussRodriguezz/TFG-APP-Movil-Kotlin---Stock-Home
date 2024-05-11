@@ -15,7 +15,7 @@ class ShoppingListDetailAdapter(
     private val setProductIsBought: (ProductShoppingListModel) -> Unit
 ) : RecyclerView.Adapter<ShoppingListDetailAdapter.ShoppingListDetailViewHolder>() {
 
-    private var ShoppingListProductsList = emptyList<ProductModel>()
+    private var shoppingListProductsList = emptyList<ProductModel>()
 
     inner class ShoppingListDetailViewHolder(private val binding: MyProductsListRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -73,16 +73,16 @@ class ShoppingListDetailAdapter(
     }
 
     override fun getItemCount(): Int {
-        return ShoppingListProductsList.size
+        return shoppingListProductsList.size
     }
 
     override fun onBindViewHolder(holder: ShoppingListDetailViewHolder, position: Int) {
-        val currentItem = ShoppingListProductsList[position]
+        val currentItem = shoppingListProductsList[position]
         holder.bind(currentItem, setProductIsBought, currentShoppingList)
     }
 
     fun setData(product: List<ProductModel>) {
-        this.ShoppingListProductsList = product
+        this.shoppingListProductsList = product
         notifyDataSetChanged()
     }
 

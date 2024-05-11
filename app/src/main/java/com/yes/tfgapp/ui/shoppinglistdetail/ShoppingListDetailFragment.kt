@@ -6,15 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.FragmentShoppingListDetailBinding
-import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
@@ -41,7 +38,7 @@ class ShoppingListDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentShoppingListDetailBinding.inflate(inflater, container, false)
         initUI()
         initListeners()
@@ -72,17 +69,17 @@ class ShoppingListDetailFragment : Fragment() {
         myProductsBoughtRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         myProductsBoughtRecyclerView.adapter = myProductsBoughtAdapter
 
-        mShoppingListDetailViewModel.readAllDataProductShoppingList.observe(viewLifecycleOwner, { productShoppingList ->
-            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner, { products ->
+        mShoppingListDetailViewModel.readAllDataProductShoppingList.observe(viewLifecycleOwner) { productShoppingList ->
+            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner) { products ->
                 myProductsAdapter.setData(products)
-            })
-        })
+            }
+        }
 
-        mShoppingListDetailViewModel.readAllDataProductBoughtShoppingList.observe(viewLifecycleOwner, { productShoppingList ->
-            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner, { products ->
+        mShoppingListDetailViewModel.readAllDataProductBoughtShoppingList.observe(viewLifecycleOwner) { productShoppingList ->
+            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner) { products ->
                 myProductsBoughtAdapter.setData(products)
-            })
-        })
+            }
+        }
     }
 
 

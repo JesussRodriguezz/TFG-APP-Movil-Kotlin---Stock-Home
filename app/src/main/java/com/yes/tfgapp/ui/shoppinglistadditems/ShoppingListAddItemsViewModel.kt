@@ -17,8 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel(application) {
-    private val sharedPreferences =
-        application.getSharedPreferences("sharedPrefs", Application.MODE_PRIVATE)
 
     private val shoppingListRepository: ShoppingListRepository
     private val productRepository: ProductRepository
@@ -30,7 +28,7 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
     private val allProductsLiveData: LiveData<List<ProductModel>>
     private var allProducts: List<ProductModel> = emptyList()
     val productIdLiveData = MutableLiveData<Long>()
-    val productCategoryIdLiveData = MutableLiveData<Int>()
+    private val productCategoryIdLiveData = MutableLiveData<Int>()
 
     init {
         val shoppingListDao = AppDataBase.getDatabase(application).shoppingListDao()
