@@ -12,8 +12,9 @@ import com.yes.tfgapp.domain.model.ShoppingListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ShoppingListViewModel(application: Application): AndroidViewModel(application){
-    private val sharedPreferences = application.getSharedPreferences("sharedPrefs", Application.MODE_PRIVATE)
+class ShoppingListViewModel(application: Application) : AndroidViewModel(application) {
+    private val sharedPreferences =
+        application.getSharedPreferences("sharedPrefs", Application.MODE_PRIVATE)
 
     val readAllData: LiveData<List<ShoppingListModel>>
     private val repository: ShoppingListRepository
@@ -41,30 +42,25 @@ class ShoppingListViewModel(application: Application): AndroidViewModel(applicat
             }
             sharedPreferences.edit().putBoolean("firstTime", false).apply()
         }
-
         //Hacemos que todas las categorias inicialmente esten deseleccionadas
         viewModelScope.launch(Dispatchers.IO) {
             categoryRepository.updateAllCategories(false)
         }
-
-
-
-
     }
 
-    fun addShoppingList(shoppingList: ShoppingListModel){
+    fun addShoppingList(shoppingList: ShoppingListModel) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addShoppingList(shoppingList)
         }
     }
 
-    fun deleteShoppingList(shoppingList: ShoppingListModel){
+    fun deleteShoppingList(shoppingList: ShoppingListModel) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteShoppingList(shoppingList)
         }
     }
 
-    fun updateShoppingList(shoppingList: ShoppingListModel){
+    fun updateShoppingList(shoppingList: ShoppingListModel) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateShoppingList(shoppingList)
         }

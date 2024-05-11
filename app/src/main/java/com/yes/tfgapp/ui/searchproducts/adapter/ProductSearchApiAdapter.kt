@@ -10,12 +10,12 @@ import com.yes.tfgapp.data.network.response.ProductItemResponse
 import com.yes.tfgapp.databinding.ProductApiSearchRowBinding
 import com.yes.tfgapp.domain.model.ProductModel
 
-class ProductSearchApiAdapter(private val onAddProductToList: (ProductModel) -> Unit): RecyclerView.Adapter<ProductSearchApiAdapter.ProductSearchViewHolder>(){
+class ProductSearchApiAdapter(private val onAddProductToList: (ProductModel,Int) -> Unit): RecyclerView.Adapter<ProductSearchApiAdapter.ProductSearchViewHolder>(){
 
     private var productApiSearchList = emptyList<ProductItemResponse>()
     inner class ProductSearchViewHolder(private val binding: ProductApiSearchRowBinding ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentItem: ProductItemResponse,onAddProductToList: (ProductModel) -> Unit) {
+        fun bind(currentItem: ProductItemResponse,onAddProductToList: (ProductModel,Int) -> Unit) {
             val backgroundColor = if(adapterPosition % 2 == 0){
                 R.color.primaryGrey
             }else{
@@ -27,7 +27,7 @@ class ProductSearchApiAdapter(private val onAddProductToList: (ProductModel) -> 
             Picasso.get().load(currentItem.productImage).into(binding.ivProductApiSearchImage)
 
             binding.ibBoughtProduct.setOnClickListener{
-                onAddProductToList(ProductModel(name = currentItem.productName))
+                onAddProductToList(ProductModel(name = currentItem.productName),adapterPosition)
             }
         }
 

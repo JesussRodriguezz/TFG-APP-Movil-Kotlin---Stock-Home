@@ -32,8 +32,7 @@ class ShoppingListAddItemsFragment : Fragment() {
 
     private val args: ShoppingListAddItemsFragmentArgs by navArgs()
 
-    private lateinit var _binding: FragmentShoppingListAddItemsBinding
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentShoppingListAddItemsBinding
 
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
     private lateinit var mShoppingListViewModel: ShoppingListViewModel
@@ -42,7 +41,7 @@ class ShoppingListAddItemsFragment : Fragment() {
         onItemSelected = { position -> updateCategories(position) },
         onConfigureSelected = { category -> configureCategories(category)})
     val productsAdapter = ShoppingListProductsAdapter { product -> addProductToList(product) }
-    //,args.CurrentShoppingList
+
 
 
     override fun onResume() {
@@ -55,7 +54,7 @@ class ShoppingListAddItemsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentShoppingListAddItemsBinding.inflate(inflater, container, false)
+        binding = FragmentShoppingListAddItemsBinding.inflate(inflater, container, false)
         initUI()
         initListeners()
         return binding.root
@@ -88,24 +87,15 @@ class ShoppingListAddItemsFragment : Fragment() {
             productsAdapter.notifyDataSetChanged()
         })
 
-
-
         binding.btnSearchView.setOnClickListener{
             val action = ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(args.CurrentShoppingList)
             binding.root.findNavController().navigate(action)
         }
 
-
-
-
-        //El rollo no es que con observe tengas que asignarle ese valor todo el rato, el observe solo actualiza una variable cuando cambia.
-        //Para nuestro caso tenemos que tener en el adapter una variable (categoriesList) que primero la inicialicemos con el observer readAllData
-        //y luego cuando queramos cambiarla, simplemente le asignamos el nuevo valor y llamamos a notifyDataSetChanged() para que se actualice la vista.
-
     }
 
     private fun initListeners() {
-        binding.btnCreateList.setOnClickListener {
+        binding.btnCreateCategory.setOnClickListener {
             val dialog = Dialog(requireContext())
             dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setContentView(R.layout.dialog_new_category)
@@ -187,20 +177,10 @@ class ShoppingListAddItemsFragment : Fragment() {
     }
 
     private fun addProductToList(product: ProductModel){
-        //mShoppingListDetailViewModel.addProductToList(productShoppingList)
-        if(this.args.CurrentShoppingList != null){
-            println("Current shopping list: ${this.args.CurrentShoppingList.name}")
-        }else{
-            println("Current shopping list is null")
-        }
-        println("Product added to list: ${product.name}")
         val productShoppingList= ProductShoppingListModel(
             shoppingListId = this.args.CurrentShoppingList.id,
             productId = product.id
         )
-        println("ProductShoppingList: ${productShoppingList.productId}")
-        println("ShoppingList: ${productShoppingList.shoppingListId}")
-        println("ProductShoppingList is bought: ${productShoppingList.isBought}")
         mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
     }
 }

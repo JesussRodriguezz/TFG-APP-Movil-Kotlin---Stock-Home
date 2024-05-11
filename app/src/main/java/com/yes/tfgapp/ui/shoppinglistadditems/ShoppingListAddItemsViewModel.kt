@@ -16,8 +16,9 @@ import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(application){
-    private val sharedPreferences = application.getSharedPreferences("sharedPrefs", Application.MODE_PRIVATE)
+class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel(application) {
+    private val sharedPreferences =
+        application.getSharedPreferences("sharedPrefs", Application.MODE_PRIVATE)
 
     private val shoppingListRepository: ShoppingListRepository
     private val productRepository: ProductRepository
@@ -32,8 +33,6 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
     val productCategoryIdLiveData = MutableLiveData<Int>()
 
     init {
-
-
         val shoppingListDao = AppDataBase.getDatabase(application).shoppingListDao()
         shoppingListRepository = ShoppingListRepository(shoppingListDao)
         val productDao = AppDataBase.getDatabase(application).productDao()
@@ -47,16 +46,15 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
         val productShoppingListDato = AppDataBase.getDatabase(application).productShoppingListDao()
         productShoppingListRepository = ProductShoppingListRepository(productShoppingListDato)
 
-        allProductsLiveData= productRepository.readAllData
+        allProductsLiveData = productRepository.readAllData
 
         allProductsLiveData.observeForever { products ->
             allProducts = products ?: emptyList()
         }
 
-
     }
 
-    fun updateCategory(category: CategoryModel){
+    fun updateCategory(category: CategoryModel) {
         viewModelScope.launch(Dispatchers.IO) {
             categoryRepository.updateCategory(category)
         }
@@ -69,7 +67,7 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
 
     }
 
-    fun addCategory(category: CategoryModel){
+    fun addCategory(category: CategoryModel) {
         viewModelScope.launch(Dispatchers.IO) {
             categoryRepository.addCategory(category)
         }
@@ -81,18 +79,17 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
         }
     }
 
-    fun addProductToList( productShoppingList : ProductShoppingListModel){
+    fun addProductToList(productShoppingList: ProductShoppingListModel) {
         viewModelScope.launch(Dispatchers.IO) {
             productShoppingListRepository.addProductShoppingList(productShoppingList)
         }
     }
 
     fun filterProducts(text: String?): List<ProductModel> {
-
-        val productsToShow= mutableListOf<ProductModel>()
-        text?.let{
-            if(it.isNotEmpty()){
-                val temporalProduct =ProductModel(name=it)
+        val productsToShow = mutableListOf<ProductModel>()
+        text?.let {
+            if (it.isNotEmpty()) {
+                val temporalProduct = ProductModel(name = it)
                 productsToShow.add(temporalProduct)
                 productsToShow.addAll(allProducts.filter { product ->
                     product.name.contains(it, ignoreCase = true)
@@ -100,7 +97,6 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
             }
         }
         return productsToShow
-
     }
 
     fun addProduct(product: ProductModel) {
@@ -117,40 +113,20 @@ class ShoppingListAddItemsViewModel(application: Application): AndroidViewModel(
         }
     }
 
-   override fun onCleared() {
+    override fun onCleared() {
         //remove observer
-        allProductsLiveData.removeObserver {  }
-
+        allProductsLiveData.removeObserver { }
         super.onCleared()
-   }
+    }
 
     suspend fun getCategoryById(id: Int): CategoryModel {
         return categoryRepository.getCategoryById(id)
     }
 
-    fun updateProduct(product: ProductModel){
+    fun updateProduct(product: ProductModel) {
         viewModelScope.launch(Dispatchers.IO) {
             productRepository.updateProduct(product)
             productCategoryIdLiveData.postValue(product.categoryId)
         }
     }
-
-    fun updateAndAddProduct(product: ProductModel) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            /*productRepository.updateProduct(product)
-            val existingProduct = productRepository.findProductByName(product.name)
-            if (existingProduct == null) {
-                // El producto no existe, insertar en la base de datos
-                val productId = productRepository.insertProduct(product)
-                productIdLiveData.postValue(productId)
-            } else {
-                // El producto ya existe, opcionalmente actualizar o simplemente usar el ID existente
-                productIdLiveData.postValue(existingProduct.id.toLong())
-            }*/
-        }
-
-    }
-
-
 }

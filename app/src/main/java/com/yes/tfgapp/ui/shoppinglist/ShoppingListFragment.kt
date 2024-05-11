@@ -25,11 +25,11 @@ import kotlin.math.log
 
 class ShoppingListFragment : Fragment() {
 
-    private var _binding: FragmentShoppingListBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: FragmentShoppingListBinding
     private lateinit var mShoppingListViewModel: ShoppingListViewModel
-
+    private val adapter = ShoppingListAdapter(
+        onClickOpenConfiguration = { onConfigureItem(it) }
+    )
 
     override fun onResume() {
         super.onResume()
@@ -41,16 +41,14 @@ class ShoppingListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentShoppingListBinding.inflate(inflater, container, false)
+        binding = FragmentShoppingListBinding.inflate(inflater, container, false)
         initUI()
         initListeners()
         return binding.root
     }
 
     private fun initUI() {
-        val adapter = ShoppingListAdapter(
-            onClickOpenConfiguration={onConfigureItem(it)}
-        )
+
         val recyclerView = binding.rvShoppingList
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -59,26 +57,26 @@ class ShoppingListFragment : Fragment() {
         mShoppingListViewModel.readAllData.observe(viewLifecycleOwner, { shoppingList ->
             adapter.setData(shoppingList)
         })
-
-
     }
 
     fun onConfigureItem(shoppingList: ShoppingListModel) {
-        val dialog =Dialog(requireContext())
+
+        val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_configure_shopping_list)
         dialog.show()
-        val textInputLayout:TextInputLayout = dialog.findViewById(R.id.tilUpdateNameList)
+        val textInputLayout: TextInputLayout = dialog.findViewById(R.id.tilUpdateNameList)
         textInputLayout.hint = shoppingList.name
-
 
         val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChanges)
         btnSaveChanges.setOnClickListener {
-            val newName = dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameList).text.toString()
+            val newName =
+                dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameList).text.toString()
             val newShoppingList = ShoppingListModel(shoppingList.id, newName, shoppingList.quantity)
             mShoppingListViewModel.updateShoppingList(newShoppingList)
             dialog.hide()
         }
+
         val btnDeleteList = dialog.findViewById<ImageButton>(R.id.ibDeleteList)
         btnDeleteList.setOnClickListener {
             mShoppingListViewModel.deleteShoppingList(shoppingList)
@@ -87,7 +85,6 @@ class ShoppingListFragment : Fragment() {
     }
 
     private fun initListeners() {
-
         binding.extendedFab.setOnClickListener {
             showDialogNewList()
         }
@@ -99,7 +96,7 @@ class ShoppingListFragment : Fragment() {
 
         dialog.setContentView(R.layout.dialog_new_shopping_list)
         dialog.show()
-        val btnAdd:Button = dialog.findViewById(R.id.btnCreateList)
+        val btnAdd: Button = dialog.findViewById(R.id.btnCreateList)
         btnAdd.setOnClickListener {
             addShoppingList(dialog)
         }
@@ -107,18 +104,15 @@ class ShoppingListFragment : Fragment() {
 
     private fun addShoppingList(dialog: Dialog) {
         val name = dialog.findViewById<TextInputEditText?>(R.id.etNewListName).text.toString()
-
         if (inputCheck(name)) {
             val shoppingList = ShoppingListModel(0, name, 0)
             mShoppingListViewModel.addShoppingList(shoppingList)
             Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
-
         } else {
             Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG)
                 .show()
         }
         dialog.hide()
-
     }
 
     private fun inputCheck(name: String): Boolean {

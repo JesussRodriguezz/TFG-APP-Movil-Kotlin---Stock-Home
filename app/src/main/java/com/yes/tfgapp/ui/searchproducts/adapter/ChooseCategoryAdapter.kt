@@ -18,7 +18,6 @@ class ChooseCategoryAdapter(): RecyclerView.Adapter<ChooseCategoryAdapter.Choose
     private var categoriesList = emptyList<CategoryModel>()
     var publicCategoriesList = emptyList<CategoryModel>()
     var selectedItemPosition = 0
-    private var initialSelectedPosition = 0
     private var firstTimeClick = true
 
 
@@ -27,24 +26,19 @@ class ChooseCategoryAdapter(): RecyclerView.Adapter<ChooseCategoryAdapter.Choose
 
         init {
             if(firstTimeClick){
-                println("Entra en el if")
                 selectedItemPosition = 0
                 val firstItem = categoriesList[selectedItemPosition]
                 firstItem.isSelected = true
-                //marca el resto de categorias como no seleccionadas
                 for (i in 1 until categoriesList.size){
                     categoriesList[i].isSelected = false
                 }
                 firstTimeClick = false
-                println("Item seleccionado: ${firstItem.name}")
             }
             binding.root.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val item = categoriesList[position]
                     val previousItem = categoriesList[selectedItemPosition]
-                    println("Desmarcamos el item: ${previousItem.name}")
-                    println("Marcamos el item: ${item.name}")
                     previousItem.isSelected = false  // Desmarcar el anterior
                     item.isSelected = true  // Marcar el actual
                     selectedItemPosition = position  // Actualizar la posición seleccionada
@@ -58,23 +52,27 @@ class ChooseCategoryAdapter(): RecyclerView.Adapter<ChooseCategoryAdapter.Choose
             binding.ivCategoryIcon.setImageResource(currentItem.icon)
             binding.cvCategory.isSelected = currentItem.isSelected
             if (adapterPosition == 0) {
-
-                val dialogWidthPx = dpToPx(400, binding.root.context)  // Ancho del diálogo en píxeles
-                val cardWidthPx = binding.root.context.resources.getDimensionPixelSize(R.dimen.card_width)
-                val totalPadding = dialogWidthPx - cardWidthPx
-                val sidePadding = (totalPadding / 2) - dpToPx(12, binding.root.context)  // Restar el margen izquierdo del diálogo
-
-                val layoutParams = binding.cvCategory.layoutParams as ViewGroup.MarginLayoutParams
-                layoutParams.setMargins(sidePadding, 0, sidePadding, 0)
-                binding.cvCategory.layoutParams = layoutParams
+                setCategoryToCenterPosition()
             } else {
-                val layoutParams = binding.cvCategory.layoutParams as ViewGroup.MarginLayoutParams
-                layoutParams.setMargins(0, 32, 0, 0)
-                binding.cvCategory.layoutParams = layoutParams
+                setCategoryToDefaultPosition()
             }
         }
-        private fun Int.toDp(context: Context): Int {
-            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), context.resources.displayMetrics).toInt()
+
+        private fun setCategoryToCenterPosition() {
+            val dialogWidthPx = dpToPx(400, binding.root.context)  // Ancho del diálogo en píxeles
+            val cardWidthPx = binding.root.context.resources.getDimensionPixelSize(R.dimen.card_width)
+            val totalPadding = dialogWidthPx - cardWidthPx
+            val sidePadding = (totalPadding / 2) - dpToPx(12, binding.root.context)  // Restar el margen izquierdo del diálogo
+
+            val layoutParams = binding.cvCategory.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(sidePadding, 0, sidePadding, 0)
+            binding.cvCategory.layoutParams = layoutParams
+        }
+
+        private fun setCategoryToDefaultPosition() {
+            val layoutParams = binding.cvCategory.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(0, 32, 0, 0)
+            binding.cvCategory.layoutParams = layoutParams
         }
 
         private fun dpToPx(dp: Int, context: Context): Int {
@@ -101,11 +99,6 @@ class ChooseCategoryAdapter(): RecyclerView.Adapter<ChooseCategoryAdapter.Choose
     override fun onBindViewHolder(holder: ChooseCategoryAdapter.ChooseCategoryViewHolder, position: Int) {
         val currentItem = categoriesList[position]
         holder.bind(currentItem)
-    }
-
-    fun setCategoriesList(categories: List<CategoryModel>){
-        this.categoriesList = categories
-        notifyDataSetChanged()
     }
 
     fun setFirstTimeClick(){

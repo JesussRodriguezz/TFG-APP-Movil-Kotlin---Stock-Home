@@ -11,13 +11,13 @@ import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListProductsAdapter
 
-class ProductSearchAdapter (private val onAddProductToList: (ProductModel) -> Unit,private val getCategoryById: (Int, (CategoryModel?) -> Unit) -> Unit,private val changeCategory:(ProductModel,Int)->Unit): RecyclerView.Adapter<ProductSearchAdapter.ProductSearchViewHolder>(){
+class ProductSearchAdapter (private val onAddProductToList: (ProductModel,Int) -> Unit,private val getCategoryById: (Int, (CategoryModel?) -> Unit) -> Unit,private val changeCategory:(ProductModel,Int)->Unit): RecyclerView.Adapter<ProductSearchAdapter.ProductSearchViewHolder>(){
 
     private var productsList = emptyList<ProductModel>()
 
     inner class ProductSearchViewHolder(private val binding: ProductSearchRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentItem: ProductModel, onAddProductToList: (ProductModel) -> Unit, getCategoryById: (Int, (CategoryModel?) -> Unit) -> Unit, changeCategory:(ProductModel,Int)->Unit){
+        fun bind(currentItem: ProductModel, onAddProductToList: (ProductModel,Int) -> Unit, getCategoryById: (Int, (CategoryModel?) -> Unit) -> Unit, changeCategory:(ProductModel,Int)->Unit){
 
             val backgroundColor = if(adapterPosition % 2 == 0){
                 R.color.primaryGrey
@@ -37,7 +37,7 @@ class ProductSearchAdapter (private val onAddProductToList: (ProductModel) -> Un
             }
 
             binding.ibAddProductToList.setOnClickListener{
-                onAddProductToList(currentItem)
+                onAddProductToList(currentItem,adapterPosition)
             }
         }
 

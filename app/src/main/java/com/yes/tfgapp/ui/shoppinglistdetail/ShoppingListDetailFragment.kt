@@ -28,11 +28,8 @@ class ShoppingListDetailFragment : Fragment() {
 
 
     private val args: ShoppingListDetailFragmentArgs by navArgs()
-    private lateinit var _binding : FragmentShoppingListDetailBinding
+    private lateinit var binding : FragmentShoppingListDetailBinding
     private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
-
-
-
 
 
     override fun onResume() {
@@ -45,16 +42,16 @@ class ShoppingListDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentShoppingListDetailBinding.inflate(inflater, container, false)
+        binding = FragmentShoppingListDetailBinding.inflate(inflater, container, false)
         initUI()
         initListeners()
-        return _binding.root
+        return binding.root
     }
 
     private fun initListeners() {
-        this._binding.fabAddProducts.setOnClickListener{
+        this.binding.fabAddProducts.setOnClickListener{
             val action = ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(args.currentShoppingList)
-            _binding.root.findNavController().navigate(action)
+            binding.root.findNavController().navigate(action)
         }
     }
 
@@ -67,11 +64,11 @@ class ShoppingListDetailFragment : Fragment() {
         }
 
         mShoppingListDetailViewModel = ViewModelProvider(this, ShoppingListDetailViewModelFactory(requireActivity().application, args.currentShoppingList)).get(ShoppingListDetailViewModel::class.java)
-        val myProductsRecyclerView=_binding.rvShoppingListDetailProductsToBuy
+        val myProductsRecyclerView=binding.rvShoppingListDetailProductsToBuy
         myProductsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         myProductsRecyclerView.adapter = myProductsAdapter
 
-        val myProductsBoughtRecyclerView= _binding.rvShoppingListDetailBoughtProducts
+        val myProductsBoughtRecyclerView= binding.rvShoppingListDetailBoughtProducts
         myProductsBoughtRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         myProductsBoughtRecyclerView.adapter = myProductsBoughtAdapter
 
