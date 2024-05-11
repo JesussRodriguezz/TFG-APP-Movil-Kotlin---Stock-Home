@@ -13,13 +13,10 @@ import com.yes.tfgapp.domain.model.ShoppingListModel
 interface ShoppingListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addShoppingList(shoppingList: ShoppingListModel): Unit
-
     @Update
     suspend fun updateShoppingList(shoppingList: ShoppingListModel): Unit
-
     @Delete
     suspend fun deleteShoppingList(shoppingList: ShoppingListModel): Unit
-
     @Query("SELECT * FROM shopping_list ORDER BY id ASC")
     fun readAllData(): LiveData<List<ShoppingListModel>>
 

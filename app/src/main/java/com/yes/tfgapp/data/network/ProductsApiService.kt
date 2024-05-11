@@ -9,14 +9,6 @@ import retrofit2.http.Url
 
 interface ProductsApiService {
 
-    @GET("api/v2/search")
-    suspend fun searchProducts(@Query("search_terms") searchTerms: String): Response <ProductSearchResponse>
-
-    @GET
-    fun searchProductsFixed(
-        @Url url: String = "https://world.openfoodfacts.org/cgi/search.pl?action=process&search_terms=aquarius&json=true&page_size=24&page=1"
-    ): Response<ProductSearchResponse>
-
     @GET("cgi/search.pl")
     suspend fun searchProductsv2(
         @Query("search_terms") searchTerms: String,

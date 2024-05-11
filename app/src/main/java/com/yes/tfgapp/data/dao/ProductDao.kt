@@ -31,20 +31,15 @@ interface ProductDao {
     fun readAllData(): LiveData<List<ProductModel>>
 
     @Query("SELECT * FROM product WHERE id = :productId")
-    abstract fun getProduct(productId: Int): ProductModel
+    fun getProduct(productId: Int): ProductModel
 
 
     @Query("SELECT * FROM product WHERE id IN (:productIds)")
     fun getProductsById(productIds: List<Int>): LiveData<List<ProductModel>>
 
     @Query("SELECT * FROM product WHERE name = :name LIMIT 1")
-    abstract fun findProductByName(name: String): ProductModel
+    fun findProductByName(name: String): ProductModel
 
-    //@Query("SELECT * FROM product WHERE category = :name")
-    //fun productsByCategory(name: String): LiveData<List<ProductModel>>
-
-    //@Query("SELECT * FROM product WHERE category = :name")
-    //fun productsByCategoryNoLive(name: String): List<ProductModel>
 
 
 }

@@ -225,12 +225,10 @@ class SearchProductsFragment : Fragment() {
             dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).isVisible = false
         }
 
-        //set the tvProductName
         dialog.findViewById<TextView>(R.id.tvProductNameDialogChangeCategory).text = product.name
         val layoutManager = GridLayoutManager(requireContext(), 3)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                // El primer ítem (posición 0) ocupa 3 espacios (todo el ancho), los demás ítems ocupan 1
                 return if (position == 0) 3 else 1
             }
         }
@@ -248,12 +246,12 @@ class SearchProductsFragment : Fragment() {
             var categorySelected=chooseCategoryAdapter.selectedItemPosition
             val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
             val newProduct = product.copy(categoryId = category.id)
-            addLocalProductToList(newProduct)
-            println("Category: ${newProduct.categoryId}")
-            println("Product: ${newProduct.name}")
-
-
-
+            mShoppingListAddItemsViewModel.updateProduct(newProduct)
+            if(position == 0){
+                addExternalProductToList(newProduct)
+            }else{
+                addLocalProductToList(newProduct)
+            }
         }
 
         dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).setOnClickListener {

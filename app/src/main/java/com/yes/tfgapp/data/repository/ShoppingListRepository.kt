@@ -11,11 +11,9 @@ class ShoppingListRepository(private val shoppingListDao: ShoppingListDao) {
     suspend fun addShoppingList(shoppingList: ShoppingListModel){
         shoppingListDao.addShoppingList(shoppingList)
     }
-
     suspend fun updateShoppingList(shoppingList: ShoppingListModel){
         shoppingListDao.updateShoppingList(shoppingList)
     }
-
     suspend fun deleteShoppingList(shoppingList: ShoppingListModel){
         shoppingListDao.deleteShoppingList(shoppingList)
     }

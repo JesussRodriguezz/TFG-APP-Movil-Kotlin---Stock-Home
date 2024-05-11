@@ -18,9 +18,6 @@ class ProductRepository(private val productDao: ProductDao) {
             }
         }
     }
-    suspend fun addProduct(product: ProductModel){
-        productDao.addProduct(product)
-    }
 
     fun insertProduct(product: ProductModel): Long {
         return productDao.insertProduct(product)
@@ -28,15 +25,6 @@ class ProductRepository(private val productDao: ProductDao) {
 
     suspend fun updateProduct(product: ProductModel){
         productDao.updateProduct(product)
-    }
-
-    suspend fun deleteProduct(product: ProductModel){
-        productDao.deleteProduct(product)
-    }
-
-    fun getProduct(productId: Int): ProductModel {
-        return productDao.getProduct(productId)
-
     }
 
     fun getProductsById(productIds: List<Int>): LiveData<List<ProductModel>> {
@@ -49,13 +37,6 @@ class ProductRepository(private val productDao: ProductDao) {
 
     }
 
-    /*fun productsByCategory(category: CategoryModel): LiveData<List<ProductModel>> {
-
-        val example = productDao.productsByCategoryNoLive(category.name)
-        println("AAA $example")
-
-        return productDao.productsByCategory(category.name)
-    }*/
 
 
 
