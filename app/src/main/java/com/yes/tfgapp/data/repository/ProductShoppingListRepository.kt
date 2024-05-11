@@ -35,12 +35,19 @@ class ProductShoppingListRepository(private val productShoppingListDAO: ProductS
 
     fun getProductsForShoppingList(id: Int): LiveData<List<ProductShoppingListModel>> {
         return productShoppingListDAO.getAllMyProductsToBuy(id)
-
     }
 
     fun getProductsBoughtForShoppingList(id: Int): LiveData<List<ProductShoppingListModel>> {
         return productShoppingListDAO.getAllMyProductsBought(id)
+    }
 
+    fun getAllProductsInShoppingList(id: Int): LiveData<List<ProductShoppingListModel>> {
+        return productShoppingListDAO.getAllProductsInShoppingList(id)
+    }
+
+    suspend fun deleteProductShoppingList(productShoppingList: ProductShoppingListModel) {
+        productShoppingListDAO.deleteProductShoppingList(productShoppingList)
+        productShoppingListDAO.decrementQuantity(productShoppingList.shoppingListId)
     }
 
 

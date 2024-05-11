@@ -25,8 +25,10 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
 
     val readAllDataProduct: LiveData<List<ProductModel>>
     val readAllDataCategory: LiveData<List<CategoryModel>>
+
     private val allProductsLiveData: LiveData<List<ProductModel>>
     private var allProducts: List<ProductModel> = emptyList()
+
     val productIdLiveData = MutableLiveData<Long>()
     private val productCategoryIdLiveData = MutableLiveData<Int>()
 
@@ -126,5 +128,12 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
             productRepository.updateProduct(product)
             productCategoryIdLiveData.postValue(product.categoryId)
         }
+    }
+
+    fun deleteProductFromList(productShoppingList: ProductShoppingListModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            productShoppingListRepository.deleteProductShoppingList(productShoppingList)
+        }
+
     }
 }

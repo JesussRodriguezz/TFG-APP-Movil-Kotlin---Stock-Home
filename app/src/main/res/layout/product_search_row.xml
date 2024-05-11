@@ -39,7 +39,6 @@
         android:layout_marginStart="24dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_add"
-        app:tint="@color/black"
         android:contentDescription="ibAddProductToList" />
 
 

@@ -3,7 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/primaryGrey">
+
+    <ImageView
+        android:id="@+id/ivProductIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center_vertical"
+        tools:src="@drawable/ic_panaderia"
+        android:contentDescription="ivProductIcon" />
 
     <TextView
         android:id="@+id/tvMyProductName"
@@ -19,11 +29,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
+
+
     <ImageButton
         android:id="@+id/ibBoughtProduct"
         android:layout_width="37dp"
         android:layout_height="37dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginStart="24dp"
         android:layout_gravity="center_vertical"
         android:background="@android:color/transparent"
         android:contentDescription="ibBoughtProduct"

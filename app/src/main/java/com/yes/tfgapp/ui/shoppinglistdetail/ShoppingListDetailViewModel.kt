@@ -20,8 +20,10 @@ class ShoppingListDetailViewModel(aplication: Application, currentShoppingList: 
     private val productRepository: ProductRepository
 
     val readAllDataProductShoppingList: LiveData<List<ProductShoppingListModel>>
-
     val readAllDataProductBoughtShoppingList: LiveData<List<ProductShoppingListModel>>
+
+    val allProductsShoppingListLiveData : LiveData<List<ProductShoppingListModel>>
+    var allProductsShoppingList: List<ProductShoppingListModel> = emptyList()
 
     init{
         val productShoppingListDao = AppDataBase.getDatabase(aplication).productShoppingListDao()
@@ -32,6 +34,11 @@ class ShoppingListDetailViewModel(aplication: Application, currentShoppingList: 
 
         readAllDataProductShoppingList = productShoppingListRepository.getProductsForShoppingList(currentShoppingList.id)
         readAllDataProductBoughtShoppingList= productShoppingListRepository.getProductsBoughtForShoppingList(currentShoppingList.id)
+
+        allProductsShoppingListLiveData = productShoppingListRepository.getAllProductsInShoppingList(currentShoppingList.id)
+        allProductsShoppingListLiveData.observeForever { products ->
+            allProductsShoppingList = products ?: emptyList()
+        }
     }
 
     fun getProductsForShoppingList(productShoppingList: List<ProductShoppingListModel>): LiveData<List<ProductModel>> {

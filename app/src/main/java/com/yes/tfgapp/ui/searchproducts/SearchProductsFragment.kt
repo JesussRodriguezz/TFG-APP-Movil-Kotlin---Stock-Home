@@ -1,7 +1,10 @@
 package com.yes.tfgapp.ui.searchproducts
 
+import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -25,11 +29,13 @@ import com.yes.tfgapp.databinding.FragmentSearchProductsBinding
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
+import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchAdapter
 import com.yes.tfgapp.ui.searchproducts.adapter.ProductSearchApiAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
+import com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +43,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Timer
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.schedule
 
 
 class SearchProductsFragment : Fragment() {
@@ -45,16 +53,18 @@ class SearchProductsFragment : Fragment() {
     private val args: SearchProductsFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentSearchProductsBinding
-    private var productsAdapter : ProductSearchAdapter = ProductSearchAdapter(
-        onAddProductToList = { product,position -> addProductToList(product,position) },
+    private var productsAdapter: ProductSearchAdapter = ProductSearchAdapter(
+        onAddProductToList = { product, position -> addProductToList(product, position) },
         getCategoryById = { id, callback -> getCategoryById(id, callback) },
-        changeCategory = {product,position -> changeCategory(product,position)}
+        changeCategory = { product, position -> changeCategory(product, position) },
+        onDeleteProductFromList = { product -> deleteProductFromList(product) }
     )
     private var chooseCategoryAdapter: ChooseCategoryAdapter = ChooseCategoryAdapter()
     private var productSearchApiAdapter: ProductSearchApiAdapter =
-        ProductSearchApiAdapter { product,position -> addProductToList(product,position) }
+        ProductSearchApiAdapter { product, position -> addProductToList(product, position) }
 
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
+    private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
 
     var searchModeLocal: Boolean = true
     private lateinit var retrofit: Retrofit
@@ -74,26 +84,78 @@ class SearchProductsFragment : Fragment() {
     private fun initListeners() {
         binding.btnLocalSearch.setOnClickListener {
             if (!searchModeLocal) {
-                activateLocalOrExternalSearch(true,R.color.accentRed,R.color.white,R.color.primaryGrey,R.color.black)
+                activateLocalOrExternalSearch(
+                    true,
+                    R.color.accentRed,
+                    R.color.white,
+                    R.color.primaryGrey,
+                    R.color.black
+                )
             }
         }
         binding.btnExternalSearch.setOnClickListener {
             if (searchModeLocal) {
-                activateLocalOrExternalSearch(false,R.color.primaryGrey,R.color.black,R.color.accentRed,R.color.white)
+                activateLocalOrExternalSearch(
+                    false,
+                    R.color.primaryGrey,
+                    R.color.black,
+                    R.color.accentRed,
+                    R.color.white
+                )
             }
         }
     }
-    private fun activateLocalOrExternalSearch(isLocal: Boolean,backgroundColorLocal: Int, textColorLocal: Int, backgroundColorExternal: Int, textColorExternal: Int) {
+
+    private fun activateLocalOrExternalSearch(
+        isLocal: Boolean,
+        backgroundColorLocal: Int,
+        textColorLocal: Int,
+        backgroundColorExternal: Int,
+        textColorExternal: Int
+    ) {
         binding.rvProductsSearch.isVisible = isLocal
         binding.rvProductsSearchApi.isVisible = !isLocal
         searchModeLocal = isLocal
-        binding.btnLocalSearch.setBackgroundColor(ContextCompat.getColor(requireContext(),backgroundColorLocal))
-        binding.btnLocalSearch.setTextColor(ContextCompat.getColor(requireContext(),textColorLocal))
-        binding.btnExternalSearch.setBackgroundColor(ContextCompat.getColor(requireContext(),backgroundColorExternal))
-        binding.btnExternalSearch.setTextColor(ContextCompat.getColor(requireContext(),textColorExternal))
+        binding.btnLocalSearch.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                backgroundColorLocal
+            )
+        )
+        binding.btnLocalSearch.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                textColorLocal
+            )
+        )
+        binding.btnExternalSearch.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                backgroundColorExternal
+            )
+        )
+        binding.btnExternalSearch.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                textColorExternal
+            )
+        )
     }
 
     private fun initUI() {
+        mShoppingListDetailViewModel = ViewModelProvider(
+            this,
+            ShoppingListDetailViewModelFactory(
+                requireActivity().application,
+                args.CurrentShoppingList
+            )
+        ).get(
+            ShoppingListDetailViewModel::
+            class.java
+        )
+        mShoppingListDetailViewModel.allProductsShoppingListLiveData.observe(viewLifecycleOwner) { productsInShoppingList ->
+            productsAdapter.setProductsInShoppingList(productsInShoppingList)
+        }
 
         binding.rvProductsSearchApi.setHasFixedSize(true)
         binding.rvProductsSearchApi.layoutManager = LinearLayoutManager(requireContext())
@@ -107,19 +169,34 @@ class SearchProductsFragment : Fragment() {
         productSearchRecyclerView.adapter = productsAdapter
 
 
+
+
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if(!searchModeLocal){
+                if (!searchModeLocal) {
                     searchByProductName(query)
                 }
                 return false
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 filterProducts(newText)
                 return false
             }
         })
+    }
+
+    inner class ShoppingListDetailViewModelFactory(
+        private val application: Application,
+        private val currentShoppingList: ShoppingListModel
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ShoppingListDetailViewModel::class.java)) {
+                return ShoppingListDetailViewModel(application, currentShoppingList) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
     }
 
     private fun getCategoryById(id: Int, callback: (CategoryModel?) -> Unit) {
@@ -171,7 +248,7 @@ class SearchProductsFragment : Fragment() {
 
 
     private fun addProductToList(product: ProductModel, position: Int) {
-        if (!searchModeLocal || position==0) {
+        if (!searchModeLocal || position == 0) {
             addExternalProductToList(product)
         } else {
             addLocalProductToList(product)
@@ -190,6 +267,7 @@ class SearchProductsFragment : Fragment() {
 
         mShoppingListAddItemsViewModel.addProduct(product)
         observeProductIDAndAddToList()
+
     }
 
     private fun observeProductIDAndAddToList() {
@@ -201,31 +279,42 @@ class SearchProductsFragment : Fragment() {
                 )
                 mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
                 mShoppingListAddItemsViewModel.productIdLiveData.value = null
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    var currentText = binding.searchView.query.toString()
+                    println("currentText: $currentText")
+                    val filteredList = mShoppingListAddItemsViewModel.filterProducts(currentText)
+                    println("filteredList: $filteredList")
+                    productsAdapter.setProductList(filteredList)
+                    productsAdapter.notifyDataSetChanged()
+                }, 100)
             }
         }
     }
 
-    private fun changeCategory(product: ProductModel, position: Int){
+    private fun changeCategory(product: ProductModel, position: Int) {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_change_category)
-        configureDialog(dialog,product,position)
-        dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory).setOnClickListener{
-            addProductWithNewCategory(product,position)
-        }
+        configureDialog(dialog, product, position)
+        dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory)
+            .setOnClickListener {
+                addProductWithNewCategory(product, position)
+            }
         dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).setOnClickListener {
             updateCategoryProduct(product)
         }
         dialog.show()
         dialog.setOnDismissListener {
-            val filteredList = mShoppingListAddItemsViewModel.filterProducts(binding.searchView.query.toString())
+            val filteredList =
+                mShoppingListAddItemsViewModel.filterProducts(binding.searchView.query.toString())
             productsAdapter.setProductList(filteredList)
             productsAdapter.notifyDataSetChanged()
         }
     }
 
     private fun configureDialog(dialog: Dialog, product: ProductModel, position: Int) {
-        if(position == 0){
+        if (position == 0) {
             dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).isVisible = false
         }
 
@@ -256,11 +345,20 @@ class SearchProductsFragment : Fragment() {
     }
 
     private fun addProductWithNewCategory(product: ProductModel, position: Int) {
-        val categorySelected=chooseCategoryAdapter.selectedItemPosition
+        val categorySelected = chooseCategoryAdapter.selectedItemPosition
         val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
         val newProduct = product.copy(categoryId = category.id)
         mShoppingListAddItemsViewModel.updateProduct(newProduct)
-        addProductToList(newProduct,position)
+        addProductToList(newProduct, position)
+    }
+
+    private fun deleteProductFromList(product: ProductModel) {
+        println("deleteProductFromList")
+        val productShoppingList = ProductShoppingListModel(
+            shoppingListId = this.args.CurrentShoppingList.id,
+            productId = product.id
+        )
+        mShoppingListAddItemsViewModel.deleteProductFromList(productShoppingList)
     }
 
     private fun getRetrofit(): Retrofit {

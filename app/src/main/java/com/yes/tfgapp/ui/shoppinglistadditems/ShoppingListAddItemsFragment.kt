@@ -1,5 +1,6 @@
 package com.yes.tfgapp.ui.shoppinglistadditems
 
+import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,10 +23,12 @@ import com.yes.tfgapp.databinding.FragmentShoppingListAddItemsBinding
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
+import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListCategoriesAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListProductsAdapter
+import com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailViewModel
 
 class ShoppingListAddItemsFragment : Fragment() {
 
@@ -35,11 +39,19 @@ class ShoppingListAddItemsFragment : Fragment() {
 
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
     private lateinit var mShoppingListViewModel: ShoppingListViewModel
+    private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
+
+    private var isCategoriesLoaded = false
+    private var isProductsLoaded = false
+
 
     private val categoriesAdapter = ShoppingListCategoriesAdapter(
         onItemSelected = { position -> updateCategories(position) },
         onConfigureSelected = { category -> configureCategories(category)})
-    private val productsAdapter = ShoppingListProductsAdapter { product -> addProductToList(product) }
+    private val productsAdapter = ShoppingListProductsAdapter(
+        { product -> addProductToList(product) },
+        { product -> deleteProductFromList(product) }
+    )
 
 
 
@@ -60,10 +72,21 @@ class ShoppingListAddItemsFragment : Fragment() {
     }
 
     private fun initUI() {
+        binding.progressBar.visibility = View.VISIBLE
         mShoppingListAddItemsViewModel =
             ViewModelProvider(this).get(ShoppingListAddItemsViewModel::class.java)
 
         mShoppingListViewModel = ViewModelProvider(this).get(ShoppingListViewModel::class.java)
+        mShoppingListDetailViewModel = ViewModelProvider(
+            this,
+            ShoppingListDetailViewModelFactory(
+                requireActivity().application,
+                args.CurrentShoppingList
+            )
+        ).get(
+            ShoppingListDetailViewModel::
+            class.java
+        )
 
 
         val categoriesRecyclerView = binding.rvCategories
@@ -72,8 +95,12 @@ class ShoppingListAddItemsFragment : Fragment() {
         categoriesRecyclerView.adapter = categoriesAdapter
 
         mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner) { categories ->
-            categoriesAdapter.setCategoriesList(categories)
-            categoriesAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
+            if (categories.isNotEmpty()) {
+                categoriesAdapter.setCategoriesList(categories)
+                categoriesAdapter.notifyDataSetChanged()
+                isCategoriesLoaded = true
+                checkDataLoaded()
+            }
         }
 
 
@@ -82,14 +109,23 @@ class ShoppingListAddItemsFragment : Fragment() {
         productsRecyclerView.adapter = productsAdapter
 
         mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner){ products ->
-            productsAdapter.setProductList(products)
-            productsAdapter.notifyDataSetChanged()
+            if (products.isNotEmpty()) {
+                productsAdapter.setProductList(products)
+                productsAdapter.notifyDataSetChanged()
+                isProductsLoaded = true
+                checkDataLoaded()
+            }
+        }
+
+        mShoppingListDetailViewModel.allProductsShoppingListLiveData.observe(viewLifecycleOwner){ productsInShoppingList ->
+            productsAdapter.setProductsInShoppingList(productsInShoppingList)
         }
 
         binding.btnSearchView.setOnClickListener{
             val action = ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(args.CurrentShoppingList)
             binding.root.findNavController().navigate(action)
         }
+
 
     }
 
@@ -116,6 +152,26 @@ class ShoppingListAddItemsFragment : Fragment() {
                         .show()
                 }
             }
+        }
+    }
+
+    inner class ShoppingListDetailViewModelFactory(
+        private val application: Application,
+        private val currentShoppingList: ShoppingListModel
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ShoppingListDetailViewModel::class.java)) {
+                return ShoppingListDetailViewModel(application, currentShoppingList) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+
+    private fun checkDataLoaded() {
+        if (isCategoriesLoaded && isProductsLoaded) {
+            binding.progressBar.visibility = View.GONE
+        }else{
+            binding.progressBar.visibility = View.VISIBLE
         }
     }
 
@@ -182,4 +238,15 @@ class ShoppingListAddItemsFragment : Fragment() {
         )
         mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
     }
+
+    private fun deleteProductFromList(product: ProductModel){
+        val productShoppingList= ProductShoppingListModel(
+            shoppingListId = this.args.CurrentShoppingList.id,
+            productId = product.id
+        )
+        mShoppingListAddItemsViewModel.deleteProductFromList(productShoppingList)
+    }
+
+
+
 }

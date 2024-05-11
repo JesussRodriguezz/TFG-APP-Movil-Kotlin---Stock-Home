@@ -7,26 +7,58 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ProductListRowBinding
 import com.yes.tfgapp.domain.model.ProductModel
+import com.yes.tfgapp.domain.model.ProductShoppingListModel
 
-class ShoppingListProductsAdapter(private val onAddProductToList: (ProductModel) -> Unit): RecyclerView.Adapter<ShoppingListProductsAdapter.ShoppingListProductsViewHolder>(){
+class ShoppingListProductsAdapter(
+    private val onAddProductToList: (ProductModel) -> Unit,
+    private val onDeleteProductFromList: (ProductModel) -> Unit
+) : RecyclerView.Adapter<ShoppingListProductsAdapter.ShoppingListProductsViewHolder>() {
 
     private var productsList = emptyList<ProductModel>()
+    private var productsInShoppingList = emptyList<ProductShoppingListModel>()
 
-    inner class ShoppingListProductsViewHolder(private val binding: ProductListRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ShoppingListProductsViewHolder(private val binding: ProductListRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currentItem: ProductModel, onAddProductToList: (ProductModel) -> Unit){
+        fun bind(
+            currentItem: ProductModel,
+            onAddProductToList: (ProductModel) -> Unit,
+            onDeleteProductFromList: (ProductModel) -> Unit
+        ) {
 
-            val backgroundColor = if(adapterPosition % 2 == 0){
+            val backgroundColor = if (adapterPosition % 2 == 0) {
                 R.color.primaryGrey
-            }else{
+            } else {
                 R.color.primaryWhite
             }
 
-            binding.root.setBackgroundColor(ContextCompat.getColor(binding.root.context, backgroundColor))
+            binding.root.setBackgroundColor(
+                ContextCompat.getColor(
+                    binding.root.context,
+                    backgroundColor
+                )
+            )
             binding.tvProductName.text = currentItem.name
 
-            binding.ibAddProductToList.setOnClickListener{
-                onAddProductToList(currentItem)
+            println("productsInShoppingList: $productsInShoppingList")
+
+            if (productsInShoppingList.any { it.productId == currentItem.id }) {
+                binding.ibAddProductToList.setImageResource(R.drawable.ic_check)
+            } else {
+                binding.ibAddProductToList.setImageResource(R.drawable.ic_add)
+            }
+
+            binding.ibAddProductToList.setOnClickListener {
+                if (binding.ibAddProductToList.drawable.constantState == ContextCompat.getDrawable(
+                        binding.root.context,
+                        R.drawable.ic_check
+                    )!!.constantState
+                ) {
+                    onDeleteProductFromList(currentItem)
+                } else {
+                    onAddProductToList(currentItem)
+                }
+
             }
         }
 
@@ -36,7 +68,8 @@ class ShoppingListProductsAdapter(private val onAddProductToList: (ProductModel)
         parent: ViewGroup,
         viewType: Int
     ): ShoppingListProductsViewHolder {
-        val binding = ProductListRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ProductListRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ShoppingListProductsViewHolder(binding)
     }
 
@@ -46,11 +79,16 @@ class ShoppingListProductsAdapter(private val onAddProductToList: (ProductModel)
 
     override fun onBindViewHolder(holder: ShoppingListProductsViewHolder, position: Int) {
         val currentItem = productsList[position]
-        holder.bind(currentItem, onAddProductToList/*, currentShoppingList*/)
+        holder.bind(currentItem, onAddProductToList, onDeleteProductFromList)
     }
 
-    fun setProductList(products: List<ProductModel>){
+    fun setProductList(products: List<ProductModel>) {
         this.productsList = products
+    }
+
+    fun setProductsInShoppingList(productsInShoppingList: List<ProductShoppingListModel>) {
+        this.productsInShoppingList = productsInShoppingList
+        notifyDataSetChanged()
     }
 
 }

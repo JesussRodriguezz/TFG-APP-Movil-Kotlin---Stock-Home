@@ -45,5 +45,8 @@ interface ProductShoppingListDao {
     @Query("UPDATE shopping_list SET quantityBought = quantityBought - 1 WHERE id = :shoppingListId")
     fun decrementQuantityBought(shoppingListId: Int)
 
+    @Query("SELECT * FROM product_shopping_list WHERE shoppingListId = :id")
+    fun getAllProductsInShoppingList(id: Int): LiveData<List<ProductShoppingListModel>>
+
 
 }

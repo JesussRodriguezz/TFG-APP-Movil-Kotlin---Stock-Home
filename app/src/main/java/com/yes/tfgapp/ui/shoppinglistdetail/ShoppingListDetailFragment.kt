@@ -8,15 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yes.tfgapp.databinding.FragmentShoppingListDetailBinding
+import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
+import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import com.yes.tfgapp.ui.shoppinglistdetail.adapter.ShoppingListDetailAdapter
 import com.yes.tfgapp.ui.shoppinglistdetail.adapter.ShoppingListDetailBoughtAdapter
+import kotlinx.coroutines.launch
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -25,8 +29,9 @@ class ShoppingListDetailFragment : Fragment() {
 
 
     private val args: ShoppingListDetailFragmentArgs by navArgs()
-    private lateinit var binding : FragmentShoppingListDetailBinding
+    private lateinit var binding: FragmentShoppingListDetailBinding
     private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
+    private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
 
 
     override fun onResume() {
@@ -46,45 +51,72 @@ class ShoppingListDetailFragment : Fragment() {
     }
 
     private fun initListeners() {
-        this.binding.fabAddProducts.setOnClickListener{
-            val action = ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(args.currentShoppingList)
+        this.binding.fabAddProducts.setOnClickListener {
+            val action =
+                ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(
+                    args.currentShoppingList
+                )
             binding.root.findNavController().navigate(action)
         }
     }
 
     private fun initUI() {
-        val myProductsAdapter = ShoppingListDetailAdapter(args.currentShoppingList){
-                product -> setProductIsBought(product)
-        }
-        val myProductsBoughtAdapter = ShoppingListDetailBoughtAdapter(args.currentShoppingList){
-            product -> setProductIsNotBought(product)
-        }
+        mShoppingListAddItemsViewModel =
+            ViewModelProvider(this).get(ShoppingListAddItemsViewModel::class.java)
 
-        mShoppingListDetailViewModel = ViewModelProvider(this, ShoppingListDetailViewModelFactory(requireActivity().application, args.currentShoppingList)).get(ShoppingListDetailViewModel::class.java)
-        val myProductsRecyclerView=binding.rvShoppingListDetailProductsToBuy
+
+        val myProductsAdapter = ShoppingListDetailAdapter(
+            args.currentShoppingList,
+            { productShoppingList -> setProductIsBought(productShoppingList) },
+            { id, callback -> getCategoryById(id, callback) }
+        )
+        val myProductsBoughtAdapter = ShoppingListDetailBoughtAdapter(
+            args.currentShoppingList,
+            { productShoppingList -> setProductIsNotBought(productShoppingList) },
+            { id, callback -> getCategoryById(id, callback) }
+        )
+
+
+        mShoppingListDetailViewModel = ViewModelProvider(
+            this,
+            ShoppingListDetailViewModelFactory(
+                requireActivity().application,
+                args.currentShoppingList
+            )
+        ).get(
+            ShoppingListDetailViewModel::
+            class.java
+        )
+        val myProductsRecyclerView = binding.rvShoppingListDetailProductsToBuy
         myProductsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         myProductsRecyclerView.adapter = myProductsAdapter
 
-        val myProductsBoughtRecyclerView= binding.rvShoppingListDetailBoughtProducts
+        val myProductsBoughtRecyclerView = binding.rvShoppingListDetailBoughtProducts
         myProductsBoughtRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         myProductsBoughtRecyclerView.adapter = myProductsBoughtAdapter
 
-        mShoppingListDetailViewModel.readAllDataProductShoppingList.observe(viewLifecycleOwner) { productShoppingList ->
-            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner) { products ->
-                myProductsAdapter.setData(products)
-            }
+        mShoppingListDetailViewModel.readAllDataProductShoppingList.observe(viewLifecycleOwner)
+        { productShoppingList ->
+            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList)
+                .observe(viewLifecycleOwner) { products ->
+                    myProductsAdapter.setData(products)
+                }
         }
 
-        mShoppingListDetailViewModel.readAllDataProductBoughtShoppingList.observe(viewLifecycleOwner) { productShoppingList ->
-            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList).observe(viewLifecycleOwner) { products ->
-                myProductsBoughtAdapter.setData(products)
-            }
+        mShoppingListDetailViewModel.readAllDataProductBoughtShoppingList.observe(viewLifecycleOwner)
+        { productShoppingList ->
+            mShoppingListDetailViewModel.getProductsForShoppingList(productShoppingList)
+                .observe(viewLifecycleOwner) { products ->
+                    myProductsBoughtAdapter.setData(products)
+                }
         }
     }
 
 
-
-    inner class ShoppingListDetailViewModelFactory(private val application: Application, private val currentShoppingList: ShoppingListModel) : ViewModelProvider.Factory {
+    inner class ShoppingListDetailViewModelFactory(
+        private val application: Application,
+        private val currentShoppingList: ShoppingListModel
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(ShoppingListDetailViewModel::class.java)) {
                 return ShoppingListDetailViewModel(application, currentShoppingList) as T
@@ -93,7 +125,18 @@ class ShoppingListDetailFragment : Fragment() {
         }
     }
 
-    private fun setProductIsBought(productShoppingList: ProductShoppingListModel){
+    private fun getCategoryById(id: Int, callback: (CategoryModel?) -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val category = mShoppingListAddItemsViewModel.getCategoryById(id)
+                callback(category)  // Pasamos el resultado al callback
+            } catch (e: Exception) {
+                callback(null)  // En caso de error, podríamos pasar null o manejar el error de otra forma
+            }
+        }
+    }
+
+    private fun setProductIsBought(productShoppingList: ProductShoppingListModel) {
         Timer("SettingUp", false).schedule(100) {
             mShoppingListDetailViewModel.updateProductIsBought(productShoppingList)
         }
