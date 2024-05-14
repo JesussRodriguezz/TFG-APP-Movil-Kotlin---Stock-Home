@@ -79,4 +79,9 @@ dependencies {
 
     //picasso
     implementation("com.squareup.picasso:picasso:2.8")
+
+    //barcode scanner
+    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+
 }

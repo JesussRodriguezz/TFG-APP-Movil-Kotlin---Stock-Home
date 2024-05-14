@@ -63,6 +63,12 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="OrderBySelector" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="boxBackgroundColor">@color/accentRed</item> <!-- Usar boxBackgroundColor -->
+    </style>
+
     <style name="CustomDialogStyle" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>

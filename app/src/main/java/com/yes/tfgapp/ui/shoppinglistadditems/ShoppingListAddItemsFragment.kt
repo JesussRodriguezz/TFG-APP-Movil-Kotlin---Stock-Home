@@ -142,7 +142,7 @@ class ShoppingListAddItemsFragment : Fragment() {
                     dialog.findViewById<TextInputEditText>(R.id.etNewCategoryName).text.toString()
 
                 if (newCategoryName.isNotEmpty()) {
-                    val newCategory = CategoryModel(0, newCategoryName, false)
+                    val newCategory = CategoryModel(id=0, name= newCategoryName, isSelected = false ,isDefault = false)
                     mShoppingListAddItemsViewModel.addCategory(newCategory)
                     Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG)
                         .show()
@@ -210,6 +210,12 @@ class ShoppingListAddItemsFragment : Fragment() {
             dialog.hide()
         }
         val btnDeleteCategory= dialog.findViewById<ImageButton>(R.id.ibDeleteCategory)
+        if(category.isDefault){
+            btnDeleteCategory.visibility = View.GONE
+        }else{
+            btnDeleteCategory.visibility = View.VISIBLE
+        }
+
         btnDeleteCategory.setOnClickListener {
             mShoppingListAddItemsViewModel.deleteCategory(category)
             dialog.hide()
