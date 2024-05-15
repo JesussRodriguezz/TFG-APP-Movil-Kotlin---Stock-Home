@@ -68,6 +68,9 @@
         <item name="cornerSize">50%</item>
         <item name="boxBackgroundColor">@color/accentRed</item> <!-- Usar boxBackgroundColor -->
     </style>
+    <style name="FullScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
 
     <style name="CustomDialogStyle" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>

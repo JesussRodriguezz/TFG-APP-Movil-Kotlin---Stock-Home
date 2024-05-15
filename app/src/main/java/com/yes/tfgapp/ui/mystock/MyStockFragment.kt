@@ -49,18 +49,21 @@ class MyStockFragment : Fragment() {
 
     private val scanLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
-            run{
-                if (result.contents != null) {
-                    Toast.makeText(context, "El valor escaneado es: ${result.contents}", Toast.LENGTH_SHORT)
-                        .show()
+            run {
+                if (result.contents == null) {
+                    Toast.makeText(
+                        context,
+                        "Calcelled",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     setResult(result.contents)
                 }
             }
         }
 
-    private fun setResult(string:String){
-Toast.makeText(context, "El valor escaneado es: $string", Toast.LENGTH_SHORT).show()
+    private fun setResult(string: String) {
+        Toast.makeText(context, "El valor escaneado es: $string", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -83,8 +86,6 @@ Toast.makeText(context, "El valor escaneado es: $string", Toast.LENGTH_SHORT).sh
     }
 
     private fun initUI() {
-
-
         scanBarcode = binding.llScanBarcode
         manualAdd = binding.llManualAdd
         btnScanBarcode = binding.fabScanBarcode
@@ -93,12 +94,12 @@ Toast.makeText(context, "El valor escaneado es: $string", Toast.LENGTH_SHORT).sh
         initShowOut(scanBarcode)
         initShowOut(manualAdd)
 
-
     }
 
     private fun initListeners() {
         btnScanBarcode.setOnClickListener {
             checkPermissionCamera()
+            //requestCameraPermission()
         }
 
         btnManualAdd.setOnClickListener {
@@ -108,6 +109,10 @@ Toast.makeText(context, "El valor escaneado es: $string", Toast.LENGTH_SHORT).sh
         btnNewStockProduct.setOnClickListener {
             toogleFabMode(it)
         }
+    }
+
+    private fun requestCameraPermission() {
+        requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
     }
 
     private fun checkPermissionCamera() {
