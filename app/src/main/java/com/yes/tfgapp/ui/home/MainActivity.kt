@@ -77,8 +77,22 @@ class MainActivity : AppCompatActivity() {
         binding.ibBackArrow.visibility = View.INVISIBLE
     }
 
-    private fun hideBottomNav() {
+    fun hideBottomNav() {
         binding.bottomNavView.visibility = View.GONE
+    }
+
+    fun showToolbar() {
+        binding.toolbar.visibility = View.VISIBLE
+    }
+
+    fun showBottomNavInsta() {
+        binding.bottomNavView.visibility = View.VISIBLE
+    }
+
+
+
+    fun hideToolbar() {
+        binding.toolbar.visibility = View.GONE
     }
 
     private fun showBottomNav() {

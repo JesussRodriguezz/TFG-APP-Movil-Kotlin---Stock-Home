@@ -9,7 +9,11 @@
         android:id="@+id/myStockFragment"
         android:name="com.yes.tfgapp.ui.mystock.MyStockFragment"
         android:label="fragment_my_stock"
-        tools:layout="@layout/fragment_my_stock" />
+        tools:layout="@layout/fragment_my_stock" >
+        <action
+            android:id="@+id/action_myStockFragment_to_myStockProductDetailFragment"
+            app:destination="@id/myStockProductDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/shoppingListFragment"
         android:name="com.yes.tfgapp.ui.shoppinglist.ShoppingListFragment"
@@ -59,5 +63,14 @@
         <argument
             android:name="CurrentShoppingList"
             app:argType="com.yes.tfgapp.domain.model.ShoppingListModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/myStockProductDetailFragment"
+        android:name="com.yes.tfgapp.ui.mystockproductdetail.MyStockProductDetailFragment"
+        android:label="fragment_my_stock_product_detail"
+        tools:layout="@layout/fragment_my_stock_product_detail" >
+        <argument
+            android:name="productName"
+            app:argType="string" />
     </fragment>
 </navigation>

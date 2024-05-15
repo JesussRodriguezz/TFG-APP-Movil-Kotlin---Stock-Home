@@ -1,8 +1,10 @@
 package com.yes.tfgapp.data.network
 
 import com.yes.tfgapp.data.network.response.ProductSearchResponse
+import com.yes.tfgapp.data.network.response.StockProductResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProductsApiService {
@@ -16,7 +18,7 @@ interface ProductsApiService {
         @Query("page") page: Int = 1
     ): Response<ProductSearchResponse>
 
-    //@GET("api/v2/product/{id}")
-    //suspend fun getProduct(@Path("id") id: String): Response<ProductSearchResponse>
+    @GET("api/v2/product/{id}")
+    suspend fun getProduct(@Path("id") id: String): Response<StockProductResponse>
 
 }

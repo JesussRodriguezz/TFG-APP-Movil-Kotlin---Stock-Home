@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,28 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.navigation.findNavController
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.yes.tfgapp.R
+import com.yes.tfgapp.data.network.ProductsApiService
+import com.yes.tfgapp.data.network.response.ProductSearchResponse
+import com.yes.tfgapp.data.network.response.StockProductResponse
+import com.yes.tfgapp.data.repository.StockProductRepository
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.databinding.FragmentMyStockBinding
+import com.yes.tfgapp.ui.mystockproductdetail.MyStockProductDetailFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import java.util.jar.Manifest
 
 
@@ -27,7 +44,7 @@ class MyStockFragment : Fragment() {
     //hola
 
     private lateinit var binding: FragmentMyStockBinding
-
+    private var currentDialog: MyStockProductDetailFragment? = null
     private var rotate = false
 
     private lateinit var btnScanBarcode: View
@@ -36,6 +53,8 @@ class MyStockFragment : Fragment() {
     private lateinit var manualAdd: View
 
     private lateinit var btnNewStockProduct: View
+
+    private lateinit var retrofit: Retrofit
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -63,7 +82,49 @@ class MyStockFragment : Fragment() {
         }
 
     private fun setResult(string: String) {
-        Toast.makeText(context, "El valor escaneado es: $string", Toast.LENGTH_SHORT).show()
+        getProductApi(string)
+
+
+        /*currentDialog?.dismiss()
+        val dialogFragment = MyStockProductDetailFragment()
+        dialogFragment.arguments = Bundle().apply {
+            putString("productName", string)
+        }
+        (activity as MainActivity).hideBottomNav()
+        (activity as MainActivity).hideToolbar()
+        currentDialog = dialogFragment
+        dialogFragment.show(childFragmentManager, "MyStockProductDetailFragment")*/
+    }
+
+    private fun getProductApi(productCode: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val myResponse: Response<StockProductResponse> =
+                retrofit.create(ProductsApiService::class.java).getProduct(productCode)
+            if (myResponse.isSuccessful) {
+                val response: StockProductResponse? = myResponse.body()
+                if (response != null) {
+                    withContext(Dispatchers.Main) {
+                        openProductDetailDialog(response)
+                    }
+                }
+                Log.i("yes", "funciona :)")
+            } else {
+                Log.i("yes", "No funciona")
+            }
+        }
+    }
+
+    private fun openProductDetailDialog(product: StockProductResponse) {
+        currentDialog?.dismiss()
+        val dialogFragment = MyStockProductDetailFragment()
+        dialogFragment.arguments = Bundle().apply {
+            putString("productName", product.product.productName)  // Usa el nombre del producto recibido
+            // Agrega otros detalles del producto según sea necesario
+        }
+        (activity as MainActivity).hideBottomNav()
+        (activity as MainActivity).hideToolbar()
+        currentDialog = dialogFragment
+        dialogFragment.show(childFragmentManager, "MyStockProductDetailFragment")
     }
 
 
@@ -81,6 +142,7 @@ class MyStockFragment : Fragment() {
     ): View {
         binding = FragmentMyStockBinding.inflate(inflater, container, false)
         initUI()
+        retrofit = getRetrofit()
         initListeners()
         return binding.root
     }
@@ -135,7 +197,7 @@ class MyStockFragment : Fragment() {
 
     }
 
-    private fun showCamera() {
+    fun showCamera() {
 
         val options = ScanOptions()
         options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
@@ -208,6 +270,21 @@ class MyStockFragment : Fragment() {
             .setListener(object : AnimatorListenerAdapter() {})
             .rotation(if (rotate) 180f else 0f)
         return rotate
+    }
+
+    private fun getRetrofit(): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la conexión.
+            .readTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la lectura de datos.
+            .writeTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la escritura de datos.
+            .build()
+
+        return Retrofit
+            .Builder()
+            .baseUrl("https://es.openfoodfacts.org/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
 
