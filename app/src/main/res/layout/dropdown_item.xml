@@ -1,0 +1,11 @@
+<TextView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView"
+    android:text="TextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primaryGrey"
+    android:textColor="@color/primaryDark"
+    android:padding="10dp"
+    android:textSize="16sp" />
+
