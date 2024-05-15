@@ -40,6 +40,9 @@ class ShoppingListDetailBoughtAdapter(
                 )
             )
 
+            binding.ibBoughtProduct.setImageResource(R.drawable.ic_check)
+
+
             binding.tvMyProductName.text = currentItem.name
             getCategoryById(currentItem.categoryId){category ->
                 binding.ivProductIcon.setImageResource(category!!.icon)

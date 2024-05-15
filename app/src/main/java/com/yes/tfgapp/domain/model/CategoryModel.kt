@@ -13,5 +13,6 @@ data class CategoryModel(
     val id: Int,
     val name: String,
     var isSelected : Boolean = false,
-    val icon : Int = R.drawable.ic_panaderia
+    val icon : Int = R.drawable.ic_panaderia,
+    val isDefault: Boolean = true
 ): Parcelable

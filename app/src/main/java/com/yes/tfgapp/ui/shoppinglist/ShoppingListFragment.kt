@@ -1,5 +1,6 @@
 package com.yes.tfgapp.ui.shoppinglist
 
+import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputEditText
@@ -18,13 +20,18 @@ import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.FragmentShoppingListBinding
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.shoppinglist.adapter.ShoppingListAdapter
+import com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailViewModel
 
 class ShoppingListFragment : Fragment() {
 
     private lateinit var binding: FragmentShoppingListBinding
     private lateinit var mShoppingListViewModel: ShoppingListViewModel
+    private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
+
+
     private val adapter = ShoppingListAdapter(
-        onClickOpenConfiguration = { onConfigureItem(it) }
+        onClickOpenConfiguration = { onConfigureItem(it) },
+        onGetShoppingListProductsCount={ getShoppingListProductsCount(it)}
     )
 
     override fun onResume() {
@@ -45,6 +52,8 @@ class ShoppingListFragment : Fragment() {
 
     private fun initUI() {
 
+
+
         val recyclerView = binding.rvShoppingList
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -52,6 +61,18 @@ class ShoppingListFragment : Fragment() {
         mShoppingListViewModel = ViewModelProvider(this).get(ShoppingListViewModel::class.java)
         mShoppingListViewModel.readAllData.observe(viewLifecycleOwner){ shoppingList ->
             adapter.setData(shoppingList)
+        }
+    }
+
+    inner class ShoppingListDetailViewModelFactory(
+        private val application: Application,
+        private val currentShoppingList: ShoppingListModel
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ShoppingListDetailViewModel::class.java)) {
+                return ShoppingListDetailViewModel(application, currentShoppingList) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 
@@ -113,6 +134,22 @@ class ShoppingListFragment : Fragment() {
 
     private fun inputCheck(name: String): Boolean {
         return (name.isNotEmpty())
+    }
+
+    private fun getShoppingListProductsCount(currentShoppingList: ShoppingListModel): Int {
+        mShoppingListDetailViewModel = ViewModelProvider(
+            this,
+            ShoppingListDetailViewModelFactory(
+                requireActivity().application,
+                currentShoppingList
+            )
+        ).get(
+            ShoppingListDetailViewModel::
+            class.java
+        )
+
+        //devuelve el tamaño de la lista de productos de la lista de la compra
+        return mShoppingListDetailViewModel.allProductsShoppingList.size
     }
 
 }

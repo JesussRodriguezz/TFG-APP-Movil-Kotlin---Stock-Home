@@ -11,16 +11,24 @@ import com.yes.tfgapp.ui.shoppinglist.ShoppingListFragmentDirections
 import kotlin.math.roundToInt
 
 class ShoppingListAdapter(
-    private val onClickOpenConfiguration:(ShoppingListModel)->Unit
-): RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder>() {
+    private val onClickOpenConfiguration: (ShoppingListModel) -> Unit,
+    private val onGetShoppingListProductsCount: (ShoppingListModel) -> Int
+) : RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder>() {
 
     private var shoppingListList = emptyList<ShoppingListModel>()
 
-    inner class ShoppingListViewHolder(private val binding: ShoppingListRowBinding) : RecyclerView.ViewHolder(binding.root)  {
-        fun bind(currentItem: ShoppingListModel, onClickOpenConfiguration: (ShoppingListModel) -> Unit) {
+    inner class ShoppingListViewHolder(private val binding: ShoppingListRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(
+            currentItem: ShoppingListModel,
+            onClickOpenConfiguration: (ShoppingListModel) -> Unit,
+            onGetShoppingListProductsCount: (ShoppingListModel) -> Int
+        ) {
             binding.tvShoppingListName.text = currentItem.name
-            binding.tvShoppingListNumBoughtItems.text=currentItem.quantityBought.toString()
-            binding.tvShoppingListNumItems.text=currentItem.quantity.toString()
+            binding.tvShoppingListNumBoughtItems.text = currentItem.quantityBought.toString()
+            binding.tvShoppingListNumItems.text = currentItem.quantity.toString()
+            //binding.tvShoppingListNumItems.text = onGetShoppingListProductsCount(currentItem).toString()
+
 
             val percentage = if (currentItem.quantity != 0) {
                 (currentItem.quantityBought.toDouble() / currentItem.quantity.toDouble() * 100).roundToInt()
@@ -40,12 +48,18 @@ class ShoppingListAdapter(
             }
 
             binding.root.setOnClickListener {
-                val actionToAddItems = ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListAddItemsFragment(currentItem)
-                val actionToDetail= ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListDetailFragment(currentItem)
+                val actionToAddItems =
+                    ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListAddItemsFragment(
+                        currentItem
+                    )
+                val actionToDetail =
+                    ShoppingListFragmentDirections.actionShoppingListFragmentToShoppingListDetailFragment(
+                        currentItem
+                    )
 
-                if(currentItem.quantity>0){
+                if (currentItem.quantity > 0) {
                     binding.root.findNavController().navigate(actionToDetail)
-                }else{
+                } else {
                     binding.root.findNavController().navigate(actionToAddItems)
                 }
             }
@@ -54,7 +68,8 @@ class ShoppingListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingListViewHolder {
-        val binding = ShoppingListRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ShoppingListRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ShoppingListViewHolder(binding)
     }
@@ -65,10 +80,10 @@ class ShoppingListAdapter(
 
     override fun onBindViewHolder(holder: ShoppingListViewHolder, position: Int) {
         val currentItem = shoppingListList[position]
-        holder.bind(currentItem, onClickOpenConfiguration )
+        holder.bind(currentItem, onClickOpenConfiguration,onGetShoppingListProductsCount)
     }
 
-    fun setData(shoppingList: List<ShoppingListModel>){
+    fun setData(shoppingList: List<ShoppingListModel>) {
         this.shoppingListList = shoppingList
         notifyDataSetChanged()
     }
