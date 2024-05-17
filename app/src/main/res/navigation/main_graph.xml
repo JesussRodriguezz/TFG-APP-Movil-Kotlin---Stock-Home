@@ -70,7 +70,7 @@
         android:label="fragment_my_stock_product_detail"
         tools:layout="@layout/fragment_my_stock_product_detail" >
         <argument
-            android:name="productName"
-            app:argType="string" />
+            android:name="currentStockProduct"
+            app:argType="com.yes.tfgapp.domain.model.StockProductModel" />
     </fragment>
 </navigation>

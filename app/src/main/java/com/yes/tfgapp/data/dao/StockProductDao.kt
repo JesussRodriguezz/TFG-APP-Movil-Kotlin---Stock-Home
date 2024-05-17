@@ -27,4 +27,7 @@ interface StockProductDao {
 
     @Query("SELECT * FROM stock_product ORDER BY id ASC")
     fun readAllData(): LiveData<List<StockProductModel>>
+
+    @Query("SELECT * FROM stock_product WHERE name = :name LIMIT 1")
+    fun findStockProductByName(name: String): StockProductModel
 }

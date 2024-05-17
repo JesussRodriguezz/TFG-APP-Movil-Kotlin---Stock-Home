@@ -9,10 +9,9 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = "stock_product")
 data class StockProductModel (
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey
+    val id: String,
     val name: String,
-    val description: String,
-    val expirationDate: String,
+    val expirationDate: String = "",
     val image: String
 ): Parcelable

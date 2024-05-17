@@ -26,4 +26,9 @@ class StockProductRepository(private val stockProductDao: StockProductDao) {
         return stockProductDao.getStockProductById(id)
     }
 
+    fun findStockProductByName(name: String): StockProductModel {
+        return stockProductDao.findStockProductByName(name)
+
+    }
+
 }

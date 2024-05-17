@@ -6,5 +6,6 @@ data class StockProductResponse(
 )
 
 data class StockProductDetailResponse(
-    @SerializedName("product_name") val productName: String
+    @SerializedName("product_name") val productName: String,
+    @SerializedName("image_url") val productImage:String
 )

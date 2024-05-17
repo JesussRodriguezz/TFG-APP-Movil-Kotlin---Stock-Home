@@ -16,7 +16,10 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
@@ -27,6 +30,8 @@ import com.yes.tfgapp.data.network.response.StockProductResponse
 import com.yes.tfgapp.data.repository.StockProductRepository
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.databinding.FragmentMyStockBinding
+import com.yes.tfgapp.domain.model.StockProductModel
+import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
 import com.yes.tfgapp.ui.mystockproductdetail.MyStockProductDetailFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,10 +56,14 @@ class MyStockFragment : Fragment() {
     private lateinit var btnManualAdd: View
     private lateinit var scanBarcode: View
     private lateinit var manualAdd: View
-
     private lateinit var btnNewStockProduct: View
 
     private lateinit var retrofit: Retrofit
+
+    private val stockProductAdapter = StockProductAdapter(
+        onClickDelete = { onClickDeleteStockProduct(it)}
+    )
+    private lateinit var mStockViewModel: MyStockViewModel
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -83,17 +92,6 @@ class MyStockFragment : Fragment() {
 
     private fun setResult(string: String) {
         getProductApi(string)
-
-
-        /*currentDialog?.dismiss()
-        val dialogFragment = MyStockProductDetailFragment()
-        dialogFragment.arguments = Bundle().apply {
-            putString("productName", string)
-        }
-        (activity as MainActivity).hideBottomNav()
-        (activity as MainActivity).hideToolbar()
-        currentDialog = dialogFragment
-        dialogFragment.show(childFragmentManager, "MyStockProductDetailFragment")*/
     }
 
     private fun getProductApi(productCode: String) {
@@ -106,6 +104,10 @@ class MyStockFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         openProductDetailDialog(response)
                     }
+                }else{
+                    withContext(Dispatchers.Main) {
+                        openProductDetailDialog(null)
+                    }
                 }
                 Log.i("yes", "funciona :)")
             } else {
@@ -114,12 +116,25 @@ class MyStockFragment : Fragment() {
         }
     }
 
-    private fun openProductDetailDialog(product: StockProductResponse) {
+    private fun openProductDetailDialog(product: StockProductResponse?) {
         currentDialog?.dismiss()
+        val stockProduct = if (product != null) {
+            StockProductModel(
+                id = product.code,
+                name = product.product.productName,
+                image = product.product.productImage
+            )
+        } else {
+            StockProductModel(
+                id = "error",
+                name = "Error: Producto no encontrado",
+                image = "" // Puedes usar una imagen predeterminada o dejarlo vacío
+            )
+        }
+
         val dialogFragment = MyStockProductDetailFragment()
         dialogFragment.arguments = Bundle().apply {
-            putString("productName", product.product.productName)  // Usa el nombre del producto recibido
-            // Agrega otros detalles del producto según sea necesario
+            putParcelable("currentStockProduct", stockProduct)
         }
         (activity as MainActivity).hideBottomNav()
         (activity as MainActivity).hideToolbar()
@@ -148,6 +163,17 @@ class MyStockFragment : Fragment() {
     }
 
     private fun initUI() {
+
+        val rvStockProduct = binding.rvMyStock
+        rvStockProduct.adapter = stockProductAdapter
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+
+        rvStockProduct.layoutManager = layoutManager
+        mStockViewModel = ViewModelProvider(this).get(MyStockViewModel::class.java)
+        mStockViewModel.readAllData.observe(viewLifecycleOwner) { stockProduct ->
+            stockProductAdapter.setData(stockProduct)
+        }
+
         scanBarcode = binding.llScanBarcode
         manualAdd = binding.llManualAdd
         btnScanBarcode = binding.fabScanBarcode
@@ -270,6 +296,10 @@ class MyStockFragment : Fragment() {
             .setListener(object : AnimatorListenerAdapter() {})
             .rotation(if (rotate) 180f else 0f)
         return rotate
+    }
+
+    private fun onClickDeleteStockProduct(stockProduct: StockProductModel) {
+        mStockViewModel.deleteStockProduct(stockProduct)
     }
 
     private fun getRetrofit(): Retrofit {

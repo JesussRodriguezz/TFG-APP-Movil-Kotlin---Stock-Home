@@ -6,44 +6,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.mystockproductdetail.MyStockProductDetailFragment">
 
-    <TextView
-        android:id="@+id/tvProductId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Prueba item name"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivProductApiSearchImage"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:contentDescription="Product Image"
+        android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="16dp"
-        android:gravity="center_horizontal"/>
+        android:layout_marginVertical="164dp"
+        tools:src="@drawable/nestea" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/efTestBackButton"
+    <TextView
+        android:id="@+id/tvProductId"
+        style="@style/TitleToolbarDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal"
+        android:text="Prueba item name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivProductApiSearchImage" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/efAddStockProduct"
+        style="@style/SmallButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:backgroundTint="@color/accentRed"
-        android:src="@drawable/ic_add"
+        android:text="Añadir a mi stock"
         app:backgroundTint="@color/accentRed"
-        app:fabSize="normal"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
-        app:tint="@color/white" />
+        app:shapeAppearanceOverlay="@style/RoundedExtendedFab" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/efTestBackButton2"
+        android:id="@+id/efCloseDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
         android:backgroundTint="@color/accentRed"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_delete"
         app:backgroundTint="@color/accentRed"
         app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
         app:tint="@color/white" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

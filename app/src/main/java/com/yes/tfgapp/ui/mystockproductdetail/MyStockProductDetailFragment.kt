@@ -7,19 +7,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.squareup.picasso.Picasso
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.FragmentMyStockProductDetailBinding
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.ui.mystock.MyStockFragment
+import com.yes.tfgapp.ui.mystock.MyStockViewModel
 
 class MyStockProductDetailFragment : DialogFragment() {
 
     private lateinit var binding: FragmentMyStockProductDetailBinding
 
     private val args: MyStockProductDetailFragmentArgs by navArgs()
-    private lateinit var btnBack : View
-    private lateinit var btnBack2 : View
+    private lateinit var btnAddStockProduct : View
+    private lateinit var btnCloseDialog : View
+    private lateinit var mStockViewModel: MyStockViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,25 +46,41 @@ class MyStockProductDetailFragment : DialogFragment() {
     }
 
     private fun initUI() {
-        btnBack = binding.efTestBackButton
-        btnBack2 = binding.efTestBackButton2
+        mStockViewModel= ViewModelProvider(this).get(MyStockViewModel::class.java)
 
 
-        if (args.productName.isNotEmpty()) {
-            binding.tvProductId.text = args.productName
+        btnAddStockProduct = binding.efAddStockProduct
+        btnCloseDialog = binding.efCloseDialog
+
+        if(args.currentStockProduct.id=="error"){
+            binding.tvProductId.text = "Product not found"
+            //binding.ivProductApiSearchImage.setImageResource(R.drawable.ic_delete)
+        }else{
+            binding.tvProductId.text = args.currentStockProduct.name
+            Picasso.get().load(args.currentStockProduct.image).into(binding.ivProductApiSearchImage)
         }
+
     }
 
     private fun initListeners() {
-        btnBack.setOnClickListener {
-            (parentFragment as? MyStockFragment)?.showCamera()
+        btnAddStockProduct.setOnClickListener {
+            addStockProduct()
+            //(parentFragment as? MyStockFragment)?.showCamera()
         }
 
-        btnBack2.setOnClickListener {
+        btnCloseDialog.setOnClickListener {
             (activity as MainActivity).showToolbar()
             (activity as MainActivity).showBottomNavInsta()
             dismiss()
         }
+
+    }
+
+    private fun addStockProduct() {
+        val stockProduct = args.currentStockProduct
+        //mStockViewModel.addStockProduct(stockProduct)
+        mStockViewModel.addProduct(stockProduct)
+
     }
 
 }
