@@ -21,5 +21,5 @@ data class ProductModel(
     @PrimaryKey(autoGenerate = true)
     val id:Int = 0,
     val name: String,
-    val categoryId: Int = 7
+    val categoryId: Int = 14
 ): Parcelable
