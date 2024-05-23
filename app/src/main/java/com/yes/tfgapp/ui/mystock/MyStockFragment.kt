@@ -2,7 +2,6 @@ package com.yes.tfgapp.ui.mystock
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -10,29 +9,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation.AnimationListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.yes.tfgapp.R
 import com.yes.tfgapp.data.network.ProductsApiService
-import com.yes.tfgapp.data.network.response.ProductSearchResponse
 import com.yes.tfgapp.data.network.response.StockProductResponse
-import com.yes.tfgapp.data.repository.StockProductRepository
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.databinding.FragmentMyStockBinding
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
-import com.yes.tfgapp.ui.mystockproductdetail.MyStockProductDetailFragment
+import com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +36,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import java.util.jar.Manifest
 
 
 class MyStockFragment : Fragment() {
@@ -140,6 +133,7 @@ class MyStockFragment : Fragment() {
         (activity as MainActivity).hideToolbar()
         currentDialog = dialogFragment
         dialogFragment.show(childFragmentManager, "MyStockProductDetailFragment")
+
     }
 
 
@@ -148,6 +142,10 @@ class MyStockFragment : Fragment() {
         val orderByOptions = resources.getStringArray(R.array.order_by_options_stock_products)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, orderByOptions)
         binding.autoCompleteTextView.setAdapter(arrayAdapter)
+        manualAdd.isVisible = false
+        scanBarcode.isVisible = false
+        (activity as MainActivity).showBottomNavInsta()
+        rotate = false
         (activity as MainActivity).setToolbarTitle("Mi stock")
     }
 

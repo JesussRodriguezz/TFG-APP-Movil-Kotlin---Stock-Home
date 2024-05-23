@@ -70,6 +70,7 @@ class SearchProductsFragment : Fragment() {
     private lateinit var retrofit: Retrofit
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,6 +81,7 @@ class SearchProductsFragment : Fragment() {
         retrofit = getRetrofit()
         return binding.root
     }
+
 
     private fun initListeners() {
         binding.btnLocalSearch.setOnClickListener {

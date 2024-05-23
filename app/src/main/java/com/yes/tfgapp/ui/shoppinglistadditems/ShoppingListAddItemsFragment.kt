@@ -56,9 +56,19 @@ class ShoppingListAddItemsFragment : Fragment() {
 
 
     override fun onResume() {
+        //unselectAllCategories()
         super.onResume()
         (activity as MainActivity).setToolbarTitle(args.CurrentShoppingList.name)
         (activity as MainActivity).activeButtonBack()
+
+    }
+
+    private fun unselectAllCategories() {
+        mShoppingListAddItemsViewModel.readAllDataCategory.value?.map {
+            it.copy(isSelected = false)
+        }?.let { updatedCategories ->
+            mShoppingListAddItemsViewModel.updateCategories(updatedCategories)
+        }
     }
 
     override fun onCreateView(
@@ -121,10 +131,7 @@ class ShoppingListAddItemsFragment : Fragment() {
             productsAdapter.setProductsInShoppingList(productsInShoppingList)
         }
 
-        binding.btnSearchView.setOnClickListener{
-            val action = ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(args.CurrentShoppingList)
-            binding.root.findNavController().navigate(action)
-        }
+
 
 
     }
@@ -152,6 +159,12 @@ class ShoppingListAddItemsFragment : Fragment() {
                         .show()
                 }
             }
+        }
+
+        binding.btnSearchView.setOnClickListener{
+            unselectAllCategories()
+            val action = ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(args.CurrentShoppingList)
+            binding.root.findNavController().navigate(action)
         }
     }
 

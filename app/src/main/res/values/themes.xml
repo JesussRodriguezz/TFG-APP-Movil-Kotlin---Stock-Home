@@ -44,6 +44,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="image_roundedstock" >
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10%</item>
+    </style>
     <style name="ActiveItemIndicatorStyle">
         <item name="android:background">@color/transparent</item>
     </style>

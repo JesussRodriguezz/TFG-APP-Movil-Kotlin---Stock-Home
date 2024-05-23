@@ -66,7 +66,7 @@
     </fragment>
     <fragment
         android:id="@+id/myStockProductDetailFragment"
-        android:name="com.yes.tfgapp.ui.mystockproductdetail.MyStockProductDetailFragment"
+        android:name="com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment"
         android:label="fragment_my_stock_product_detail"
         tools:layout="@layout/fragment_my_stock_product_detail" >
         <argument

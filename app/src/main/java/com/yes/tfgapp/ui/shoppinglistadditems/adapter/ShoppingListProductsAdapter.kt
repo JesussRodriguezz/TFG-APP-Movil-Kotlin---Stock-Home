@@ -20,6 +20,9 @@ class ShoppingListProductsAdapter(
     inner class ShoppingListProductsViewHolder(private val binding: ProductListRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private var isProductAdded = false
+
+
         fun bind(
             currentItem: ProductModel,
             onAddProductToList: (ProductModel) -> Unit,
@@ -44,22 +47,27 @@ class ShoppingListProductsAdapter(
 
             if (productsInShoppingList.any { it.productId == currentItem.id }) {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_check)
+                isProductAdded = true
             } else {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_add)
+                isProductAdded = false
             }
 
             binding.ibAddProductToList.setOnClickListener {
-                if (binding.ibAddProductToList.drawable.constantState == ContextCompat.getDrawable(
-                        binding.root.context,
-                        R.drawable.ic_check
-                    )!!.constantState
-                ) {
+                if (isProductAdded) {
                     onDeleteProductFromList(currentItem)
+                    binding.ibAddProductToList.setImageDrawable(
+                        ContextCompat.getDrawable(binding.root.context, R.drawable.ic_add)
+                    )
                 } else {
                     onAddProductToList(currentItem)
+                    binding.ibAddProductToList.setImageDrawable(
+                        ContextCompat.getDrawable(binding.root.context, R.drawable.ic_check)
+                    )
                 }
-
+                isProductAdded = !isProductAdded
             }
+
         }
 
     }

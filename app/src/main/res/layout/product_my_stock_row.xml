@@ -2,49 +2,99 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="180dp"
-    android:layout_height="128dp"
-    android:layout_marginHorizontal="0dp"
-    android:layout_marginVertical="8dp"
+    android:layout_width="175dp"
+    android:layout_height="200dp"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginVertical="6dp"
     app:cardBackgroundColor="@color/primaryGrey"
-    app:cardCornerRadius="24dp"
-    >
-    <ImageButton
-        android:id="@+id/ibDeleteStockProduct"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_delete"
-        app:tint="@color/accentRed"
-        android:contentDescription="ibSettings" />
+    app:cardCornerRadius="18dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivStockProduct"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:contentDescription="Product Image"
             android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/image_rounded"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/image_roundedstock"
             tools:src="@drawable/nestea" />
 
-        <TextView
-            android:id="@+id/tvStockProductName"
-            style="@style/TitleToolbarDark"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textColor="@color/primaryDark"
-            tools:text="PRUEBA" />
+        <ImageButton
+            android:id="@+id/ibDeleteStockProduct"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="0dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Delete product"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_delete"
+            android:translationZ="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/accentRed" />
 
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/infoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@color/semiTransparentLight"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tvStockProductName"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Product Name"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintWidth_default="wrap"
+                app:layout_constraintWidth_max="100dp"
+                app:layout_constraintWidth_min="0dp"
+                tools:text="Nestea con paaassdas" />
+            <!--
+                        <TextView
+                            android:id="@+id/tvCategoryName"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="5dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/roboto_medium"
+                            android:maxLines="1"
+                            android:textColor="@color/primaryDark"
+                            android:textSize="14sp"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintWidth_default="wrap"
+                            app:layout_constraintWidth_max="100dp"
+                            app:layout_constraintWidth_min="0dp"
+                            tools:text="Category" />-->
+
+            <TextView
+                android:id="@+id/tvStockProductExpireDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expiration Date"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="23/05/2024" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -3,8 +3,10 @@ package com.yes.tfgapp.domain.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
-
+import kotlinx.parcelize.Parcelize
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Parcelize
 @Entity(tableName = "stock_product")
@@ -13,5 +15,13 @@ data class StockProductModel (
     val id: String,
     val name: String,
     val expirationDate: String = "",
-    val image: String
-): Parcelable
+    val image: String,
+    val addedDate: String = getCurrentDate()
+): Parcelable {
+    companion object {
+        fun getCurrentDate(): String {
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            return dateFormat.format(Date())
+        }
+    }
+}

@@ -34,7 +34,6 @@ class MyStockViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch(Dispatchers.IO) {
             val existingProduct = stockProductRepository.findStockProductByName(stockProduct.name)
             if (existingProduct == null) {
-                // El producto no existe, insertar en la base de datos
                 val productId = stockProductRepository.addStockProduct(stockProduct)
             }
         }

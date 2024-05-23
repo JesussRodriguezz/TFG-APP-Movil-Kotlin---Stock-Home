@@ -21,6 +21,8 @@ class StockProductAdapter(
             onClickDelete: (StockProductModel) -> Unit
         ) {
             binding.tvStockProductName.text = currentItem.name
+            binding.tvStockProductExpireDate.text = currentItem.addedDate
+            println("CURRENT DATE: "+currentItem.addedDate)
             Picasso.get().load(currentItem.image).into(binding.ivStockProduct)
             binding.ibDeleteStockProduct.setOnClickListener {
                 onClickDelete(currentItem)
