@@ -39,6 +39,12 @@ class MyStockViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun updateStockProduct(stockProduct: StockProductModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            stockProductRepository.updateStockProduct(stockProduct)
+        }
+    }
+
     fun deleteStockProduct(stockProduct: StockProductModel) {
         viewModelScope.launch(Dispatchers.IO) {
             stockProductRepository.deleteStockProduct(stockProduct)

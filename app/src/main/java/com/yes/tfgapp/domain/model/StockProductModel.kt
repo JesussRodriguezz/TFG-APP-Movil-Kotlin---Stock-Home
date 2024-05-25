@@ -14,14 +14,16 @@ data class StockProductModel (
     @PrimaryKey
     val id: String,
     val name: String,
-    val expirationDate: String = "",
+    var expirationDate: String = "",
     val image: String,
-    val addedDate: String = getCurrentDate()
+    val addedDate: String = getCurrentDate(),
+    var daysToExpire: Int = 0,
 ): Parcelable {
     companion object {
         fun getCurrentDate(): String {
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             return dateFormat.format(Date())
         }
+
     }
 }

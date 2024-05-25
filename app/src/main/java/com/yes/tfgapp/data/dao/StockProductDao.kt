@@ -30,4 +30,7 @@ interface StockProductDao {
 
     @Query("SELECT * FROM stock_product WHERE name = :name LIMIT 1")
     fun findStockProductByName(name: String): StockProductModel
+
+    @Query("SELECT * FROM stock_product")
+    suspend fun getAllStockProducts(): List<StockProductModel>
 }

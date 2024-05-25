@@ -15,6 +15,10 @@ import com.yes.tfgapp.databinding.FragmentMyStockProductDetailBinding
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.ui.mystock.MyStockFragment
 import com.yes.tfgapp.ui.mystock.MyStockViewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class MyStockProductDetailFragment : DialogFragment() {
 
@@ -24,6 +28,10 @@ class MyStockProductDetailFragment : DialogFragment() {
     private lateinit var btnAddStockProduct : View
     private lateinit var btnCloseDialog : View
     private lateinit var mStockViewModel: MyStockViewModel
+    private var selectedExpireDateButton: Button? = null
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +42,6 @@ class MyStockProductDetailFragment : DialogFragment() {
         initListeners()
         return binding.root
     }
-
-
 
     override fun onStart() {
         dialog?.window?.setLayout(
@@ -106,6 +112,7 @@ class MyStockProductDetailFragment : DialogFragment() {
     private fun updateButtonStates(selectedButton: Button, otherButtons: List<Button>) {
         selectedButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.accentRed))
         selectedButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        selectedExpireDateButton=selectedButton
 
         otherButtons.forEach { button ->
             button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primaryGrey))
@@ -116,9 +123,37 @@ class MyStockProductDetailFragment : DialogFragment() {
 
     private fun addStockProduct() {
         val stockProduct = args.currentStockProduct
-        //mStockViewModel.addStockProduct(stockProduct)
-        mStockViewModel.addProduct(stockProduct)
+        val expirationDate = when (selectedExpireDateButton) {
+            binding.btn1Week -> addDaysToDate(stockProduct.addedDate, 7)
+            binding.btn2Weeks -> addDaysToDate(stockProduct.addedDate, 14)
+            binding.btn1Month -> addDaysToDate(stockProduct.addedDate, 30)
+            binding.btn2Months -> addDaysToDate(stockProduct.addedDate, 60)
+            else -> stockProduct.addedDate
+        }
+        val daysToExpire = daysBetweenDates(stockProduct.addedDate, expirationDate).toInt()
+        val updatedStockProduct = stockProduct.copy(expirationDate = expirationDate, daysToExpire = daysToExpire)
+        mStockViewModel.updateStockProduct(updatedStockProduct)
+        mStockViewModel.addProduct(updatedStockProduct)
+    }
 
+
+    fun addDaysToDate(date: String, days: Int): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        calendar.time = dateFormat.parse(date) ?: return date
+        calendar.add(Calendar.DAY_OF_YEAR, days)
+        return dateFormat.format(calendar.time)
+    }
+
+    fun daysBetweenDates(startDate: String, endDate: String): Long {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val start = dateFormat.parse(startDate)
+        val end = dateFormat.parse(endDate)
+        if (start != null && end != null) {
+            val diffInMillis = end.time - start.time
+            return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS)
+        }
+        return 0
     }
 
 }

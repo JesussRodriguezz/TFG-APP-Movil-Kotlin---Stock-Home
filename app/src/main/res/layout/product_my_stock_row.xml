@@ -13,6 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tvStockProductDaysToExpire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2d"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:translationZ="2dp"
+            android:paddingVertical="4dp"
+            android:paddingHorizontal="8dp"
+            android:background="@color/semiTransparentLight"
+
+            />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivStockProduct"
             android:layout_width="match_parent"
@@ -44,7 +61,7 @@
         <LinearLayout
             android:id="@+id/infoLayout"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="85dp"
             android:background="@color/semiTransparentLight"
             android:orientation="vertical"
             android:padding="8dp"
@@ -67,24 +84,15 @@
                 app:layout_constraintWidth_max="100dp"
                 app:layout_constraintWidth_min="0dp"
                 tools:text="Nestea con paaassdas" />
-            <!--
-                        <TextView
-                            android:id="@+id/tvCategoryName"
-                            android:layout_width="70dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="5dp"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/roboto_medium"
-                            android:maxLines="1"
-                            android:textColor="@color/primaryDark"
-                            android:textSize="14sp"
-                            app:layout_constraintHorizontal_bias="0"
-                            app:layout_constraintWidth_default="wrap"
-                            app:layout_constraintWidth_max="100dp"
-                            app:layout_constraintWidth_min="0dp"
-                            tools:text="Category" />-->
 
+            <TextView
+                android:id="@+id/tvStockProductAddedDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expiration Date"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="23/05/2024" />
             <TextView
                 android:id="@+id/tvStockProductExpireDate"
                 android:layout_width="wrap_content"

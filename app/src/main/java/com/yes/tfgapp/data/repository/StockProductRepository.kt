@@ -28,7 +28,10 @@ class StockProductRepository(private val stockProductDao: StockProductDao) {
 
     fun findStockProductByName(name: String): StockProductModel {
         return stockProductDao.findStockProductByName(name)
+    }
 
+    suspend fun getAllStockProducts(): List<StockProductModel> {
+        return stockProductDao.getAllStockProducts()
     }
 
 }

@@ -83,5 +83,10 @@ dependencies {
     //barcode scanner
     implementation("com.google.zxing:core:3.4.1")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    
+    //work manager
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
 
 }

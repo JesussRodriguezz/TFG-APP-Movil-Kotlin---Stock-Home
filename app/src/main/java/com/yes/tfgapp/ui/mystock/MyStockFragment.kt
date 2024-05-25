@@ -2,6 +2,7 @@ package com.yes.tfgapp.ui.mystock
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -16,12 +17,19 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.yes.tfgapp.R
 import com.yes.tfgapp.data.network.ProductsApiService
 import com.yes.tfgapp.data.network.response.StockProductResponse
+import com.yes.tfgapp.data.worker.MyWorker
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.databinding.FragmentMyStockBinding
 import com.yes.tfgapp.domain.model.StockProductModel
@@ -35,11 +43,11 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 
 class MyStockFragment : Fragment() {
-    //hola
 
     private lateinit var binding: FragmentMyStockBinding
     private var currentDialog: MyStockProductDetailFragment? = null
@@ -54,7 +62,7 @@ class MyStockFragment : Fragment() {
     private lateinit var retrofit: Retrofit
 
     private val stockProductAdapter = StockProductAdapter(
-        onClickDelete = { onClickDeleteStockProduct(it)}
+        onClickDelete = { onClickDeleteStockProduct(it) }
     )
     private lateinit var mStockViewModel: MyStockViewModel
 
@@ -87,6 +95,56 @@ class MyStockFragment : Fragment() {
         getProductApi(string)
     }
 
+    override fun onResume() {
+        super.onResume()
+        val orderByOptions = resources.getStringArray(R.array.order_by_options_stock_products)
+        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, orderByOptions)
+        binding.autoCompleteTextView.setAdapter(arrayAdapter)
+        manualAdd.isVisible = false
+        scanBarcode.isVisible = false
+        (activity as MainActivity).showBottomNavInsta()
+        (activity as MainActivity).showToolbar()
+        rotate = false
+        (activity as MainActivity).setToolbarTitle("Mi stock")
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentMyStockBinding.inflate(inflater, container, false)
+        initUI()
+        retrofit = getRetrofit()
+        initListeners()
+        scheduleInitialWork()
+        return binding.root
+    }
+
+    private fun scheduleInitialWork() {
+        val currentDate= Calendar.getInstance()
+        val nextRun = Calendar.getInstance()
+
+        nextRun.set(Calendar.HOUR_OF_DAY, 0)
+        nextRun.set(Calendar.MINUTE, 5)
+        nextRun.set(Calendar.SECOND, 0)
+        nextRun.set(Calendar.MILLISECOND, 0)
+        nextRun.add(Calendar.DAY_OF_YEAR, 1)
+
+        val initialDelay = nextRun.timeInMillis - currentDate.timeInMillis
+        Log.d(ContentValues.TAG, "Initial delay: $initialDelay")
+
+        val workRequest =OneTimeWorkRequestBuilder<MyWorker>()
+            .setInitialDelay(10, TimeUnit.SECONDS)
+            .build()
+
+        //val workRequest =OneTimeWorkRequestBuilder<MyWorker>()
+        //    .setInitialDelay(initialDelay.toLong(), TimeUnit.MILLISECONDS)
+        //    .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(workRequest)
+    }
+
+
     private fun getProductApi(productCode: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val myResponse: Response<StockProductResponse> =
@@ -97,7 +155,7 @@ class MyStockFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         openProductDetailDialog(response)
                     }
-                }else{
+                } else {
                     withContext(Dispatchers.Main) {
                         openProductDetailDialog(null)
                     }
@@ -137,29 +195,6 @@ class MyStockFragment : Fragment() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-        val orderByOptions = resources.getStringArray(R.array.order_by_options_stock_products)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, orderByOptions)
-        binding.autoCompleteTextView.setAdapter(arrayAdapter)
-        manualAdd.isVisible = false
-        scanBarcode.isVisible = false
-        (activity as MainActivity).showBottomNavInsta()
-        rotate = false
-        (activity as MainActivity).setToolbarTitle("Mi stock")
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMyStockBinding.inflate(inflater, container, false)
-        initUI()
-        retrofit = getRetrofit()
-        initListeners()
-        return binding.root
-    }
-
     private fun initUI() {
 
         val rvStockProduct = binding.rvMyStock
@@ -189,13 +224,14 @@ class MyStockFragment : Fragment() {
         }
 
         btnManualAdd.setOnClickListener {
-            Toast.makeText(context, "Manual add", Toast.LENGTH_SHORT).show()
+            //show
         }
 
         btnNewStockProduct.setOnClickListener {
             toogleFabMode(it)
         }
     }
+
 
     private fun requestCameraPermission() {
         requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
@@ -286,7 +322,6 @@ class MyStockFragment : Fragment() {
 
         }
     }
-
 
     private fun rotateFab(v: View, rotate: Boolean): Boolean {
         v.animate()
