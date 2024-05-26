@@ -3,6 +3,7 @@ package com.yes.tfgapp.ui.mystock
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -17,11 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
@@ -35,6 +32,7 @@ import com.yes.tfgapp.databinding.FragmentMyStockBinding
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
 import com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment
+import com.yes.tfgapp.ui.mystockproductsmanual.MyStockProductManualActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -116,7 +114,7 @@ class MyStockFragment : Fragment() {
         initUI()
         retrofit = getRetrofit()
         initListeners()
-        scheduleInitialWork()
+        //scheduleInitialWork()
         return binding.root
     }
 
@@ -224,12 +222,18 @@ class MyStockFragment : Fragment() {
         }
 
         btnManualAdd.setOnClickListener {
-            //show
+            openProductManualFragment()
         }
 
         btnNewStockProduct.setOnClickListener {
             toogleFabMode(it)
         }
+    }
+
+    private fun openProductManualFragment() {
+        val intent = Intent(activity, MyStockProductManualActivity::class.java)
+        startActivity(intent)
+
     }
 
 

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000"
+    tools:context=".ui.mystockproductsmanual.MyStockProductManualFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvProductName"
+            style="@style/SmallButtonTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="Nombre"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ibBackArrow" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilNewProductName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:boxBackgroundColor="@color/primaryGrey"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/accentRed"
+            app:hintTextColor="@color/accentRed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvProductName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNewProductName"
+                style="@style/TextInputEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:padding="16dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilNewProductName" />
+
+        <LinearLayout
+            android:id="@+id/llAddPhotoorIcon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SmallButtonTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Foto"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <FrameLayout
+                    android:id="@+id/flAddPhoto"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp">
+
+                    <ImageView
+                        android:id="@+id/ivAddPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:background="@color/primaryGrey"
+                        android:padding="25dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_camera" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/SmallButtonTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="16dp"
+                android:text="o"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SmallButtonTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Icono"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ivAddIcon"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@color/primaryGrey"
+                    android:padding="25dp"
+                    android:src="@drawable/ic_icon"
+                    /> <!-- Reemplaza con el icono de tu martini -->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llAddPhotoorIcon" />
+
+        <TextView
+            android:id="@+id/tvExpireDataTitle"
+            style="@style/ProductsListTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Caduca en:"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+
+        <GridLayout
+            android:id="@+id/glExpireDataButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:columnCount="2"
+            android:rowCount="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvExpireDataTitle">
+
+            <Button
+                android:id="@+id/btn1Week"
+                style="@style/SmallButtonTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/primaryGrey"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="0dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="1 semana"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn2Weeks"
+                style="@style/SmallButtonTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/primaryGrey"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="0dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="2 semanas"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn1Month"
+                style="@style/SmallButtonTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/primaryGrey"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="0dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="1 mes"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn2Months"
+                style="@style/SmallButtonTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/primaryGrey"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="0dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:text="3 meses"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </GridLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/efAddStockItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:backgroundTint="@color/accentRed"
+            android:src="@drawable/ic_add"
+            app:backgroundTint="@color/accentRed"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/ibBackArrow"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="ibBackArrow"
+            android:src="@drawable/ic_back_arrow_big"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

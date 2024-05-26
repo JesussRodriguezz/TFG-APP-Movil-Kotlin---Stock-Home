@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ProductMyStockRowBinding
 import com.yes.tfgapp.databinding.ShoppingListRowBinding
 import com.yes.tfgapp.domain.model.StockProductModel
@@ -25,7 +26,15 @@ class StockProductAdapter(
             binding.tvStockProductExpireDate.text = currentItem.expirationDate
             binding.tvStockProductDaysToExpire.text = currentItem.daysToExpire.toString()
             println("CURRENT DATE: "+currentItem.addedDate)
-            Picasso.get().load(currentItem.image).into(binding.ivStockProduct)
+
+            if (currentItem.image != null) {
+                Picasso.get().load(currentItem.image).into(binding.ivStockProduct)
+            } else if (currentItem.icon != null) {
+                binding.ivStockProduct.setImageResource(currentItem.icon)
+            } else {
+                binding.ivStockProduct.setImageResource(R.drawable.ic_others_category) // Imagen por defecto si no hay imagen ni icono
+            }
+
             binding.ibDeleteStockProduct.setOnClickListener {
                 onClickDelete(currentItem)
             }

@@ -15,7 +15,8 @@ data class StockProductModel (
     val id: String,
     val name: String,
     var expirationDate: String = "",
-    val image: String,
+    val image: String? = null,
+    val icon: Int? = null,
     val addedDate: String = getCurrentDate(),
     var daysToExpire: Int = 0,
 ): Parcelable {
