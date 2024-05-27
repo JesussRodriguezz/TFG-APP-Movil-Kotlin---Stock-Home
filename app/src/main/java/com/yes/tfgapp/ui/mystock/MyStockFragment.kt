@@ -114,7 +114,7 @@ class MyStockFragment : Fragment() {
         initUI()
         retrofit = getRetrofit()
         initListeners()
-        //scheduleInitialWork()
+        scheduleInitialWork()
         return binding.root
     }
 
@@ -132,12 +132,8 @@ class MyStockFragment : Fragment() {
         Log.d(ContentValues.TAG, "Initial delay: $initialDelay")
 
         val workRequest =OneTimeWorkRequestBuilder<MyWorker>()
-            .setInitialDelay(10, TimeUnit.SECONDS)
+            .setInitialDelay(50, TimeUnit.SECONDS)
             .build()
-
-        //val workRequest =OneTimeWorkRequestBuilder<MyWorker>()
-        //    .setInitialDelay(initialDelay.toLong(), TimeUnit.MILLISECONDS)
-        //    .build()
 
         WorkManager.getInstance(requireContext()).enqueue(workRequest)
     }

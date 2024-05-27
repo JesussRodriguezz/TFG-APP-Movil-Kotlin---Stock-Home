@@ -46,7 +46,8 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
 
     override suspend fun doWork(): Result {
         updateExpireDate()
-        //scheduleNextWork()
+        scheduleNextWork()
+
 
         return Result.success()
     }
@@ -65,7 +66,10 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
                 expireDate
             )
             Log.d(TAG, "DAYS TO EXPIRE: $daysToExpire")
-            val updatedProduct = product.copy(daysToExpire = daysToExpire.toInt() - 1)
+            if(daysToExpire<=3){
+                showNotification(product.name, daysToExpire.toInt())
+            }
+            val updatedProduct = product.copy(daysToExpire = daysToExpire.toInt())
             withContext(Dispatchers.IO) {
                 stockProductRepository.updateStockProduct(updatedProduct)
             }
@@ -104,7 +108,7 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
         WorkManager.getInstance(applicationContext).enqueue(workRequest)
     }
 
-    private fun showNotification() {
+    private fun showNotification(name:String, daysToExpire: Int) {
         // Check if the notification permission is granted
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -125,8 +129,8 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
 
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_check)
-            .setContentTitle("Title")
-            .setContentText("Content")
+            .setContentTitle("Product $name will expire in $daysToExpire days")
+            .setContentText("Check your stock")
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

@@ -11,27 +11,28 @@
         android:id="@+id/rvShoppingList"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:background="@color/primaryWhite"
-        android:padding="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/extended_fab"
-        style="@style/SmallButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-        android:text="NUEVA LISTA"
+        android:backgroundTint="@color/accentRed"
+        android:src="@drawable/ic_add"
         app:backgroundTint="@color/accentRed"
-        app:icon="@drawable/ic_add"
-        app:iconTint="@color/white"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:shapeAppearanceOverlay="@style/RoundedExtendedFab" />
+        app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
+        app:tint="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

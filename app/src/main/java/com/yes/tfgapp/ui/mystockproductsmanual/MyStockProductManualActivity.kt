@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.core.app.ActivityCompat
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -22,17 +24,32 @@ import com.yes.tfgapp.databinding.ActivityMyStockProductManualBinding
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.MyStockViewModel
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
-
 class MyStockProductManualActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyStockProductManualBinding
     private lateinit var mStockViewModel: MyStockViewModel
 
     private val icons = listOf(
-        R.drawable.ic_bebidas, R.drawable.ic_carnes, R.drawable.ic_congelados, R.drawable.ic_desayuno,
-        R.drawable.ic_dys, R.drawable.ic_gyp, R.drawable.ic_desayuno, R.drawable.ic_carnes
+        R.drawable.ic_fyv,
+        R.drawable.ic_carnes,
+        R.drawable.ic_pescados,
+        R.drawable.ic_latas,
+        R.drawable.ic_lacteos,
+        R.drawable.ic_panaderia,
+        R.drawable.ic_bebidas,
+        R.drawable.ic_desayuno,
+        R.drawable.ic_eys,
+        R.drawable.ic_congelados,
+        R.drawable.ic_gyp,
+        R.drawable.ic_dys,
+        R.drawable.ic_others_category,
     )
     private var isPhotoSelected: Boolean = false
     private var selectedIconResource: Int? = null
@@ -40,6 +57,23 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private var selectedExpireDateButton: Button? = null
     private lateinit var imageUrl: Uri
     private lateinit var captureIV: ImageView
+
+    private val cameraPermissionLauncher = registerForActivityResult(RequestPermission()) { isGranted ->
+        if (isGranted) {
+            launchCamera()
+        } else {
+            Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val storagePermissionLauncher = registerForActivityResult(RequestPermission()) { isGranted ->
+        if (isGranted) {
+            captureIV.performClick()
+        } else {
+            Toast.makeText(this, "Permiso de almacenamiento denegado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
             captureIV.setImageURI(null)
@@ -61,12 +95,11 @@ class MyStockProductManualActivity : AppCompatActivity() {
         setContentView(binding.root)
         initUI()
         initListeners()
-
     }
 
     private fun initUI() {
         imageUrl = createImageUri()
-        captureIV= binding.ivAddPhoto
+        captureIV = binding.ivAddPhoto
         mStockViewModel = ViewModelProvider(this).get(MyStockViewModel::class.java)
     }
 
@@ -75,7 +108,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         if (!imageDir.exists()) {
             imageDir.mkdirs()
         }
-        val imageFile = File(imageDir, "${UUID.randomUUID()}")
+        val imageFile = File(imageDir, "${UUID.randomUUID()}.jpg")
         return FileProvider.getUriForFile(
             this,
             "com.yes.tfgapp.ui.mystockproductsmanual.FileProvider",
@@ -100,10 +133,13 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
 
         binding.btn2Months.setOnClickListener {
-            updateButtonStates(binding.btn2Months, listOf(binding.btn1Week, binding.btn2Weeks, binding.btn1Month))
+            updateButtonStates(binding.btn2Months, listOf(binding.btn1Week, binding.btn1Month, binding.btn2Weeks))
         }
+
         captureIV.setOnClickListener {
-            contract.launch(imageUrl)
+            if (checkAndRequestPermissions()) {
+                launchCamera()
+            }
         }
 
         binding.ivAddIcon.setOnClickListener {
@@ -111,43 +147,98 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
         binding.efAddStockItem.setOnClickListener {
             addStockProduct()
-            finish()
         }
     }
 
-    private fun addStockProduct() {
-            val name = binding.etNewProductName.text.toString()
-            if (name.isEmpty()) {
-                Toast.makeText(
-                    this,
-                    "El nombre del producto no puede estar vacío",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
+    private fun checkAndRequestPermissions(): Boolean {
+        val cameraPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+        val storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val listPermissionsNeeded = mutableListOf<String>()
 
-            val stockProduct = if (isPhotoSelected) {
-                StockProductModel(
-                    id = UUID.randomUUID().toString(),
-                    name = name,
-                    image = imageUrl.toString()
-                )
-            } else {
-                StockProductModel(
-                    id = UUID.randomUUID().toString(),
-                    name = name,
-                    icon = selectedIconResource
-                )
-            }
-
-            // Aquí puedes manejar el objeto stockProduct, por ejemplo, agregarlo a una lista o enviarlo a otra actividad
-            Toast.makeText(this, "Producto agregado: $name", Toast.LENGTH_SHORT).show()
-            mStockViewModel.addProduct(stockProduct)
-
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.CAMERA)
+        }
+        if (storagePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
 
+        if (listPermissionsNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toTypedArray(), PERMISSIONS_REQUEST_CODE)
+            return false
+        }
+        return true
+    }
 
+    private fun launchCamera() {
+        imageUrl = createImageUri()
+        contract.launch(imageUrl)
+    }
 
+    private fun addStockProduct() {
+        val name = binding.etNewProductName.text.toString()
+        if (name.isEmpty()) {
+            Toast.makeText(
+                this,
+                "El nombre del producto no puede estar vacío",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        val expirationDate = when (selectedExpireDateButton) {
+            binding.btn1Week -> addDaysToDate(getCurrentDate(), 7)
+            binding.btn2Weeks -> addDaysToDate(getCurrentDate(), 14)
+            binding.btn1Month -> addDaysToDate(getCurrentDate(), 30)
+            binding.btn2Months -> addDaysToDate(getCurrentDate(), 60)
+            else -> getCurrentDate()
+        }
+        val daysToExpire = daysBetweenDates(getCurrentDate(), expirationDate).toInt()
+
+        val stockProduct = if (isPhotoSelected) {
+            StockProductModel(
+                id = UUID.randomUUID().toString(),
+                name = name,
+                image = imageUrl.toString(),
+                expirationDate = expirationDate,
+                daysToExpire = daysToExpire
+            )
+        } else {
+            StockProductModel(
+                id = UUID.randomUUID().toString(),
+                name = name,
+                icon = selectedIconResource,
+                expirationDate = expirationDate,
+                daysToExpire = daysToExpire
+            )
+        }
+
+        Toast.makeText(this, "Producto agregado: $name", Toast.LENGTH_SHORT).show()
+        mStockViewModel.addProduct(stockProduct)
+        finish()
+    }
+
+    private fun addDaysToDate(date: String, days: Int): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+        calendar.time = dateFormat.parse(date) ?: return date
+        calendar.add(Calendar.DAY_OF_YEAR, days)
+        return dateFormat.format(calendar.time)
+    }
+
+    private fun daysBetweenDates(startDate: String, endDate: String): Long {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val start = dateFormat.parse(startDate)
+        val end = dateFormat.parse(endDate)
+        if (start != null && end != null) {
+            val diffInMillis = end.time - start.time
+            return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS)
+        }
+        return 0
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
 
     private fun showIconDialog() {
         val dialog = SelectIconDialogFragment(icons) { selectedIcon ->
@@ -163,7 +254,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private fun updateButtonStates(selectedButton: Button, otherButtons: List<Button>) {
         selectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.accentRed))
         selectedButton.setTextColor(ContextCompat.getColor(this, R.color.white))
-        selectedExpireDateButton=selectedButton
+        selectedExpireDateButton = selectedButton
 
         otherButtons.forEach { button ->
             button.setBackgroundColor(ContextCompat.getColor(this, R.color.primaryGrey))
@@ -171,6 +262,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
     }
 
-
-
+    companion object {
+        private const val PERMISSIONS_REQUEST_CODE = 123
+    }
 }

@@ -1,7 +1,12 @@
 package com.yes.tfgapp.ui.shoppinglistadditems.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.databinding.CategoryListRowBinding
@@ -28,9 +33,48 @@ class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)->
             }
 
             binding.ibSettingsCategory.setOnClickListener {
-                onConfigureSelected(currentItem)
+                animateButtonClick(binding.ibSettingsCategory) {
+                    onConfigureSelected(currentItem)
+                }
+
+                //onConfigureSelected(currentItem)
             }
         }
+
+        fun animateButtonClick(
+            view: View,
+            action: () -> Unit
+        ) {
+            // Crear animación de escalado
+            val scaleXUp = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.2f)
+            val scaleYUp = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.2f)
+            val scaleXDown = ObjectAnimator.ofFloat(view, "scaleX", 1.2f, 1f)
+            val scaleYDown = ObjectAnimator.ofFloat(view, "scaleY", 1.2f, 1f)
+
+            // Configurar la duración de las animaciones
+            scaleXUp.duration = 100
+            scaleYUp.duration = 100
+            scaleXDown.duration = 100
+            scaleYDown.duration = 100
+
+            // Crear un AnimatorSet para secuenciar las animaciones
+            val animatorSet = AnimatorSet()
+            animatorSet.play(scaleXUp).with(scaleYUp).before(scaleXDown).before(scaleYDown)
+            animatorSet.interpolator = AccelerateDecelerateInterpolator()
+
+            // Iniciar la animación y realizar la acción de borrado al finalizar
+            animatorSet.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    // Acción a realizar después de la animación
+                    action()
+                }
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+            animatorSet.start()
+        }
+
     }
 
     override fun onCreateViewHolder(

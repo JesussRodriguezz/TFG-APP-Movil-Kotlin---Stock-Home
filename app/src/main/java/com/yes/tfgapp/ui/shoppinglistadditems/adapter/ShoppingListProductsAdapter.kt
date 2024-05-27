@@ -1,7 +1,11 @@
 package com.yes.tfgapp.ui.shoppinglistadditems.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
@@ -55,22 +59,43 @@ class ShoppingListProductsAdapter(
 
             binding.ibAddProductToList.setOnClickListener {
                 if (isProductAdded) {
-                    onDeleteProductFromList(currentItem)
-                    binding.ibAddProductToList.setImageDrawable(
-                        ContextCompat.getDrawable(binding.root.context, R.drawable.ic_add)
-                    )
+                    animateIconChange(binding.ibAddProductToList, R.drawable.ic_add) {
+                        onDeleteProductFromList(currentItem)
+                    }
                 } else {
-                    onAddProductToList(currentItem)
-                    binding.ibAddProductToList.setImageDrawable(
-                        ContextCompat.getDrawable(binding.root.context, R.drawable.ic_check)
-                    )
+                    animateIconChange(binding.ibAddProductToList, R.drawable.ic_check) {
+                        onAddProductToList(currentItem)
+                    }
                 }
                 isProductAdded = !isProductAdded
             }
 
         }
 
+        private fun animateIconChange(
+            imageButton: ImageButton,
+            newIconResId: Int,
+            onAnimationEnd: () -> Unit
+        ) {
+            imageButton.setImageResource(newIconResId)
+            imageButton.animate()
+                .scaleX(1.4f)
+                .scaleY(1.4f)
+                .setDuration(25)
+                .withEndAction {
+                    imageButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(25)
+                        .withEndAction {
+                            onAnimationEnd()
+                        }.start()
+                }.start()
+        }
+
     }
+
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

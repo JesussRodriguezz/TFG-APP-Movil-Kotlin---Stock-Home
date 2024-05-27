@@ -2,6 +2,7 @@ package com.yes.tfgapp.ui.searchproducts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
@@ -22,6 +23,8 @@ class ProductSearchAdapter(
 
     inner class ProductSearchViewHolder(private val binding: ProductSearchRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+            private var isProductAdded = false
 
         fun bind(
             currentItem: ProductModel,
@@ -45,10 +48,12 @@ class ProductSearchAdapter(
             )
             binding.tvProductName.text = currentItem.name
 
-            if(productsInShoppingList.any { it.productId == currentItem.id }){
+            if (productsInShoppingList.any { it.productId == currentItem.id }) {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_check)
-            }else{
+                isProductAdded=true
+            } else {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_add)
+                isProductAdded=false
             }
 
             getCategoryById(currentItem.categoryId) { category ->
@@ -60,13 +65,39 @@ class ProductSearchAdapter(
             }
 
             binding.ibAddProductToList.setOnClickListener {
-                if (binding.ibAddProductToList.drawable.constantState == ContextCompat.getDrawable(binding.root.context,R.drawable.ic_check)!!.constantState) {
-                    onDeleteProductFromList(currentItem)
+
+                if (isProductAdded) {
+                    animateIconChange(binding.ibAddProductToList, R.drawable.ic_add) {
+                        onDeleteProductFromList(currentItem)
+                    }
                 } else {
-                    onAddProductToList(currentItem, adapterPosition)
+                    animateIconChange(binding.ibAddProductToList, R.drawable.ic_check) {
+                        onAddProductToList(currentItem, adapterPosition)
+                    }
                 }
 
             }
+        }
+
+        private fun animateIconChange(
+            imageButton: ImageButton,
+            newIconResId: Int,
+            onAnimationEnd: () -> Unit
+        ) {
+            imageButton.setImageResource(newIconResId)
+            imageButton.animate()
+                .scaleX(1.4f)
+                .scaleY(1.4f)
+                .setDuration(25)
+                .withEndAction {
+                    imageButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(25)
+                        .withEndAction {
+                            onAnimationEnd()
+                        }.start()
+                }.start()
         }
 
     }
@@ -86,14 +117,20 @@ class ProductSearchAdapter(
 
     override fun onBindViewHolder(holder: ProductSearchViewHolder, position: Int) {
         val currentItem = productsList[position]
-        holder.bind(currentItem, onAddProductToList, getCategoryById, changeCategory,onDeleteProductFromList)
+        holder.bind(
+            currentItem,
+            onAddProductToList,
+            getCategoryById,
+            changeCategory,
+            onDeleteProductFromList
+        )
     }
 
     fun setProductList(products: List<ProductModel>) {
         this.productsList = products
     }
 
-    fun setProductsInShoppingList(productsInShoppingList: List<ProductShoppingListModel>){
+    fun setProductsInShoppingList(productsInShoppingList: List<ProductShoppingListModel>) {
         this.productsInShoppingList = productsInShoppingList
         notifyDataSetChanged()
     }

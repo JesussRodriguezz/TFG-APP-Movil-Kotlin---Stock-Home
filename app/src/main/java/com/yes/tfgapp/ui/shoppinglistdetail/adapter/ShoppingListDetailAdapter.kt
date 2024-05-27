@@ -2,6 +2,7 @@ package com.yes.tfgapp.ui.shoppinglistdetail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
@@ -39,6 +40,7 @@ class ShoppingListDetailAdapter(
                     backgroundColor
                 )
             )
+
             binding.tvMyProductName.text = currentItem.name
             binding.ibBoughtProduct.setImageResource(R.drawable.ic_unchecked)
 
@@ -47,15 +49,40 @@ class ShoppingListDetailAdapter(
             }
 
             binding.ibBoughtProduct.setOnClickListener {
-                val productShoppingList = ProductShoppingListModel(
-                    productId = currentItem.id,
-                    shoppingListId = currentShoppingList.id,
-                    isBought = true
-                )
-                setProductIsBought(productShoppingList)
-                println("Product bought")
+                animateIconChange(binding.ibBoughtProduct, R.drawable.ic_check) {
+                    val productShoppingList = ProductShoppingListModel(
+                        productId = currentItem.id,
+                        shoppingListId = currentShoppingList.id,
+                        isBought = true
+                    )
+                    setProductIsBought(productShoppingList)
+                    println("Product bought")
+                }
             }
 
+        }
+
+        private fun animateIconChange(
+            imageButton: ImageButton,
+            newIconResId: Int,
+            onAnimationEnd: () -> Unit
+        ) {
+            imageButton.setImageResource(newIconResId)
+            imageButton.scaleX = 0.8f
+            imageButton.scaleY = 0.8f
+            imageButton.animate()
+                .scaleX(1.2f)
+                .scaleY(1.2f)
+                .setDuration(100)
+                .withEndAction {
+                    imageButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(100)
+                        .withEndAction {
+                            onAnimationEnd()
+                        }.start()
+                }.start()
         }
 
     }

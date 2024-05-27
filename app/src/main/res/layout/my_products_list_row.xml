@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/primaryGrey">
 
     <ImageView
         android:id="@+id/ivProductIcon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="16dp"
         android:layout_gravity="center_vertical"
-        tools:src="@drawable/ic_panaderia"
-        android:contentDescription="ivProductIcon" />
+        android:layout_marginStart="16dp"
+        android:contentDescription="ivProductIcon"
+        tools:src="@drawable/ic_panaderia" />
 
     <TextView
         android:id="@+id/tvMyProductName"
         style="@style/ProductsListTextStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
         android:paddingStart="16dp"
-        android:text="Product Name" />
+        android:text="Product Nameeeeeeeeeeeeeeeee"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintWidth_max="100dp"
+        app:layout_constraintWidth_min="0dp"
+        />
+
 
     <Space
         android:layout_width="0dp"
@@ -30,14 +38,13 @@
         android:layout_weight="1" />
 
 
-
     <ImageButton
         android:id="@+id/ibBoughtProduct"
         android:layout_width="37dp"
         android:layout_height="37dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="24dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="10dp"
         android:background="@android:color/transparent"
         android:contentDescription="ibBoughtProduct"
         android:src="@drawable/ic_unchecked" />

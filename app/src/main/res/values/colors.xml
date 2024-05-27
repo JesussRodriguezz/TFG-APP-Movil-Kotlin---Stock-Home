@@ -8,6 +8,8 @@
     <color name="primaryWhite">#f6f6f6</color>
     <color name="accentRed">#990100</color>
     <color name="accentGreen">#926BD86B</color>
+    <color name="accentGreen2">#0F8507</color>
+    <color name="accentBlue">#1C1C91</color>
 
     <color name="red">#FF0000</color>
     <color name="transparent">#00FFFFFF</color>

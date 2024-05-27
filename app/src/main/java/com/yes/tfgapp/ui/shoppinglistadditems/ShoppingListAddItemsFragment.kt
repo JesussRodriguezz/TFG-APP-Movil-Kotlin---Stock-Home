@@ -1,5 +1,8 @@
 package com.yes.tfgapp.ui.shoppinglistadditems
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
@@ -7,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -138,26 +142,9 @@ class ShoppingListAddItemsFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnCreateCategory.setOnClickListener {
-            val dialog = Dialog(requireContext())
-            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-            dialog.setContentView(R.layout.dialog_new_category)
-            dialog.show()
-
-            val btnSaveCategory = dialog.findViewById<View>(R.id.btnCreateCategory)
-            btnSaveCategory.setOnClickListener {
-                val newCategoryName =
-                    dialog.findViewById<TextInputEditText>(R.id.etNewCategoryName).text.toString()
-
-                if (newCategoryName.isNotEmpty()) {
-                    val newCategory = CategoryModel(id=0, name= newCategoryName, isSelected = false ,isDefault = false)
-                    mShoppingListAddItemsViewModel.addCategory(newCategory)
-                    Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG)
-                        .show()
-                    dialog.hide()
-                } else {
-                    Toast.makeText(requireContext(), "Please fill the name", Toast.LENGTH_LONG)
-                        .show()
-                }
+            //showNewCategoryDialog()
+            animateButtonClick(binding.btnCreateCategory) {
+                showNewCategoryDialog()
             }
         }
 
@@ -166,6 +153,66 @@ class ShoppingListAddItemsFragment : Fragment() {
             val action = ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(args.CurrentShoppingList)
             binding.root.findNavController().navigate(action)
         }
+    }
+
+    private fun showNewCategoryDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.dialog_new_category)
+        dialog.show()
+
+        val btnSaveCategory = dialog.findViewById<View>(R.id.btnCreateCategory)
+        btnSaveCategory.setOnClickListener {
+            //createNewCategory(dialog)
+            animateButtonClick(btnSaveCategory) {
+                createNewCategory(dialog)
+            }
+        }
+    }
+
+    private fun createNewCategory(dialog: Dialog) {
+        val newCategoryName =
+            dialog.findViewById<TextInputEditText>(R.id.etNewCategoryName).text.toString()
+
+        if (newCategoryName.isNotEmpty()) {
+            val newCategory = CategoryModel(id=0, name= newCategoryName, isSelected = false ,isDefault = false)
+            mShoppingListAddItemsViewModel.addCategory(newCategory)
+            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG)
+                .show()
+            dialog.hide()
+        } else {
+            Toast.makeText(requireContext(), "Please fill the name", Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    fun animateButtonClick(
+        view: View,
+        action: () -> Unit
+    ) {
+        val scaleXUp = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f)
+        val scaleYUp = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f)
+        val scaleXDown = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f)
+        val scaleYDown = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f)
+
+        scaleXUp.duration = 100
+        scaleYUp.duration = 100
+        scaleXDown.duration = 100
+        scaleYDown.duration = 100
+
+        val animatorSet = AnimatorSet()
+        animatorSet.play(scaleXUp).with(scaleYUp).before(scaleXDown).before(scaleYDown)
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+
+        animatorSet.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                action()
+            }
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        animatorSet.start()
     }
 
     inner class ShoppingListDetailViewModelFactory(
@@ -217,10 +264,17 @@ class ShoppingListAddItemsFragment : Fragment() {
 
         val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChangesCategory)
         btnSaveChanges.setOnClickListener {
-            val newName = dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameCategory).text.toString()
-            val newCategory = CategoryModel(category.id, newName, category.isSelected, icon=category.icon)
-            mShoppingListAddItemsViewModel.updateCategory(newCategory)
-            dialog.hide()
+            animateButtonClick(btnSaveChanges) {
+                val newName = dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameCategory).text.toString()
+                val newCategory = CategoryModel(category.id, newName, category.isSelected, icon=category.icon, isDefault = category.isDefault)
+                if (newName.isNotEmpty()) {
+                    mShoppingListAddItemsViewModel.updateCategory(newCategory)
+                    dialog.hide()
+                } else {
+                    Toast.makeText(requireContext(), "Please fill the name", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
         }
         val btnDeleteCategory= dialog.findViewById<ImageButton>(R.id.ibDeleteCategory)
         if(category.isDefault){
@@ -230,8 +284,12 @@ class ShoppingListAddItemsFragment : Fragment() {
         }
 
         btnDeleteCategory.setOnClickListener {
-            mShoppingListAddItemsViewModel.deleteCategory(category)
-            dialog.hide()
+            animateButtonClick(btnDeleteCategory) {
+                mShoppingListAddItemsViewModel.deleteCategory(category)
+                dialog.hide()
+            }
+            //mShoppingListAddItemsViewModel.deleteCategory(category)
+            //dialog.hide()
         }
 
     }

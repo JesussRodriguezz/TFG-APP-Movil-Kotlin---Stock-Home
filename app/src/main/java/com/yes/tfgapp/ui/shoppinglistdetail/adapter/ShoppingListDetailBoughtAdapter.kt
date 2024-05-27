@@ -2,6 +2,7 @@ package com.yes.tfgapp.ui.shoppinglistdetail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
@@ -42,22 +43,58 @@ class ShoppingListDetailBoughtAdapter(
 
             binding.ibBoughtProduct.setImageResource(R.drawable.ic_check)
 
-
             binding.tvMyProductName.text = currentItem.name
             getCategoryById(currentItem.categoryId){category ->
                 binding.ivProductIcon.setImageResource(category!!.icon)
             }
             binding.tvMyProductName.paint.isStrikeThruText = true
 
+
             binding.ibBoughtProduct.setOnClickListener {
-                val productShoppingList = ProductShoppingListModel(
-                    productId = currentItem.id,
-                    shoppingListId = currentShoppingList.id,
-                    isBought = false
-                )
-                setProductIsNotBought(productShoppingList)
+                animateIconChange(binding.ibBoughtProduct, R.drawable.ic_unchecked) {
+                    val productShoppingList = ProductShoppingListModel(
+                        productId = currentItem.id,
+                        shoppingListId = currentShoppingList.id,
+                        isBought = false
+                    )
+                    setProductIsNotBought(productShoppingList)
+                    println("Product bought")
+                }
             }
 
+        }
+
+        private fun animateIconChange(
+            imageButton: ImageButton,
+            newIconResId: Int,
+            onAnimationEnd: () -> Unit
+        ) {
+            imageButton.setImageResource(newIconResId)
+            imageButton.scaleX = 0.8f
+            imageButton.scaleY = 0.8f
+            imageButton.animate()
+                .scaleX(1.2f)
+                .scaleY(1.2f)
+                .setDuration(100)
+                .withEndAction {
+                    imageButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(100)
+                        .withEndAction {
+                            onAnimationEnd()
+                        }.start()
+                }.start()
+        }
+
+        private fun animateIconReduce(imageButton: ImageButton, onAnimationEnd: () -> Unit) {
+            imageButton.animate()
+                .scaleX(0f)
+                .scaleY(0f)
+                .setDuration(200)  // Puedes ajustar la duración de la animación aquí
+                .withEndAction {
+                    onAnimationEnd()
+                }.start()
         }
     }
 

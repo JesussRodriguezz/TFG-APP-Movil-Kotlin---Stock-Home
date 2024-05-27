@@ -1,5 +1,9 @@
 package com.yes.tfgapp.ui.shoppinglist
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
@@ -7,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
@@ -90,19 +95,76 @@ class ShoppingListFragment : Fragment() {
             val newName =
                 dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameList).text.toString()
             val newShoppingList = ShoppingListModel(shoppingList.id, newName, shoppingList.quantity)
-            mShoppingListViewModel.updateShoppingList(newShoppingList)
-            dialog.hide()
+
+            animateButtonClick(btnSaveChanges) {
+                if (newName.isNotEmpty()) {
+                    mShoppingListViewModel.updateShoppingList(newShoppingList)
+                    dialog.hide()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please fill out all fields.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+
+            //animateButtonClick(btnSaveChanges, {
+            //    if (newName.isNotEmpty()){
+            //        mShoppingListViewModel.updateShoppingList(newShoppingList)
+            //    }else{
+            //        Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
+            //    }
+            //}, dialog)
+
         }
 
         val btnDeleteList = dialog.findViewById<ImageButton>(R.id.ibDeleteList)
         btnDeleteList.setOnClickListener {
-            mShoppingListViewModel.deleteShoppingList(shoppingList)
-            dialog.hide()
+            animateButtonClick(btnDeleteList) {
+                mShoppingListViewModel.deleteShoppingList(shoppingList)
+                dialog.hide()
+            }
         }
+    }
+
+    fun animateButtonClick(
+        view: View,
+        action: () -> Unit
+    ) {
+        val scaleXUp = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f)
+        val scaleYUp = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f)
+        val scaleXDown = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f)
+        val scaleYDown = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f)
+
+        scaleXUp.duration = 100
+        scaleYUp.duration = 100
+        scaleXDown.duration = 100
+        scaleYDown.duration = 100
+
+        val animatorSet = AnimatorSet()
+        animatorSet.play(scaleXUp).with(scaleYUp).before(scaleXDown).before(scaleYDown)
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+
+        animatorSet.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                action()
+            }
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        animatorSet.start()
     }
 
     private fun initListeners() {
         binding.extendedFab.setOnClickListener {
+            // Animación de rotación de 360 grados
+            val rotation = ObjectAnimator.ofFloat(binding.extendedFab, "rotation", 0f, 180f)
+            rotation.duration = 400 // Duración de la animación en milisegundos
+            rotation.interpolator = AccelerateDecelerateInterpolator() // Interpolador para una animación suave
+            rotation.start()
             showDialogNewList()
         }
     }
@@ -115,8 +177,16 @@ class ShoppingListFragment : Fragment() {
         dialog.show()
         val btnAdd: Button = dialog.findViewById(R.id.btnCreateList)
         btnAdd.setOnClickListener {
-            addShoppingList(dialog)
+            animateButtonClick(btnAdd) {
+                addShoppingList(dialog)
+                dialog.hide()
+            }
         }
+        //btnAdd.setOnClickListener {
+        //    animateButtonClick(btnAdd, {
+        //        addShoppingList(dialog)
+        //    }, dialog)
+        //}
     }
 
     private fun addShoppingList(dialog: Dialog) {

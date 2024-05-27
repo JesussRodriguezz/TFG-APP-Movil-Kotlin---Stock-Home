@@ -1,11 +1,15 @@
 package com.yes.tfgapp.ui.shoppinglistdetail
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -51,13 +55,24 @@ class ShoppingListDetailFragment : Fragment() {
     }
 
     private fun initListeners() {
-        this.binding.fabAddProducts.setOnClickListener {
-            val action =
-                ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(
-                    args.currentShoppingList
-                )
-            binding.root.findNavController().navigate(action)
+        binding.fabAddProducts.setOnClickListener {
+
+            animateButtonClick(binding.fabAddProducts) {
+                val action =
+                    ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(
+                        args.currentShoppingList
+                    )
+                binding.root.findNavController().navigate(action)
+            }
+
+            //val action =
+            //    ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(
+            //        args.currentShoppingList
+            //    )
+            //binding.root.findNavController().navigate(action)
         }
+
+
     }
 
     private fun initUI() {
@@ -110,6 +125,35 @@ class ShoppingListDetailFragment : Fragment() {
                     myProductsBoughtAdapter.setData(products)
                 }
         }
+    }
+
+    fun animateButtonClick(
+        view: View,
+        action: () -> Unit
+    ) {
+        val scaleXUp = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f)
+        val scaleYUp = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f)
+        val scaleXDown = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f)
+        val scaleYDown = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f)
+
+        scaleXUp.duration = 100
+        scaleYUp.duration = 100
+        scaleXDown.duration = 100
+        scaleYDown.duration = 100
+
+        val animatorSet = AnimatorSet()
+        animatorSet.play(scaleXUp).with(scaleYUp).before(scaleXDown).before(scaleYDown)
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+
+        animatorSet.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationEnd(animation: Animator) {
+                action()
+            }
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        animatorSet.start()
     }
 
 
