@@ -13,7 +13,7 @@
         android:id="@+id/tvTitleDialogUpdateShoppingList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Editar lista"
+        android:text="Renombrar lista"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -58,16 +58,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tilUpdateNameList"
         android:layout_marginTop="16dp">
 
-        <ImageButton
-            android:id="@+id/ibDeleteList"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_delete"
-            app:tint="@color/accentRed"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="ibDeleteList" />
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"

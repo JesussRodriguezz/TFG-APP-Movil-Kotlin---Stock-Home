@@ -50,5 +50,10 @@ class ProductShoppingListRepository(private val productShoppingListDAO: ProductS
         productShoppingListDAO.decrementQuantity(productShoppingList.shoppingListId)
     }
 
+    suspend fun emptyAllList(id: Int) {
+        productShoppingListDAO.emptyAllList(id)
+        productShoppingListDAO.decrementAllQuantities(id)
+    }
+
 
 }

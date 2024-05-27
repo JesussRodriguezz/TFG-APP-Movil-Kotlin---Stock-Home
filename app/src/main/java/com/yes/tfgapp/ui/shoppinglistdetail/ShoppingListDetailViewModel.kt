@@ -58,4 +58,11 @@ class ShoppingListDetailViewModel(aplication: Application, currentShoppingList: 
         }
     }
 
+    fun emptyAllList(shoppingList: ShoppingListModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            productShoppingListRepository.emptyAllList(shoppingList.id)
+        }
+
+    }
+
 }

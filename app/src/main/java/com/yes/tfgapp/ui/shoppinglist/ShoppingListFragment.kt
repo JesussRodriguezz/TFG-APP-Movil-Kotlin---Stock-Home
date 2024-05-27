@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
 import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -63,6 +65,8 @@ class ShoppingListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+
+
         mShoppingListViewModel = ViewModelProvider(this).get(ShoppingListViewModel::class.java)
         mShoppingListViewModel.readAllData.observe(viewLifecycleOwner){ shoppingList ->
             adapter.setData(shoppingList)
@@ -83,6 +87,8 @@ class ShoppingListFragment : Fragment() {
 
     private fun onConfigureItem(shoppingList: ShoppingListModel) {
 
+        showOptionsDialog(shoppingList)
+        /*
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_configure_shopping_list)
@@ -109,15 +115,6 @@ class ShoppingListFragment : Fragment() {
                 }
             }
 
-
-            //animateButtonClick(btnSaveChanges, {
-            //    if (newName.isNotEmpty()){
-            //        mShoppingListViewModel.updateShoppingList(newShoppingList)
-            //    }else{
-            //        Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show()
-            //    }
-            //}, dialog)
-
         }
 
         val btnDeleteList = dialog.findViewById<ImageButton>(R.id.ibDeleteList)
@@ -126,8 +123,80 @@ class ShoppingListFragment : Fragment() {
                 mShoppingListViewModel.deleteShoppingList(shoppingList)
                 dialog.hide()
             }
-        }
+        }*/
     }
+
+    private fun showOptionsDialog(shoppingList: ShoppingListModel) {
+
+        val dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.dialog_edit_shopping_list)
+        dialog.show()
+
+        dialog.findViewById<LinearLayout>(R.id.option1).setOnClickListener {
+            showDialogRenameList(shoppingList)
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<LinearLayout>(R.id.option2).setOnClickListener {
+            emptyAllList(shoppingList)
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<LinearLayout>(R.id.option3).setOnClickListener {
+            mShoppingListViewModel.deleteShoppingList(shoppingList)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun emptyAllList(shoppingList: ShoppingListModel) {
+
+        mShoppingListDetailViewModel = ViewModelProvider(
+            this,
+            ShoppingListDetailViewModelFactory(
+                requireActivity().application,
+                shoppingList
+            )
+        ).get(
+            ShoppingListDetailViewModel::
+            class.java
+        )
+        mShoppingListDetailViewModel.emptyAllList(shoppingList)
+    }
+
+    private fun showDialogRenameList(shoppingList: ShoppingListModel) {
+        val dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.dialog_configure_shopping_list)
+        dialog.show()
+        val textInputLayout: TextInputLayout = dialog.findViewById(R.id.tilUpdateNameList)
+        textInputLayout.hint = shoppingList.name
+
+        val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChanges)
+        btnSaveChanges.setOnClickListener {
+            val newName =
+                dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameList).text.toString()
+            val newShoppingList = ShoppingListModel(shoppingList.id, newName, shoppingList.quantity)
+
+            animateButtonClick(btnSaveChanges) {
+                if (newName.isNotEmpty()) {
+                    mShoppingListViewModel.updateShoppingList(newShoppingList)
+                    dialog.hide()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please fill out all fields.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+        }
+
+    }
+
 
     fun animateButtonClick(
         view: View,

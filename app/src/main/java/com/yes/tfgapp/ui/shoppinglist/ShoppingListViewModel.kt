@@ -66,4 +66,5 @@ class ShoppingListViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
+
 }

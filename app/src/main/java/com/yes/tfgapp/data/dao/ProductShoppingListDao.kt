@@ -48,5 +48,11 @@ interface ProductShoppingListDao {
     @Query("SELECT * FROM product_shopping_list WHERE shoppingListId = :id")
     fun getAllProductsInShoppingList(id: Int): LiveData<List<ProductShoppingListModel>>
 
+    @Query("DELETE FROM product_shopping_list WHERE shoppingListId = :id")
+    suspend fun emptyAllList(id: Int)
+
+    @Query("UPDATE shopping_list SET quantity = 0, quantityBought = 0 WHERE id = :id")
+    fun decrementAllQuantities(id: Int)
+
 
 }

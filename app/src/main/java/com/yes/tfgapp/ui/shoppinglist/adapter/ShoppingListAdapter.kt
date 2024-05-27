@@ -48,9 +48,7 @@ class ShoppingListAdapter(
                 percentage >= 25 -> R.color.progress2
                 else -> R.color.progress1
             }
-            if (percentage == 100) {
-                binding.tvCompletada.visibility = android.view.View.VISIBLE
-            }
+
             binding.progressBar.setDividerColorResource(progressBarColor)
             binding.ibSettings.setOnClickListener {
                 val rotation = ObjectAnimator.ofFloat(binding.ibSettings, "rotation", 0f, 180f)

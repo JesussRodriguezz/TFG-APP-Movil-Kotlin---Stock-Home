@@ -55,11 +55,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNavigation() {
-        val navHost= supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        navController = navHost.navController
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        navController = navHostFragment.navController
         binding.bottomNavView.setupWithNavController(navController)
 
         tvTitle = binding.tvTitleToolbar
+
+        // Setup OnDestinationChangedListener to handle navigation manually
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.shoppingListFragment, R.id.myStockFragment -> {
+                    binding.ibBackArrow.visibility = View.INVISIBLE
+                }
+                else -> {
+                    binding.ibBackArrow.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        binding.bottomNavView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.shoppingListFragment -> {
+                    navController.navigate(R.id.shoppingListFragment)
+                    true
+                }
+                R.id.myStockFragment -> {
+                    navController.navigate(R.id.myStockFragment)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     fun setToolbarTitle(title: String) {
