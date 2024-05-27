@@ -4,8 +4,8 @@
 
     <string-array name="order_by_options_stock_products">
         <item>Nombre</item>
-        <item>Stock</item>
         <item>Fecha de caducidad</item>
+        <item>Ultimos añadidos</item>
     </string-array>
 
 

@@ -97,7 +97,7 @@ class MyStockFragment : Fragment() {
         super.onResume()
         val orderByOptions = resources.getStringArray(R.array.order_by_options_stock_products)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, orderByOptions)
-        binding.autoCompleteTextView.setAdapter(arrayAdapter)
+        binding.orderBy.setAdapter(arrayAdapter)
         manualAdd.isVisible = false
         scanBarcode.isVisible = false
         (activity as MainActivity).showBottomNavInsta()
@@ -199,6 +199,26 @@ class MyStockFragment : Fragment() {
         mStockViewModel = ViewModelProvider(this).get(MyStockViewModel::class.java)
         mStockViewModel.readAllData.observe(viewLifecycleOwner) { stockProduct ->
             stockProductAdapter.setData(stockProduct)
+        }
+
+        binding.orderBy.setOnItemClickListener { parent, view, position, id ->
+            when (position) {
+                0 -> {
+                    mStockViewModel.getStockProductsOrderedByName().observe(viewLifecycleOwner) { stockProduct ->
+                        stockProductAdapter.setData(stockProduct)
+                    }
+                }
+                1 -> {
+                    mStockViewModel.getStockProductsOrderedByExpiryDate().observe(viewLifecycleOwner) { stockProduct ->
+                        stockProductAdapter.setData(stockProduct)
+                    }
+                }
+                2 -> {
+                    mStockViewModel.getStockProductsOrderedByAddedDate().observe(viewLifecycleOwner) { stockProduct ->
+                        stockProductAdapter.setData(stockProduct)
+                    }
+                }
+            }
         }
 
         scanBarcode = binding.llScanBarcode

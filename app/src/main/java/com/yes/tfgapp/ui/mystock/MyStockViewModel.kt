@@ -18,6 +18,10 @@ class MyStockViewModel(application: Application) : AndroidViewModel(application)
     val readAllData : LiveData<List<StockProductModel>>
     val productIdLiveData = MutableLiveData<String>()
 
+    private var isNameAsc = true
+    private var isAddedDateAsc = true
+    private var isExpiryDateAsc = true
+
     init {
         val stockProductDao = AppDataBase.getDatabase(application).stockProductDao()
         stockProductRepository = StockProductRepository(stockProductDao)
@@ -50,4 +54,36 @@ class MyStockViewModel(application: Application) : AndroidViewModel(application)
             stockProductRepository.deleteStockProduct(stockProduct)
         }
     }
+
+    fun getStockProductsOrderedByName(): LiveData<List<StockProductModel>> {
+        return if (isNameAsc) {
+            isNameAsc = false
+            stockProductRepository.getStockProductsOrderedByNameAsc()
+        } else {
+            isNameAsc = true
+            stockProductRepository.getStockProductsOrderedByNameDesc()
+        }
+    }
+
+    fun getStockProductsOrderedByAddedDate(): LiveData<List<StockProductModel>> {
+        return if (isAddedDateAsc) {
+            isAddedDateAsc = false
+            stockProductRepository.getStockProductsOrderedByAddedDateAsc()
+        } else {
+            isAddedDateAsc = true
+            stockProductRepository.getStockProductsOrderedByAddedDateDesc()
+        }
+    }
+
+    fun getStockProductsOrderedByExpiryDate(): LiveData<List<StockProductModel>> {
+        return if (isExpiryDateAsc) {
+            isExpiryDateAsc = false
+            stockProductRepository.getStockProductsOrderedByExpiryDateAsc()
+        } else {
+            isExpiryDateAsc = true
+            stockProductRepository.getStockProductsOrderedByExpiryDateDesc()
+        }
+    }
+
+
 }

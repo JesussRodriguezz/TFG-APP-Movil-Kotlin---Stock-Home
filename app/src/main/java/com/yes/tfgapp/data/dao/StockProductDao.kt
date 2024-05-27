@@ -33,4 +33,22 @@ interface StockProductDao {
 
     @Query("SELECT * FROM stock_product")
     suspend fun getAllStockProducts(): List<StockProductModel>
+
+    @Query("SELECT * FROM stock_product ORDER BY name ASC")
+    fun getStockProductsOrderedByNameAsc(): LiveData<List<StockProductModel>>
+
+    @Query("SELECT * FROM stock_product ORDER BY name DESC")
+    fun getStockProductsOrderedByNameDesc(): LiveData<List<StockProductModel>>
+
+    @Query("SELECT * FROM stock_product ORDER BY addedDate ASC")
+    fun getStockProductsOrderedByAddedDateAsc(): LiveData<List<StockProductModel>>
+
+    @Query("SELECT * FROM stock_product ORDER BY addedDate DESC")
+    fun getStockProductsOrderedByAddedDateDesc(): LiveData<List<StockProductModel>>
+
+    @Query("SELECT * FROM stock_product ORDER BY expirationDate ASC")
+    fun getStockProductsOrderedByExpiryDateAsc(): LiveData<List<StockProductModel>>
+
+    @Query("SELECT * FROM stock_product ORDER BY expirationDate DESC")
+    fun getStockProductsOrderedByExpiryDateDesc(): LiveData<List<StockProductModel>>
 }

@@ -34,4 +34,27 @@ class StockProductRepository(private val stockProductDao: StockProductDao) {
         return stockProductDao.getAllStockProducts()
     }
 
+    fun getStockProductsOrderedByNameAsc(): LiveData<List<StockProductModel>> {
+        return stockProductDao.getStockProductsOrderedByNameAsc()
+    }
+
+    fun getStockProductsOrderedByNameDesc(): LiveData<List<StockProductModel>> {
+        return stockProductDao.getStockProductsOrderedByNameDesc()
+    }
+
+    fun getStockProductsOrderedByAddedDateAsc(): LiveData<List<StockProductModel>> {
+        return stockProductDao.getStockProductsOrderedByAddedDateAsc()
+    }
+
+    fun getStockProductsOrderedByAddedDateDesc(): LiveData<List<StockProductModel>> {
+        return stockProductDao.getStockProductsOrderedByAddedDateDesc()
+    }
+
+    fun getStockProductsOrderedByExpiryDateAsc(): LiveData<List<StockProductModel>> {
+        return stockProductDao.getStockProductsOrderedByExpiryDateAsc()
+    }
+
+    fun getStockProductsOrderedByExpiryDateDesc(): LiveData<List<StockProductModel>> {
+        return stockProductDao.getStockProductsOrderedByExpiryDateDesc()
+    }
 }
