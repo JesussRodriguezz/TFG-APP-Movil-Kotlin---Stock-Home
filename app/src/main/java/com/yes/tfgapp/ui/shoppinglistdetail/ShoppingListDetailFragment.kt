@@ -77,7 +77,7 @@ class ShoppingListDetailFragment : Fragment() {
 
     private fun initUI() {
         mShoppingListAddItemsViewModel =
-            ViewModelProvider(this).get(ShoppingListAddItemsViewModel::class.java)
+            ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
 
         val myProductsAdapter = ShoppingListDetailAdapter(
@@ -98,10 +98,8 @@ class ShoppingListDetailFragment : Fragment() {
                 requireActivity().application,
                 args.currentShoppingList
             )
-        ).get(
-            ShoppingListDetailViewModel::
-            class.java
-        )
+        )[ShoppingListDetailViewModel::
+        class.java]
         val myProductsRecyclerView = binding.rvShoppingListDetailProductsToBuy
         myProductsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         myProductsRecyclerView.adapter = myProductsAdapter
@@ -127,7 +125,7 @@ class ShoppingListDetailFragment : Fragment() {
         }
     }
 
-    fun animateButtonClick(
+    private fun animateButtonClick(
         view: View,
         action: () -> Unit
     ) {

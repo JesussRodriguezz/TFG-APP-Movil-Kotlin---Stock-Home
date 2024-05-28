@@ -13,7 +13,7 @@
         android:id="@+id/tvTitleDialogUpdateCategory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Editar categoria"
+        android:text="@string/edit_category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -67,7 +67,7 @@
             android:src="@drawable/ic_delete"
             app:tint="@color/accentRed"
             android:layout_gravity="center_vertical"
-            android:contentDescription="ibDeleteCategory" />
+            android:contentDescription="@string/ibdeletecategory" />
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accentRed"
-            android:text="Guardar cambios"
+            android:text="@string/save_changes"
             android:layout_gravity="center_vertical"
             />
 

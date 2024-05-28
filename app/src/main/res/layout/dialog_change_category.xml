@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:layout_marginStart="16dp"
-        android:text="Editar categoria"
+        android:text="@string/edit_category"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -75,7 +75,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
-            android:contentDescription="ibAddProductToListDialogChangeCategory"
+            android:contentDescription="@string/ibaddproducttolistdialogchangecategory"
             android:src="@drawable/ic_add"
             app:tint="@color/black" />
     </LinearLayout>
@@ -101,7 +101,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvCategoriesDialogChangeCategory"
-        android:text="Actualizar categoria"
+        android:text="@string/update_category"
         android:layout_gravity="center_vertical"
         />
 

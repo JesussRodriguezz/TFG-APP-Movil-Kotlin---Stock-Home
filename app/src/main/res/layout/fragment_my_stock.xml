@@ -29,7 +29,7 @@
             android:inputType="none"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:text="Ordenar por"
+            android:text="@string/order_by"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Escanear QR"
+                android:text="@string/scan_qr"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -83,7 +83,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_delete"
+            android:src="@drawable/ic_scanner"
             app:backgroundTint="@color/white"
             app:fabSize="normal"
             app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
@@ -114,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Añadir manualmente"
+                android:text="@string/add_manual"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -126,7 +126,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_delete"
+            android:src="@drawable/ic_manual"
             app:backgroundTint="@color/white"
             app:fabSize="normal"
             app:shapeAppearanceOverlay="@style/RoundedExtendedFab"

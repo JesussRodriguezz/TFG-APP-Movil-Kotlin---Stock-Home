@@ -25,7 +25,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:text="Nombre"
+            android:text="@string/name"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Foto"
+                    android:text="@string/photo"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -120,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="16dp"
-                android:text="o"
+                android:text="@string/o"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -136,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Icono"
+                    android:text="@string/icon"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -168,7 +168,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Caduca en:"
+            android:text="@string/expire_in"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider2" />
@@ -199,7 +199,7 @@
                 android:paddingHorizontal="0dp"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
-                android:text="1 semana"
+                android:text="@string/_1_week"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -216,7 +216,7 @@
                 android:paddingHorizontal="0dp"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
-                android:text="2 semanas"
+                android:text="@string/_2_weeks"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -233,7 +233,7 @@
                 android:paddingHorizontal="0dp"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
-                android:text="1 mes"
+                android:text="@string/_1_month"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -250,7 +250,7 @@
                 android:paddingHorizontal="0dp"
                 android:paddingTop="1dp"
                 android:paddingBottom="1dp"
-                android:text="3 meses"
+                android:text="@string/_3_months"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
         </GridLayout>
@@ -277,7 +277,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
-            android:contentDescription="ibBackArrow"
+            android:contentDescription="@string/ibbackarrow"
             android:src="@drawable/ic_back_arrow_big"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

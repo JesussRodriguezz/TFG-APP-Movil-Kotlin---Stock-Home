@@ -59,7 +59,7 @@ class MyStockProductDetailFragment : DialogFragment() {
     }
 
     private fun initUI() {
-        mStockViewModel= ViewModelProvider(this).get(MyStockViewModel::class.java)
+        mStockViewModel= ViewModelProvider(this)[MyStockViewModel::class.java]
 
 
         btnAddStockProduct = binding.efAddStockItem
@@ -137,7 +137,7 @@ class MyStockProductDetailFragment : DialogFragment() {
     }
 
 
-    fun addDaysToDate(date: String, days: Int): String {
+    private fun addDaysToDate(date: String, days: Int): String {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val calendar = Calendar.getInstance()
         calendar.time = dateFormat.parse(date) ?: return date
@@ -145,7 +145,7 @@ class MyStockProductDetailFragment : DialogFragment() {
         return dateFormat.format(calendar.time)
     }
 
-    fun daysBetweenDates(startDate: String, endDate: String): Long {
+    private fun daysBetweenDates(startDate: String, endDate: String): Long {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val start = dateFormat.parse(startDate)
         val end = dateFormat.parse(endDate)

@@ -196,12 +196,12 @@ class MyStockFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireContext(), 2)
 
         rvStockProduct.layoutManager = layoutManager
-        mStockViewModel = ViewModelProvider(this).get(MyStockViewModel::class.java)
+        mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
         mStockViewModel.readAllData.observe(viewLifecycleOwner) { stockProduct ->
             stockProductAdapter.setData(stockProduct)
         }
 
-        binding.orderBy.setOnItemClickListener { parent, view, position, id ->
+        binding.orderBy.setOnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> {
                     mStockViewModel.getStockProductsOrderedByName().observe(viewLifecycleOwner) { stockProduct ->

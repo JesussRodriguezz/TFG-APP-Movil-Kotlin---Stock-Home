@@ -23,7 +23,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
-            android:contentDescription="ibBackArrow"
+            android:contentDescription="@string/ibbackarrow"
             android:src="@drawable/ic_back_arrow_big"
             android:visibility="invisible"
             app:tint="@color/white" />
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Listas de la compra" />
+            android:text="@string/shopping_lists" />
 
     </FrameLayout>
 

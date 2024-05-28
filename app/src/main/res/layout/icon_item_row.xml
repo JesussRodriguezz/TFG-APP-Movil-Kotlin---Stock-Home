@@ -7,4 +7,6 @@
     android:layout_height="70dp"
     android:padding="10dp"
     android:layout_margin="4dp"
-    android:src="@drawable/ic_icon" /> <!-- Reemplaza con el icono de tu martini -->
+    android:src="@drawable/ic_icon"
+    android:contentDescription="@string/icon"
+    /> <!-- Reemplaza con el icono de tu martini -->

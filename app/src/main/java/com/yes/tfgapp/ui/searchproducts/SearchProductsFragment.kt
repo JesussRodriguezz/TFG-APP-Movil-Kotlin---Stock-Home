@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
@@ -43,9 +44,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Timer
 import java.util.concurrent.TimeUnit
-import kotlin.concurrent.schedule
 
 
 class SearchProductsFragment : Fragment() {
@@ -80,6 +79,17 @@ class SearchProductsFragment : Fragment() {
         initListeners()
         retrofit = getRetrofit()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activateLocalOrExternalSearch(
+            searchModeLocal,
+            if (searchModeLocal) R.color.accentRed else R.color.primaryGrey,
+            if (searchModeLocal) R.color.white else R.color.black,
+            if (searchModeLocal) R.color.primaryGrey else R.color.accentRed,
+            if (searchModeLocal) R.color.black else R.color.white
+        )
     }
 
 
@@ -151,10 +161,8 @@ class SearchProductsFragment : Fragment() {
                 requireActivity().application,
                 args.CurrentShoppingList
             )
-        ).get(
-            ShoppingListDetailViewModel::
-            class.java
-        )
+        )[ShoppingListDetailViewModel::
+        class.java]
         mShoppingListDetailViewModel.allProductsShoppingListLiveData.observe(viewLifecycleOwner) { productsInShoppingList ->
             productsAdapter.setProductsInShoppingList(productsInShoppingList)
         }
@@ -164,7 +172,7 @@ class SearchProductsFragment : Fragment() {
         binding.rvProductsSearchApi.adapter = productSearchApiAdapter
 
         mShoppingListAddItemsViewModel =
-            ViewModelProvider(this).get(ShoppingListAddItemsViewModel::class.java)
+            ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
         val productSearchRecyclerView = binding.rvProductsSearch
         productSearchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -224,21 +232,38 @@ class SearchProductsFragment : Fragment() {
                     Log.i("yes", "Funciona: contenido : $response")
                     (activity as MainActivity).runOnUiThread {
                         val filteredProducts = response.products.filter {
-                            !it.productName.isNullOrBlank() && it.productName.contains(
-                                query.orEmpty(),
-                                ignoreCase = true
-                            )
+                            val productName = it.productName ?: ""
+                            productName.isNotBlank() && productName.contains(query.orEmpty(), ignoreCase = true)
                         }
-                        productSearchApiAdapter.setData(filteredProducts)
+                        if (filteredProducts.isEmpty()) {
+                            Toast.makeText(requireContext(),
+                                getString(R.string.not_products_found), Toast.LENGTH_SHORT).show()
+                            productSearchApiAdapter.setData(emptyList())
+                        } else {
+                            productSearchApiAdapter.setData(filteredProducts)
+                        }
+                        binding.progressBar.isVisible = false
+                    }
+                } else {
+                    Log.i("yes", "Respuesta vacía")
+                    (activity as MainActivity).runOnUiThread {
+                        Toast.makeText(requireContext(),
+                            getString(R.string.error_obtaining_data), Toast.LENGTH_SHORT).show()
+                        productSearchApiAdapter.setData(emptyList())
                         binding.progressBar.isVisible = false
                     }
                 }
                 Log.i("yes", "funciona :)")
             } else {
                 Log.i("yes", "No funciona")
+                (activity as MainActivity).runOnUiThread {
+                    Toast.makeText(requireContext(),
+                        getString(R.string.error_with_search), Toast.LENGTH_SHORT).show()
+                    productSearchApiAdapter.setData(emptyList())
+                    binding.progressBar.isVisible = false
+                }
             }
         }
-
     }
 
     private fun filterProducts(text: String?) {
@@ -283,7 +308,7 @@ class SearchProductsFragment : Fragment() {
                 mShoppingListAddItemsViewModel.productIdLiveData.value = null
 
                 Handler(Looper.getMainLooper()).postDelayed({
-                    var currentText = binding.searchView.query.toString()
+                    val currentText = binding.searchView.query.toString()
                     println("currentText: $currentText")
                     val filteredList = mShoppingListAddItemsViewModel.filterProducts(currentText)
                     println("filteredList: $filteredList")

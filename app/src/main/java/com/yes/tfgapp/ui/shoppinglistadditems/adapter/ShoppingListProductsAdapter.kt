@@ -1,8 +1,6 @@
 package com.yes.tfgapp.ui.shoppinglistadditems.adapter
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -49,12 +47,12 @@ class ShoppingListProductsAdapter(
 
             println("productsInShoppingList: $productsInShoppingList")
 
-            if (productsInShoppingList.any { it.productId == currentItem.id }) {
+            isProductAdded = if (productsInShoppingList.any { it.productId == currentItem.id }) {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_check)
-                isProductAdded = true
+                true
             } else {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_add)
-                isProductAdded = false
+                false
             }
 
             binding.ibAddProductToList.setOnClickListener {

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/primaryGrey">
 
     <TextView
@@ -10,7 +11,7 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:id="@+id/tvProductName"
-        android:text="Product Nameeeeeeeeeeeeeeeee"
+        tools:text="Product Nameeeeeeeeeeeeeeeee"
         android:textColor="@color/black"
         android:paddingVertical="8dp"
         android:paddingStart="16dp"
@@ -36,7 +37,7 @@
         android:layout_marginEnd="2dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_add"
-        android:contentDescription="ibAddProductToList" />
+        android:contentDescription="@string/ibaddproducttolist" />
 
 
 

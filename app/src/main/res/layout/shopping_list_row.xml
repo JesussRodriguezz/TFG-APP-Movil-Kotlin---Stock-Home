@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:text="Productos comprados:" />
+                android:text="@string/products_bought" />
 
             <TextView
                 android:id="@+id/tvShoppingListNumBoughtItems"
@@ -79,7 +79,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/"
+                android:text="@string/keyboard_bar"
                 />
 
             <TextView

@@ -1,16 +1,12 @@
 package com.yes.tfgapp.ui.mystockproductsmanual
 
-import android.app.Activity
-import android.content.Intent
+
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.core.app.ActivityCompat
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -18,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ActivityMyStockProductManualBinding
 import com.yes.tfgapp.domain.model.StockProductModel
@@ -30,7 +25,6 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
 class MyStockProductManualActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyStockProductManualBinding
@@ -100,7 +94,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private fun initUI() {
         imageUrl = createImageUri()
         captureIV = binding.ivAddPhoto
-        mStockViewModel = ViewModelProvider(this).get(MyStockViewModel::class.java)
+        mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
     }
 
     private fun createImageUri(): Uri {

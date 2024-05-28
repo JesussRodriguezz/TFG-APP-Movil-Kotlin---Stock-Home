@@ -19,7 +19,9 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit"
+            android:contentDescription="@string/rename_list"
+            />
 
         <TextView
 
@@ -29,7 +31,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             style="@style/ProductsListTextStyle"
-            android:text="Renombrar lista"
+            android:text="@string/rename_list"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -46,14 +48,16 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_empty" />
+            android:src="@drawable/ic_empty"
+            android:contentDescription="@string/empty_list"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
-            android:text="Vaciar Lista"
+            android:text="@string/empty_list"
             android:layout_marginEnd="16dp"
             style="@style/ProductsListTextStyle"
             android:textSize="18sp" />
@@ -72,7 +76,9 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_delete" />
+            android:src="@drawable/ic_delete"
+            android:contentDescription="@string/delete_list"
+            />
 
         <TextView
             android:layout_marginEnd="16dp"
@@ -81,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="16dp"
-            android:text="Eliminar Lista"
+            android:text="@string/delete_list"
             android:textSize="18sp" />
     </LinearLayout>
 

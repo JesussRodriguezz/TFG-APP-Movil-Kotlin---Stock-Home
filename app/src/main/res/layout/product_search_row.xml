@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
         android:paddingStart="16dp"
-        android:text="Product Nameeeeeeeeeeeeeeee"
+        tools:text="Product Nameeeeeeeeeeeeeeee"
         android:textColor="@color/black"
         android:ellipsize="end"
         android:maxLines="1"
@@ -51,7 +51,7 @@
         android:layout_height="30dp"
         android:layout_gravity="center_vertical"
         tools:src="@drawable/ic_panaderia"
-        android:contentDescription="ivProductIcon" />
+        android:contentDescription="@string/ivproducticon" />
 
     <ImageButton
         android:id="@+id/ibAddProductToList"
@@ -62,7 +62,7 @@
         android:layout_marginStart="24dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_add"
-        android:contentDescription="ibAddProductToList" />
+        android:contentDescription="@string/ibaddproducttolist" />
 
 
 </LinearLayout>

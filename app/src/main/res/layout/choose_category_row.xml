@@ -22,7 +22,9 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="4dp"
-            tools:src="@drawable/ic_panaderia"/>
+            tools:src="@drawable/ic_panaderia"
+            android:contentDescription="@string/ivcategoryicon"
+            />
 
         <Space
             android:layout_width="wrap_content"

@@ -87,15 +87,7 @@ class ShoppingListDetailBoughtAdapter(
                 }.start()
         }
 
-        private fun animateIconReduce(imageButton: ImageButton, onAnimationEnd: () -> Unit) {
-            imageButton.animate()
-                .scaleX(0f)
-                .scaleY(0f)
-                .setDuration(200)  // Puedes ajustar la duración de la animación aquí
-                .withEndAction {
-                    onAnimationEnd()
-                }.start()
-        }
+
     }
 
     override fun onCreateViewHolder(

@@ -12,7 +12,7 @@
         android:layout_height="30dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
-        android:contentDescription="ivProductIcon"
+        android:contentDescription="@string/ivproducticon"
         tools:src="@drawable/ic_panaderia" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
         android:paddingStart="16dp"
-        android:text="Product Nameeeeeeeeeeeeeeeee"
+        tools:text="Product Nameeeeeeeeeeeeeeeee"
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintHorizontal_bias="0"
@@ -46,7 +46,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="10dp"
         android:background="@android:color/transparent"
-        android:contentDescription="ibBoughtProduct"
+        android:contentDescription="@string/ibboughtproduct"
         android:src="@drawable/ic_unchecked" />
 
 

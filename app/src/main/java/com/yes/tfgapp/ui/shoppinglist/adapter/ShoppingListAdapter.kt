@@ -3,7 +3,6 @@ package com.yes.tfgapp.ui.shoppinglist.adapter
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,13 +68,13 @@ class ShoppingListAdapter(
                         currentItem
                     )
 
-                animateButtonClick(binding.root, {
+                animateButtonClick(binding.root) {
                     if (currentItem.quantity > 0) {
                         binding.root.findNavController().navigate(actionToDetail)
                     } else {
                         binding.root.findNavController().navigate(actionToAddItems)
                     }
-                })
+                }
 
 
                 //if (currentItem.quantity > 0) {
@@ -86,7 +85,7 @@ class ShoppingListAdapter(
             }
         }
 
-        fun animateButtonClick(
+        private fun animateButtonClick(
             view: View,
             action: () -> Unit
         ) {

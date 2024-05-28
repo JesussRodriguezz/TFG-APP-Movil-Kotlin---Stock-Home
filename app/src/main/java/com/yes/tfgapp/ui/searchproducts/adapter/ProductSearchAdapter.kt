@@ -48,12 +48,12 @@ class ProductSearchAdapter(
             )
             binding.tvProductName.text = currentItem.name
 
-            if (productsInShoppingList.any { it.productId == currentItem.id }) {
+            isProductAdded = if (productsInShoppingList.any { it.productId == currentItem.id }) {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_check)
-                isProductAdded=true
+                true
             } else {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_add)
-                isProductAdded=false
+                false
             }
 
             getCategoryById(currentItem.categoryId) { category ->

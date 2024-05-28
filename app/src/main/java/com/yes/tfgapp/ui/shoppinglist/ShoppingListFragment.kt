@@ -1,10 +1,8 @@
 package com.yes.tfgapp.ui.shoppinglist
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.app.AlertDialog
 import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
@@ -14,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -67,7 +64,7 @@ class ShoppingListFragment : Fragment() {
 
 
 
-        mShoppingListViewModel = ViewModelProvider(this).get(ShoppingListViewModel::class.java)
+        mShoppingListViewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
         mShoppingListViewModel.readAllData.observe(viewLifecycleOwner){ shoppingList ->
             adapter.setData(shoppingList)
         }
@@ -136,16 +133,24 @@ class ShoppingListFragment : Fragment() {
         dialog.findViewById<LinearLayout>(R.id.option1).setOnClickListener {
             showDialogRenameList(shoppingList)
             dialog.dismiss()
+
         }
 
         dialog.findViewById<LinearLayout>(R.id.option2).setOnClickListener {
             emptyAllList(shoppingList)
             dialog.dismiss()
+            Toast.makeText(requireContext(),
+                getString(R.string.empty_list_correctly), Toast.LENGTH_LONG)
+                .show()
+
         }
 
         dialog.findViewById<LinearLayout>(R.id.option3).setOnClickListener {
             mShoppingListViewModel.deleteShoppingList(shoppingList)
             dialog.dismiss()
+            Toast.makeText(requireContext(),
+                getString(R.string.deleted_list_correctly), Toast.LENGTH_LONG)
+                .show()
         }
 
         dialog.show()
@@ -159,10 +164,8 @@ class ShoppingListFragment : Fragment() {
                 requireActivity().application,
                 shoppingList
             )
-        ).get(
-            ShoppingListDetailViewModel::
-            class.java
-        )
+        )[ShoppingListDetailViewModel::
+        class.java]
         mShoppingListDetailViewModel.emptyAllList(shoppingList)
     }
 
@@ -184,12 +187,13 @@ class ShoppingListFragment : Fragment() {
                 if (newName.isNotEmpty()) {
                     mShoppingListViewModel.updateShoppingList(newShoppingList)
                     dialog.hide()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.renamed_list_correctly), Toast.LENGTH_LONG)
+                        .show()
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Please fill out all fields.",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.fill_the_name), Toast.LENGTH_LONG)
+                        .show()
                 }
             }
 
@@ -198,7 +202,7 @@ class ShoppingListFragment : Fragment() {
     }
 
 
-    fun animateButtonClick(
+    private fun animateButtonClick(
         view: View,
         action: () -> Unit
     ) {
@@ -251,11 +255,7 @@ class ShoppingListFragment : Fragment() {
                 dialog.hide()
             }
         }
-        //btnAdd.setOnClickListener {
-        //    animateButtonClick(btnAdd, {
-        //        addShoppingList(dialog)
-        //    }, dialog)
-        //}
+
     }
 
     private fun addShoppingList(dialog: Dialog) {
@@ -263,9 +263,10 @@ class ShoppingListFragment : Fragment() {
         if (inputCheck(name)) {
             val shoppingList = ShoppingListModel(0, name, 0)
             mShoppingListViewModel.addShoppingList(shoppingList)
-            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(),
+                getString(R.string.list_created_correctly), Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(requireContext(), "Please fill out all fields.", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), getString(R.string.fill_the_name), Toast.LENGTH_LONG)
                 .show()
         }
         dialog.hide()
@@ -282,10 +283,8 @@ class ShoppingListFragment : Fragment() {
                 requireActivity().application,
                 currentShoppingList
             )
-        ).get(
-            ShoppingListDetailViewModel::
-            class.java
-        )
+        )[ShoppingListDetailViewModel::
+        class.java]
 
         //devuelve el tamaño de la lista de productos de la lista de la compra
         return mShoppingListDetailViewModel.allProductsShoppingList.size

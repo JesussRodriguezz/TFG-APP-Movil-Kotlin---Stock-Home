@@ -32,7 +32,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        android:contentDescription="@string/create_list"/>
+
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

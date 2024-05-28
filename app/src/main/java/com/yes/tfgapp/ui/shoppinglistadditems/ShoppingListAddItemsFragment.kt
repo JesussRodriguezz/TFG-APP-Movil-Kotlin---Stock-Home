@@ -88,19 +88,17 @@ class ShoppingListAddItemsFragment : Fragment() {
     private fun initUI() {
         binding.progressBar.visibility = View.VISIBLE
         mShoppingListAddItemsViewModel =
-            ViewModelProvider(this).get(ShoppingListAddItemsViewModel::class.java)
+            ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
-        mShoppingListViewModel = ViewModelProvider(this).get(ShoppingListViewModel::class.java)
+        mShoppingListViewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
         mShoppingListDetailViewModel = ViewModelProvider(
             this,
             ShoppingListDetailViewModelFactory(
                 requireActivity().application,
                 args.CurrentShoppingList
             )
-        ).get(
-            ShoppingListDetailViewModel::
-            class.java
-        )
+        )[ShoppingListDetailViewModel::
+        class.java]
 
 
         val categoriesRecyclerView = binding.rvCategories
@@ -177,16 +175,17 @@ class ShoppingListAddItemsFragment : Fragment() {
         if (newCategoryName.isNotEmpty()) {
             val newCategory = CategoryModel(id=0, name= newCategoryName, isSelected = false ,isDefault = false)
             mShoppingListAddItemsViewModel.addCategory(newCategory)
-            Toast.makeText(requireContext(), "Successfully added!", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(),
+                getString(R.string.category_created_correctly), Toast.LENGTH_LONG)
                 .show()
             dialog.hide()
         } else {
-            Toast.makeText(requireContext(), "Please fill the name", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), getString(R.string.fill_the_name), Toast.LENGTH_LONG)
                 .show()
         }
     }
 
-    fun animateButtonClick(
+    private fun animateButtonClick(
         view: View,
         action: () -> Unit
     ) {
@@ -270,8 +269,11 @@ class ShoppingListAddItemsFragment : Fragment() {
                 if (newName.isNotEmpty()) {
                     mShoppingListAddItemsViewModel.updateCategory(newCategory)
                     dialog.hide()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.renamed_category_correctly), Toast.LENGTH_LONG)
+                        .show()
                 } else {
-                    Toast.makeText(requireContext(), "Please fill the name", Toast.LENGTH_LONG)
+                    Toast.makeText(requireContext(), getString(R.string.fill_the_name), Toast.LENGTH_LONG)
                         .show()
                 }
             }
@@ -287,9 +289,10 @@ class ShoppingListAddItemsFragment : Fragment() {
             animateButtonClick(btnDeleteCategory) {
                 mShoppingListAddItemsViewModel.deleteCategory(category)
                 dialog.hide()
+                Toast.makeText(requireContext(),
+                    getString(R.string.category_deleted_correctly), Toast.LENGTH_LONG)
+                    .show()
             }
-            //mShoppingListAddItemsViewModel.deleteCategory(category)
-            //dialog.hide()
         }
 
     }

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Añadir productos"
+        android:text="@string/add_products"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Búsqueda" />
+            android:text="@string/search" />
 
         <Space
             android:layout_width="0dp"
@@ -87,7 +87,7 @@
                 android:paddingBottom="1dp"
                 android:paddingHorizontal="0dp"
                 android:includeFontPadding="false"
-                android:text="Local"
+                android:text="@string/local"
                 android:textSize="16sp"
                 android:layout_marginEnd="8dp"/>
 
@@ -103,7 +103,7 @@
                 android:paddingHorizontal="0dp"
                 android:textColor="@color/black"
                 android:includeFontPadding="false"
-                android:text="Externa"
+                android:text="@string/external"
                 android:textSize="16sp"/>
         </LinearLayout>
     </LinearLayout>
@@ -118,20 +118,24 @@
         app:layout_constraintTop_toBottomOf="@+id/llSearchSelector"
         tools:ignore="MissingConstraints" />
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProductsSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintBottom_toBottomOf="parent"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProductsSearchApi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

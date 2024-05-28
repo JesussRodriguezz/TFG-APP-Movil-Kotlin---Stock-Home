@@ -1,12 +1,66 @@
 <resources>
     <string name="app_name">TFGapp</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ibbackarrow">ibBackArrow</string>
+    <string name="shopping_lists">Listas de la compra</string>
+    <string name="photo">Foto</string>
+    <string name="o">o</string>
+    <string name="icon">Icono</string>
+    <string name="_1_month">1 mes</string>
+    <string name="_1_week">1 semana</string>
+    <string name="_3_months">3 meses</string>
+    <string name="_2_weeks">2 semanas</string>
+    <string name="expire_in">Caduca en:</string>
+    <string name="name">Nombre</string>
+    <string name="ibsettingscategory">ibSettingsCategory</string>
+    <string name="ivcategoryicon">ivCategoryIcon</string>
+    <string name="edit_category">Editar categoria</string>
+    <string name="update_category">Actualizar categoria</string>
+    <string name="ibaddproducttolistdialogchangecategory">ibAddProductToListDialogChangeCategory</string>
+    <string name="save_changes">Guardar cambios</string>
+    <string name="ibdeletecategory">ibDeleteCategory</string>
+    <string name="rename_list">Renombrar lista</string>
+    <string name="list_name">Nombre de la lista</string>
+    <string name="empty_list">Vaciar Lista</string>
+    <string name="delete_list">Eliminar Lista</string>
+    <string name="new_category">Nueva categoria</string>
+    <string name="create_category">Crear categoria</string>
+    <string name="new_shopping_list">Nueva lista de la compra</string>
+    <string name="create_list">Crear lista</string>
+    <string name="scan_qr">Escanear QR</string>
+    <string name="add_manual">Añadir manualmente</string>
+    <string name="order_by">Ordenar por</string>
+    <string name="product_image">Product Image</string>
+    <string name="external">Externa</string>
+    <string name="local">Local</string>
+    <string name="search">Búsqueda</string>
+    <string name="add_products">Añadir productos</string>
+    <string name="select_an_icon">Selecciona un icono</string>
+    <string name="ibboughtproduct">ibBoughtProduct</string>
+    <string name="ivproducticon">ivProductIcon</string>
+    <string name="ibaddproducttolist">ibAddProductToList</string>
+    <string name="delete_product">Delete product</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="product_name">Product Name</string>
+    <string name="products_bought">Productos comprados:</string>
+    <string name="keyboard_bar">/</string>
+    <string name="list_created_correctly">Lista creada correctamente!</string>
+    <string name="fill_the_name">Rellena el nombre correctamente</string>
+    <string name="category_created_correctly">Categoría creada correctamente!</string>
+    <string name="deleted_list_correctly">Lista eliminada correctamente</string>
+    <string name="renamed_list_correctly">Lista renombrada correctamente</string>
+    <string name="empty_list_correctly">Lista vaciada correctamente</string>
+    <string name="renamed_category_correctly">Categoría renombrada correctamente</string>
+    <string name="category_deleted_correctly">Categoría eliminada correctamente</string>
+    <string name="not_products_found">No se encontraron productos</string>
+    <string name="error_obtaining_data">Error al obtener datos</string>
+    <string name="error_with_search">Error en la búsqueda</string>
+
+    <!--CONTENT DESCRIPTIONS-->
+
 
     <string-array name="order_by_options_stock_products">
         <item>Nombre</item>
         <item>Fecha de caducidad</item>
         <item>Ultimos añadidos</item>
     </string-array>
-
-
 </resources>

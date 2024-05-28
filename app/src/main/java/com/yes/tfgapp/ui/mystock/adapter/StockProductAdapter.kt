@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ProductMyStockRowBinding
-import com.yes.tfgapp.databinding.ShoppingListRowBinding
 import com.yes.tfgapp.domain.model.StockProductModel
 
 class StockProductAdapter(

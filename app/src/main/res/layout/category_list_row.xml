@@ -22,7 +22,7 @@
             android:layout_height="30dp"
             android:layout_marginStart="4dp"
             tools:src="@drawable/ic_panaderia"
-            android:contentDescription="ivCategoryIcon" />
+            android:contentDescription="@string/ivcategoryicon" />
 
         <Space
             android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_three_points"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="ibSettingsCategory" />
+            android:contentDescription="@string/ibsettingscategory" />
 
     </LinearLayout>
 

@@ -41,7 +41,7 @@ class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)->
             }
         }
 
-        fun animateButtonClick(
+        private fun animateButtonClick(
             view: View,
             action: () -> Unit
         ) {
