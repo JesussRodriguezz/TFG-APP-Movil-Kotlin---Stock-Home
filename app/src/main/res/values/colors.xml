@@ -15,6 +15,7 @@
     <color name="transparent">#00FFFFFF</color>
     <!-- res/values/colors.xml -->
     <color name="semiTransparentLight">#D3E8E8E8</color>
+    <color name="nearlyTransparentLight">#37E8E8E8</color>
     <color name="semiTransparentDark">#BE333333</color>
 
 

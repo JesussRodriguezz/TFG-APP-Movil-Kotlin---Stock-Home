@@ -1,7 +1,12 @@
 package com.yes.tfgapp.ui.mystock.adapter
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.yes.tfgapp.R
@@ -21,7 +26,6 @@ class StockProductAdapter(
             onClickDelete: (StockProductModel) -> Unit
         ) {
             binding.tvStockProductName.text = currentItem.name
-            binding.tvStockProductAddedDate.text = currentItem.addedDate
             binding.tvStockProductExpireDate.text = currentItem.expirationDate
             binding.tvStockProductDaysToExpire.text = currentItem.daysToExpire.toString()
             println("CURRENT DATE: "+currentItem.addedDate)
@@ -35,8 +39,40 @@ class StockProductAdapter(
             }
 
             binding.ibDeleteStockProduct.setOnClickListener {
-                onClickDelete(currentItem)
+                animateButtonClick(binding.ibDeleteStockProduct) {
+                    onClickDelete(currentItem)
+                }
+
             }
+        }
+
+        private fun animateButtonClick(
+            view: View,
+            action: () -> Unit
+        ) {
+            val scaleXUp = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f)
+            val scaleYUp = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f)
+            val scaleXDown = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f)
+            val scaleYDown = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f)
+
+            scaleXUp.duration = 100
+            scaleYUp.duration = 100
+            scaleXDown.duration = 100
+            scaleYDown.duration = 100
+
+            val animatorSet = AnimatorSet()
+            animatorSet.play(scaleXUp).with(scaleYUp).before(scaleXDown).before(scaleYDown)
+            animatorSet.interpolator = AccelerateDecelerateInterpolator()
+
+            animatorSet.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    action()
+                }
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+            animatorSet.start()
         }
     }
 

@@ -2,22 +2,34 @@ package com.yes.tfgapp.ui.mystock
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.app.Application
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.journeyapps.barcodescanner.ScanContract
@@ -29,10 +41,17 @@ import com.yes.tfgapp.data.network.response.StockProductResponse
 import com.yes.tfgapp.data.worker.MyWorker
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.databinding.FragmentMyStockBinding
+import com.yes.tfgapp.domain.model.ProductModel
+import com.yes.tfgapp.domain.model.ProductShoppingListModel
+import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.domain.model.StockProductModel
+import com.yes.tfgapp.ui.mystock.adapter.ChooseShoppingListAdapter
 import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
 import com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment
 import com.yes.tfgapp.ui.mystockproductsmanual.MyStockProductManualActivity
+import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
+import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
+import com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,6 +69,11 @@ class MyStockFragment : Fragment() {
     private lateinit var binding: FragmentMyStockBinding
     private var currentDialog: MyStockProductDetailFragment? = null
     private var rotate = false
+
+    private lateinit var chooseShoppingListAdapter: ChooseShoppingListAdapter
+    private lateinit var mShoppingListViewModel: ShoppingListViewModel
+    private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
+    private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
 
     private lateinit var btnScanBarcode: View
     private lateinit var btnManualAdd: View
@@ -119,7 +143,7 @@ class MyStockFragment : Fragment() {
     }
 
     private fun scheduleInitialWork() {
-        val currentDate= Calendar.getInstance()
+        val currentDate = Calendar.getInstance()
         val nextRun = Calendar.getInstance()
 
         nextRun.set(Calendar.HOUR_OF_DAY, 0)
@@ -131,7 +155,7 @@ class MyStockFragment : Fragment() {
         val initialDelay = nextRun.timeInMillis - currentDate.timeInMillis
         Log.d(ContentValues.TAG, "Initial delay: $initialDelay")
 
-        val workRequest =OneTimeWorkRequestBuilder<MyWorker>()
+        val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
             .setInitialDelay(50, TimeUnit.SECONDS)
             .build()
 
@@ -193,30 +217,38 @@ class MyStockFragment : Fragment() {
 
         val rvStockProduct = binding.rvMyStock
         rvStockProduct.adapter = stockProductAdapter
-        val layoutManager = GridLayoutManager(requireContext(), 2)
+        val layoutManager = GridLayoutManager(requireContext(), 3)
 
         rvStockProduct.layoutManager = layoutManager
         mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
         mStockViewModel.readAllData.observe(viewLifecycleOwner) { stockProduct ->
             stockProductAdapter.setData(stockProduct)
         }
+        mShoppingListViewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
+        mShoppingListAddItemsViewModel =
+            ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
         binding.orderBy.setOnItemClickListener { _, _, position, _ ->
             when (position) {
                 0 -> {
-                    mStockViewModel.getStockProductsOrderedByName().observe(viewLifecycleOwner) { stockProduct ->
-                        stockProductAdapter.setData(stockProduct)
-                    }
+                    mStockViewModel.getStockProductsOrderedByName()
+                        .observe(viewLifecycleOwner) { stockProduct ->
+                            stockProductAdapter.setData(stockProduct)
+                        }
                 }
+
                 1 -> {
-                    mStockViewModel.getStockProductsOrderedByExpiryDate().observe(viewLifecycleOwner) { stockProduct ->
-                        stockProductAdapter.setData(stockProduct)
-                    }
+                    mStockViewModel.getStockProductsOrderedByExpiryDate()
+                        .observe(viewLifecycleOwner) { stockProduct ->
+                            stockProductAdapter.setData(stockProduct)
+                        }
                 }
+
                 2 -> {
-                    mStockViewModel.getStockProductsOrderedByAddedDate().observe(viewLifecycleOwner) { stockProduct ->
-                        stockProductAdapter.setData(stockProduct)
-                    }
+                    mStockViewModel.getStockProductsOrderedByAddedDate()
+                        .observe(viewLifecycleOwner) { stockProduct ->
+                            stockProductAdapter.setData(stockProduct)
+                        }
                 }
             }
         }
@@ -352,8 +384,119 @@ class MyStockFragment : Fragment() {
     }
 
     private fun onClickDeleteStockProduct(stockProduct: StockProductModel) {
-        mStockViewModel.deleteStockProduct(stockProduct)
+        showDeleteDialog(stockProduct)
+        //mStockViewModel.deleteStockProduct(stockProduct)
     }
+
+    private fun showDeleteDialog(stockProduct: StockProductModel) {
+        val dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.dialog_delete_stock_product)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.show()
+
+        dialog.findViewById<LinearLayout>(R.id.option1).setOnClickListener {
+            showChooseShoppingListDialog(stockProduct)
+            //mStockViewModel.deleteStockProduct(stockProduct)
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<LinearLayout>(R.id.option2).setOnClickListener {
+            mStockViewModel.deleteStockProduct(stockProduct)
+            dialog.dismiss()
+        }
+    }
+
+    private fun showChooseShoppingListDialog(stockProduct: StockProductModel) {
+        val dialog = Dialog(requireContext())
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.dialog_add_product_to_shopping_list_after_delete)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val rvShoppingList = dialog.findViewById<RecyclerView>(R.id.rvShoppingLists)
+        rvShoppingList.layoutManager = LinearLayoutManager(requireContext())
+
+        val chooseShoppingListAdapter = ChooseShoppingListAdapter(
+            stockProduct = stockProduct,
+            onAddProductToList = { product, shoppingList, dialog, stockproduct ->
+                addExternalProductToList(product, shoppingList, dialog, stockproduct)
+            },
+            dialog = dialog
+        )
+
+        rvShoppingList.adapter = chooseShoppingListAdapter
+        mShoppingListViewModel.readAllData.observe(viewLifecycleOwner) { shoppingLists ->
+            chooseShoppingListAdapter.setShoppingLists(shoppingLists)
+        }
+
+        dialog.show()
+    }
+
+    private fun addExternalProductToList(
+        product: ProductModel,
+        shoppingList: ShoppingListModel,
+        dialog: Dialog,
+        stockProduct: StockProductModel
+    ) {
+
+        mShoppingListDetailViewModel = ViewModelProvider(
+            this,
+            ShoppingListDetailViewModelFactory(
+                requireActivity().application,
+                shoppingList
+            )
+        )[ShoppingListDetailViewModel::
+        class.java]
+
+        mShoppingListAddItemsViewModel.addProduct(product)
+        observeProductIDAndAddToList(shoppingList, dialog, stockProduct)
+
+    }
+
+    private fun observeProductIDAndAddToList(
+        shoppingList: ShoppingListModel,
+        dialog: Dialog,
+        stockProduct: StockProductModel
+    ) {
+        val productIdObserver = object : Observer<Long?> {
+            override fun onChanged(productId: Long?) {
+                if (productId != null) {
+                    val productShoppingList = ProductShoppingListModel(
+                        shoppingListId = shoppingList.id,
+                        productId = productId.toInt()
+                    )
+                    mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
+                    dialog.dismiss()
+                    mStockViewModel.deleteStockProduct(stockProduct)
+                    // Remove the observer after the operation is done
+                    mShoppingListAddItemsViewModel.productIdLiveData.removeObserver(this)
+                    mShoppingListAddItemsViewModel.productIdLiveData.value = null
+                }
+            }
+        }
+        mShoppingListAddItemsViewModel.productIdLiveData.observe(
+            viewLifecycleOwner,
+            productIdObserver
+        )
+    }
+
+    inner class ShoppingListDetailViewModelFactory(
+        private val application: Application,
+        private val currentShoppingList: ShoppingListModel
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(ShoppingListDetailViewModel::class.java)) {
+                return ShoppingListDetailViewModel(application, currentShoppingList) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+
 
     private fun getRetrofit(): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
