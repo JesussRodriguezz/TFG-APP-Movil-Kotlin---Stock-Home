@@ -55,6 +55,7 @@
     <string name="error_obtaining_data">Error al obtener datos</string>
     <string name="error_with_search">Error en la búsqueda</string>
     <string name="add_to_list">Añadir a la lista</string>
+    <string name="category_suggested">Categoria sugerida</string>
 
     <!--CONTENT DESCRIPTIONS-->
 

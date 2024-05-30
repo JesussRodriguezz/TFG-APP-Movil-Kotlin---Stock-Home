@@ -49,6 +49,7 @@ import com.yes.tfgapp.ui.mystock.adapter.ChooseShoppingListAdapter
 import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
 import com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment
 import com.yes.tfgapp.ui.mystockproductsmanual.MyStockProductManualActivity
+import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailViewModel
@@ -86,6 +87,7 @@ class MyStockFragment : Fragment() {
     private val stockProductAdapter = StockProductAdapter(
         onClickDelete = { onClickDeleteStockProduct(it) }
     )
+
     private lateinit var mStockViewModel: MyStockViewModel
 
     private val requestPermissionLauncher =
@@ -396,6 +398,7 @@ class MyStockFragment : Fragment() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+
         dialog.show()
 
         dialog.findViewById<LinearLayout>(R.id.option1).setOnClickListener {
@@ -418,6 +421,7 @@ class MyStockFragment : Fragment() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+
         val rvShoppingList = dialog.findViewById<RecyclerView>(R.id.rvShoppingLists)
         rvShoppingList.layoutManager = LinearLayoutManager(requireContext())
 

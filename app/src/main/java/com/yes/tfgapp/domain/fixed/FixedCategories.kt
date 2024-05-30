@@ -21,7 +21,17 @@ enum class FixedCategories(
     PASTA(11,"Pasta-Granos",R.drawable.ic_gyp),
     SNACKS(12,"Snacks-Dulces",R.drawable.ic_dys),
     LIMPIEZA(13,"Limpieza",R.drawable.ic_others_category),
-    OTROS(14,"Otros",R.drawable.ic_others_category)
+    OTROS(14,"Otros",R.drawable.ic_others_category);
+
+    companion object {
+        fun getCategoryIdByIcon(icon: Int): Int {
+            return values().find { it.icon == icon }?.id ?: OTROS.id
+        }
+
+        fun getCategoryNameById(id: Int): String {
+            return values().find { it.id == id }?.categoryName ?: OTROS.categoryName
+        }
+    }
 
 
     /*FOOD(1, "Frutas", R.drawable.nestea),

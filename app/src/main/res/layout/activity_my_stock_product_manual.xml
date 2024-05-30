@@ -17,19 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvProductName"
-            style="@style/SmallButtonTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/name"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ibBackArrow" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilNewProductName"
@@ -37,7 +24,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:hint="Nombre del producto"
             app:boxBackgroundColor="@color/primaryGrey"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
@@ -47,7 +35,7 @@
             app:hintTextColor="@color/accentRed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvProductName">
+            app:layout_constraintTop_toBottomOf="@+id/ibBackArrow">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etNewProductName"
@@ -62,7 +50,7 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginVertical="32dp"
+            android:layout_marginVertical="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilNewProductName" />
@@ -145,8 +133,7 @@
                     android:layout_height="120dp"
                     android:background="@color/primaryGrey"
                     android:padding="25dp"
-                    android:src="@drawable/ic_icon"
-                    /> <!-- Reemplaza con el icono de tu martini -->
+                    android:src="@drawable/ic_icon" /> <!-- Reemplaza con el icono de tu martini -->
 
             </LinearLayout>
 
@@ -156,7 +143,7 @@
             android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginVertical="32dp"
+            android:layout_marginVertical="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/llAddPhotoorIcon" />
@@ -192,7 +179,7 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -209,7 +196,7 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -226,7 +213,7 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -243,7 +230,7 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="8dp"
+                android:layout_margin="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -258,10 +245,107 @@
             android:id="@+id/divider3"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginVertical="32dp"
+            android:layout_marginVertical="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/glExpireDataButtons" />
+
+        <LinearLayout
+            android:id="@+id/llCategorySuggested"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider3">
+
+            <TextView
+                android:id="@+id/tvSuggestedCategory"
+                style="@style/ProductsListTextStyle"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/category_suggested" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvCategory"
+                android:layout_width="160dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center_vertical"
+                app:cardBackgroundColor="@color/accentRed"
+                app:cardCornerRadius="16dp">
+
+                <LinearLayout
+                    android:id="@+id/llContentContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="start|center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/ivCategoryIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="@string/ivcategoryicon"
+                        tools:src="@drawable/ic_panaderia" />
+
+
+                    <TextView
+                        android:id="@+id/tvCategoryName"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/roboto_medium"
+                        android:maxLines="1"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintWidth_default="wrap"
+                        app:layout_constraintWidth_max="100dp"
+                        app:layout_constraintWidth_min="0dp"
+                        tools:text="Categoryaaaaaaa" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvChangeCategory"
+            style="@style/CustomDialogStyle"
+            android:textColor="@color/primaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Cambiar categoria"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llCategorySuggested" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:layout_marginStart="12dp"
+            android:scrollbars="none"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

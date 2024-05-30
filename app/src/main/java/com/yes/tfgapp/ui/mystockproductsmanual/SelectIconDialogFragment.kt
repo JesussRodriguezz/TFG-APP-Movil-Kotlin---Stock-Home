@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.yes.tfgapp.databinding.FragmentSelectIconDialogBinding
 import com.yes.tfgapp.ui.mystockproductsmanual.adapter.SelectIconAdapter
 
-class SelectIconDialogFragment(private val icons: List<Int>, private val listener: (Int) -> Unit) : DialogFragment() {
+class SelectIconDialogFragment(private val icons: List<Int>, private val listener: (Int) -> Unit) :
+    DialogFragment() {
 
-    private lateinit var binding : FragmentSelectIconDialogBinding
+    private lateinit var binding: FragmentSelectIconDialogBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +35,10 @@ class SelectIconDialogFragment(private val icons: List<Int>, private val listene
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
 

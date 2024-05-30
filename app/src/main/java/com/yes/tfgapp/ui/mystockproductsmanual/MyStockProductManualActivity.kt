@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -14,10 +15,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ActivityMyStockProductManualBinding
+import com.yes.tfgapp.domain.fixed.FixedCategories
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.MyStockViewModel
+import com.yes.tfgapp.ui.mystockproductsmanual.adapter.ChooseCategoryAdapterManual
+import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
+import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -25,10 +31,13 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+
 class MyStockProductManualActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyStockProductManualBinding
     private lateinit var mStockViewModel: MyStockViewModel
+    private var chooseCategoryAdapter: ChooseCategoryAdapterManual = ChooseCategoryAdapterManual()
+    private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
 
     private val icons = listOf(
         R.drawable.ic_fyv,
@@ -52,36 +61,40 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private lateinit var imageUrl: Uri
     private lateinit var captureIV: ImageView
 
-    private val cameraPermissionLauncher = registerForActivityResult(RequestPermission()) { isGranted ->
-        if (isGranted) {
-            launchCamera()
-        } else {
-            Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
+    private val cameraPermissionLauncher =
+        registerForActivityResult(RequestPermission()) { isGranted ->
+            if (isGranted) {
+                launchCamera()
+            } else {
+                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
-    private val storagePermissionLauncher = registerForActivityResult(RequestPermission()) { isGranted ->
-        if (isGranted) {
-            captureIV.performClick()
-        } else {
-            Toast.makeText(this, "Permiso de almacenamiento denegado", Toast.LENGTH_SHORT).show()
+    private val storagePermissionLauncher =
+        registerForActivityResult(RequestPermission()) { isGranted ->
+            if (isGranted) {
+                captureIV.performClick()
+            } else {
+                Toast.makeText(this, "Permiso de almacenamiento denegado", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
-    }
 
-    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        if (success) {
-            captureIV.setImageURI(null)
-            captureIV.setImageURI(imageUrl)
-            binding.flAddPhoto.setBackgroundResource(R.drawable.image_border)
-            binding.flAddPhoto.setPadding(10, 10, 10, 10)
-            captureIV.setPadding(0, 0, 0, 0)
-            binding.ivAddIcon.setBackgroundResource(R.color.primaryGrey)
-            isPhotoSelected = true
-            selectedIconResource = null
-        } else {
-            Toast.makeText(this, "Error al tomar la foto", Toast.LENGTH_SHORT).show()
+    private val contract =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                captureIV.setImageURI(null)
+                captureIV.setImageURI(imageUrl)
+                binding.flAddPhoto.setBackgroundResource(R.drawable.image_border)
+                binding.flAddPhoto.setPadding(10, 10, 10, 10)
+                captureIV.setPadding(0, 0, 0, 0)
+                binding.ivAddIcon.setBackgroundResource(R.color.primaryGrey)
+                isPhotoSelected = true
+                selectedIconResource = null
+            } else {
+                Toast.makeText(this, "Error al tomar la foto", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,10 +104,38 @@ class MyStockProductManualActivity : AppCompatActivity() {
         initListeners()
     }
 
+    interface OnIconSelectedListener {
+        fun onIconSelected(selectedIcon: Int)
+    }
+
     private fun initUI() {
+
+        binding.ivCategoryIcon.setImageResource(R.drawable.ic_others_category)
+        binding.tvCategoryName.text = "Otros"
+
         imageUrl = createImageUri()
         captureIV = binding.ivAddPhoto
         mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
+
+        mShoppingListAddItemsViewModel =
+            ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
+
+        val rvCategories = binding.rvCategories
+        rvCategories.layoutManager = GridLayoutManager(this, 3, GridLayoutManager.HORIZONTAL, false)
+        rvCategories.adapter = chooseCategoryAdapter
+        mShoppingListAddItemsViewModel.readAllDataCategory.observe(this) { categories ->
+            chooseCategoryAdapter.setCategoriesListModified(categories, 14)
+            chooseCategoryAdapter.notifyDataSetChanged()
+        }
+
+
+        /*val rvCategories = dialog.findViewById<RecyclerView>(R.id.rvCategories)
+        rvCategories.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+        rvCategories.adapter = chooseCategoryAdapter
+        mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner) { categories ->
+            chooseCategoryAdapter.setCategoriesListModified(categories, 14)
+            chooseCategoryAdapter.notifyDataSetChanged()
+        }*/
     }
 
     private fun createImageUri(): Uri {
@@ -115,19 +156,31 @@ class MyStockProductManualActivity : AppCompatActivity() {
             finish()
         }
         binding.btn1Week.setOnClickListener {
-            updateButtonStates(binding.btn1Week, listOf(binding.btn2Weeks, binding.btn1Month, binding.btn2Months))
+            updateButtonStates(
+                binding.btn1Week,
+                listOf(binding.btn2Weeks, binding.btn1Month, binding.btn2Months)
+            )
         }
 
         binding.btn2Weeks.setOnClickListener {
-            updateButtonStates(binding.btn2Weeks, listOf(binding.btn1Week, binding.btn1Month, binding.btn2Months))
+            updateButtonStates(
+                binding.btn2Weeks,
+                listOf(binding.btn1Week, binding.btn1Month, binding.btn2Months)
+            )
         }
 
         binding.btn1Month.setOnClickListener {
-            updateButtonStates(binding.btn1Month, listOf(binding.btn1Week, binding.btn2Weeks, binding.btn2Months))
+            updateButtonStates(
+                binding.btn1Month,
+                listOf(binding.btn1Week, binding.btn2Weeks, binding.btn2Months)
+            )
         }
 
         binding.btn2Months.setOnClickListener {
-            updateButtonStates(binding.btn2Months, listOf(binding.btn1Week, binding.btn1Month, binding.btn2Weeks))
+            updateButtonStates(
+                binding.btn2Months,
+                listOf(binding.btn1Week, binding.btn1Month, binding.btn2Weeks)
+            )
         }
 
         captureIV.setOnClickListener {
@@ -142,11 +195,33 @@ class MyStockProductManualActivity : AppCompatActivity() {
         binding.efAddStockItem.setOnClickListener {
             addStockProduct()
         }
+
+        binding.tvChangeCategory.setOnClickListener {
+            binding.rvCategories.visibility = if (binding.rvCategories.visibility == View.VISIBLE) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            binding.llCategorySuggested.visibility = if (binding.llCategorySuggested.visibility == View.VISIBLE) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+            binding.tvChangeCategory.visibility = if (binding.tvChangeCategory.visibility == View.VISIBLE) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+        }
     }
 
     private fun checkAndRequestPermissions(): Boolean {
-        val cameraPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-        val storagePermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val cameraPermission =
+            ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+        val storagePermission = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
         val listPermissionsNeeded = mutableListOf<String>()
 
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
@@ -157,7 +232,11 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
 
         if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toTypedArray(), PERMISSIONS_REQUEST_CODE)
+            ActivityCompat.requestPermissions(
+                this,
+                listPermissionsNeeded.toTypedArray(),
+                PERMISSIONS_REQUEST_CODE
+            )
             return false
         }
         return true
@@ -241,8 +320,26 @@ class MyStockProductManualActivity : AppCompatActivity() {
             binding.ivAddPhoto.setBackgroundResource(0)
             isPhotoSelected = false
             selectedIconResource = selectedIcon
+            val categoryId = FixedCategories.getCategoryIdByIcon(selectedIcon)
+            val categoryName = FixedCategories.getCategoryNameById(categoryId)
+
+            binding.ivCategoryIcon.setImageResource(selectedIcon)
+            binding.tvCategoryName.text = categoryName
+            changeVisibilities()
+
+            mShoppingListAddItemsViewModel.readAllDataCategory.observe(this) { categories ->
+                chooseCategoryAdapter.setCategoriesListModified(categories, categoryId)
+                chooseCategoryAdapter.notifyDataSetChanged()
+            }
         }
         dialog.show(supportFragmentManager, "SelectIconDialogFragment")
+
+    }
+
+    private fun changeVisibilities() {
+        binding.rvCategories.visibility = View.GONE
+        binding.llCategorySuggested.visibility = View.VISIBLE
+        binding.tvChangeCategory.visibility = View.VISIBLE
     }
 
     private fun updateButtonStates(selectedButton: Button, otherButtons: List<Button>) {

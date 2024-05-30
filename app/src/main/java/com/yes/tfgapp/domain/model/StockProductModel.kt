@@ -19,6 +19,7 @@ data class StockProductModel (
     val icon: Int? = null,
     val addedDate: String = getCurrentDate(),
     var daysToExpire: Int = 0,
+
 ): Parcelable {
     companion object {
         fun getCurrentDate(): String {
