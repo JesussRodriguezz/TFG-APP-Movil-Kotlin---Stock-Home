@@ -28,6 +28,11 @@ enum class FixedCategories(
             return values().find { it.icon == icon }?.id ?: OTROS.id
         }
 
+        fun getCategoryIdByName(name: String): Int {
+            return values().find { it.categoryName == name }?.id ?: OTROS.id
+        }
+
+
         fun getCategoryNameById(id: Int): String {
             return values().find { it.id == id }?.categoryName ?: OTROS.categoryName
         }

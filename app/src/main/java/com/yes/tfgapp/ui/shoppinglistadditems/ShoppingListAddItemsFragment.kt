@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.FragmentShoppingListAddItemsBinding
+import com.yes.tfgapp.domain.fixed.FixedCategories
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
@@ -51,12 +52,11 @@ class ShoppingListAddItemsFragment : Fragment() {
 
     private val categoriesAdapter = ShoppingListCategoriesAdapter(
         onItemSelected = { position -> updateCategories(position) },
-        onConfigureSelected = { category -> configureCategories(category)})
+        onConfigureSelected = { category -> configureCategories(category) })
     private val productsAdapter = ShoppingListProductsAdapter(
         { product -> addProductToList(product) },
         { product -> deleteProductFromList(product) }
     )
-
 
 
     override fun onResume() {
@@ -120,7 +120,7 @@ class ShoppingListAddItemsFragment : Fragment() {
         productsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         productsRecyclerView.adapter = productsAdapter
 
-        mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner){ products ->
+        mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner) { products ->
             if (products.isNotEmpty()) {
                 productsAdapter.setProductList(products)
                 productsAdapter.notifyDataSetChanged()
@@ -129,12 +129,9 @@ class ShoppingListAddItemsFragment : Fragment() {
             }
         }
 
-        mShoppingListDetailViewModel.allProductsShoppingListLiveData.observe(viewLifecycleOwner){ productsInShoppingList ->
+        mShoppingListDetailViewModel.allProductsShoppingListLiveData.observe(viewLifecycleOwner) { productsInShoppingList ->
             productsAdapter.setProductsInShoppingList(productsInShoppingList)
         }
-
-
-
 
     }
 
@@ -146,9 +143,12 @@ class ShoppingListAddItemsFragment : Fragment() {
             }
         }
 
-        binding.btnSearchView.setOnClickListener{
+        binding.btnSearchView.setOnClickListener {
             unselectAllCategories()
-            val action = ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(args.CurrentShoppingList)
+            val action =
+                ShoppingListAddItemsFragmentDirections.actionShoppingListAddItemsFragmentToSearchProductsFragment(
+                    args.CurrentShoppingList
+                )
             binding.root.findNavController().navigate(action)
         }
     }
@@ -173,10 +173,13 @@ class ShoppingListAddItemsFragment : Fragment() {
             dialog.findViewById<TextInputEditText>(R.id.etNewCategoryName).text.toString()
 
         if (newCategoryName.isNotEmpty()) {
-            val newCategory = CategoryModel(id=0, name= newCategoryName, isSelected = false ,isDefault = false)
+            val newCategory =
+                CategoryModel(id = 0, name = newCategoryName, isSelected = false, isDefault = false)
             mShoppingListAddItemsViewModel.addCategory(newCategory)
-            Toast.makeText(requireContext(),
-                getString(R.string.category_created_correctly), Toast.LENGTH_LONG)
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.category_created_correctly), Toast.LENGTH_LONG
+            )
                 .show()
             dialog.hide()
         } else {
@@ -208,6 +211,7 @@ class ShoppingListAddItemsFragment : Fragment() {
             override fun onAnimationEnd(animation: Animator) {
                 action()
             }
+
             override fun onAnimationCancel(animation: Animator) {}
             override fun onAnimationRepeat(animation: Animator) {}
         })
@@ -229,7 +233,7 @@ class ShoppingListAddItemsFragment : Fragment() {
     private fun checkDataLoaded() {
         if (isCategoriesLoaded && isProductsLoaded) {
             binding.progressBar.visibility = View.GONE
-        }else{
+        } else {
             binding.progressBar.visibility = View.VISIBLE
         }
     }
@@ -264,35 +268,64 @@ class ShoppingListAddItemsFragment : Fragment() {
         val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChangesCategory)
         btnSaveChanges.setOnClickListener {
             animateButtonClick(btnSaveChanges) {
-                val newName = dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameCategory).text.toString()
-                val newCategory = CategoryModel(category.id, newName, category.isSelected, icon=category.icon, isDefault = category.isDefault)
+                val newName =
+                    dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameCategory).text.toString()
+                val newCategory = CategoryModel(
+                    category.id,
+                    newName,
+                    category.isSelected,
+                    icon = category.icon,
+                    isDefault = category.isDefault
+                )
                 if (newName.isNotEmpty()) {
                     mShoppingListAddItemsViewModel.updateCategory(newCategory)
                     dialog.hide()
-                    Toast.makeText(requireContext(),
-                        getString(R.string.renamed_category_correctly), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.renamed_category_correctly), Toast.LENGTH_LONG
+                    )
                         .show()
                 } else {
-                    Toast.makeText(requireContext(), getString(R.string.fill_the_name), Toast.LENGTH_LONG)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.fill_the_name),
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
             }
         }
-        val btnDeleteCategory= dialog.findViewById<ImageButton>(R.id.ibDeleteCategory)
-        if(category.isDefault){
+        val btnDeleteCategory = dialog.findViewById<ImageButton>(R.id.ibDeleteCategory)
+        if (category.isDefault) {
             btnDeleteCategory.visibility = View.GONE
-        }else{
+        } else {
             btnDeleteCategory.visibility = View.VISIBLE
         }
 
         btnDeleteCategory.setOnClickListener {
             animateButtonClick(btnDeleteCategory) {
-                mShoppingListAddItemsViewModel.deleteCategory(category)
-                dialog.hide()
-                Toast.makeText(requireContext(),
-                    getString(R.string.category_deleted_correctly), Toast.LENGTH_LONG)
-                    .show()
+                deleteCategoryWithItemsUpdate(category, dialog)
             }
+        }
+
+    }
+
+    private fun deleteCategoryWithItemsUpdate(category: CategoryModel, dialog: Dialog) {
+        val otherCategory = FixedCategories.getCategoryIdByName("Otros")
+
+        if (otherCategory != null) {
+            mShoppingListAddItemsViewModel.deleteCategoryWithItemsUpdate(category, otherCategory)
+            dialog.hide()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.category_deleted_correctly),
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            Toast.makeText(
+                requireContext(), "No se encontro la categoria otros",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
     }
@@ -311,22 +344,21 @@ class ShoppingListAddItemsFragment : Fragment() {
         }
     }
 
-    private fun addProductToList(product: ProductModel){
-        val productShoppingList= ProductShoppingListModel(
+    private fun addProductToList(product: ProductModel) {
+        val productShoppingList = ProductShoppingListModel(
             shoppingListId = this.args.CurrentShoppingList.id,
             productId = product.id
         )
         mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
     }
 
-    private fun deleteProductFromList(product: ProductModel){
-        val productShoppingList= ProductShoppingListModel(
+    private fun deleteProductFromList(product: ProductModel) {
+        val productShoppingList = ProductShoppingListModel(
             shoppingListId = this.args.CurrentShoppingList.id,
             productId = product.id
         )
         mShoppingListAddItemsViewModel.deleteProductFromList(productShoppingList)
     }
-
 
 
 }

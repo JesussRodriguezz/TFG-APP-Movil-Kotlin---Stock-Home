@@ -37,7 +37,10 @@ class ProductRepository(private val productDao: ProductDao) {
 
     }
 
+    fun updateItemsCategory(id: Int, id1: Int) {
+        productDao.updateItemsCategory(id, id1)
 
+    }
 
 
 }

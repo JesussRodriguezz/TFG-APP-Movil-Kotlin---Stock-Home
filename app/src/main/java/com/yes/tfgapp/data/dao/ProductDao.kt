@@ -40,6 +40,8 @@ interface ProductDao {
     @Query("SELECT * FROM product WHERE name = :name LIMIT 1")
     fun findProductByName(name: String): ProductModel
 
+    @Query("UPDATE product SET categoryId = :id1 WHERE categoryId = :id")
+    fun updateItemsCategory(id: Int, id1: Int)
 
 
 }

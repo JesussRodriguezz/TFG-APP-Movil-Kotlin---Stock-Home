@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="@string/scan_qr"
+                android:text="@string/scan_barcode"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -83,7 +83,7 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_scanner"
+            android:src="@drawable/ic_barcode"
             app:backgroundTint="@color/white"
             app:fabSize="normal"
             app:shapeAppearanceOverlay="@style/RoundedExtendedFab"

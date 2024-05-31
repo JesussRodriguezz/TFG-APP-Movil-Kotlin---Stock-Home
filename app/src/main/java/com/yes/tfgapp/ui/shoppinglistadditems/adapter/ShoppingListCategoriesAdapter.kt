@@ -13,23 +13,36 @@ import com.yes.tfgapp.databinding.CategoryListRowBinding
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.R
 
-class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)-> Unit, private val onConfigureSelected:(CategoryModel)->Unit ): RecyclerView.Adapter<ShoppingListCategoriesAdapter.ShoppingListCategoriesViewHolder>() {
+class ShoppingListCategoriesAdapter(
+    private val onItemSelected: (CategoryModel) -> Unit,
+    private val onConfigureSelected: (CategoryModel) -> Unit
+) : RecyclerView.Adapter<ShoppingListCategoriesAdapter.ShoppingListCategoriesViewHolder>() {
 
     private var categoriesList = emptyList<CategoryModel>()
 
-    inner class ShoppingListCategoriesViewHolder(private val binding:CategoryListRowBinding) : RecyclerView.ViewHolder(binding.root)  {
-        fun bind(currentItem: CategoryModel, onItemSelected: (CategoryModel) -> Unit, onConfigureSelected: (CategoryModel) -> Unit){
+    inner class ShoppingListCategoriesViewHolder(private val binding: CategoryListRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(
+            currentItem: CategoryModel,
+            onItemSelected: (CategoryModel) -> Unit,
+            onConfigureSelected: (CategoryModel) -> Unit
+        ) {
             binding.cvCategory.isSelected = currentItem.isSelected
             binding.tvCategoryName.text = currentItem.name
-            val color = if(currentItem.isSelected){
+            val color = if (currentItem.isSelected) {
                 R.color.white
-            }else{
+            } else {
                 R.color.black
             }
             binding.ivCategoryIcon.setImageResource(currentItem.icon)
-            binding.tvCategoryName.setTextColor(ContextCompat.getColor(binding.tvCategoryName.context, color))
+            binding.tvCategoryName.setTextColor(
+                ContextCompat.getColor(
+                    binding.tvCategoryName.context,
+                    color
+                )
+            )
             binding.root.setOnClickListener {
-                    onItemSelected(currentItem)
+                onItemSelected(currentItem)
             }
 
             binding.ibSettingsCategory.setOnClickListener {
@@ -69,6 +82,7 @@ class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)->
                     // Acción a realizar después de la animación
                     action()
                 }
+
                 override fun onAnimationCancel(animation: Animator) {}
                 override fun onAnimationRepeat(animation: Animator) {}
             })
@@ -81,7 +95,8 @@ class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)->
         parent: ViewGroup,
         viewType: Int
     ): ShoppingListCategoriesViewHolder {
-        val binding = CategoryListRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            CategoryListRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ShoppingListCategoriesViewHolder(binding)
     }
 
@@ -94,7 +109,7 @@ class ShoppingListCategoriesAdapter(private val onItemSelected:(CategoryModel)->
         holder.bind(currentItem, onItemSelected, onConfigureSelected)
     }
 
-    fun setCategoriesList(categories: List<CategoryModel>){
+    fun setCategoriesList(categories: List<CategoryModel>) {
         this.categoriesList = categories
         notifyDataSetChanged()
     }

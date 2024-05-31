@@ -57,6 +57,7 @@
     <string name="add_to_list">Añadir a la lista</string>
     <string name="category_suggested">Categoria sugerida</string>
     <string name="doestn_exist_any_shopping_list">No existe ninguna lista de la compra</string>
+    <string name="scan_barcode">Escanear codigo de barras</string>
 
     <!--CONTENT DESCRIPTIONS-->
 
