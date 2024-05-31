@@ -122,8 +122,13 @@ class ShoppingListAddItemsFragment : Fragment() {
 
         mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner) { products ->
             if (products.isNotEmpty()) {
-                productsAdapter.setProductList(products)
+                // Ordenar alfabéticamente los productos por su nombre
+                val sortedProducts = products.sortedBy { it.name }
+
+                // Establecer la lista ordenada en el adaptador
+                productsAdapter.setProductList(sortedProducts)
                 productsAdapter.notifyDataSetChanged()
+
                 isProductsLoaded = true
                 checkDataLoaded()
             }
@@ -331,15 +336,23 @@ class ShoppingListAddItemsFragment : Fragment() {
     }
 
     private fun updateProducts(category: CategoryModel) {
-
         if (category.isSelected) {
             val selectedTasks =
                 mShoppingListAddItemsViewModel.readAllDataProduct.value?.filter { it.categoryId == category.id }
 
-            productsAdapter.setProductList(selectedTasks!!)
+            // Ordenar alfabéticamente los productos seleccionados por su nombre
+            val sortedSelectedTasks = selectedTasks?.sortedBy { it.name }
+
+            // Establecer la lista ordenada en el adaptador
+            productsAdapter.setProductList(sortedSelectedTasks!!)
             productsAdapter.notifyDataSetChanged()
         } else {
-            productsAdapter.setProductList(mShoppingListAddItemsViewModel.readAllDataProduct.value!!)
+            // Ordenar alfabéticamente todos los productos por su nombre
+            val allProducts = mShoppingListAddItemsViewModel.readAllDataProduct.value
+            val sortedAllProducts = allProducts?.sortedBy { it.name }
+
+            // Establecer la lista ordenada en el adaptador
+            productsAdapter.setProductList(sortedAllProducts!!)
             productsAdapter.notifyDataSetChanged()
         }
     }
