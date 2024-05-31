@@ -1,6 +1,7 @@
 package com.yes.tfgapp.ui.mystockproductsmanual.adapter
 
 
+import android.app.Dialog
 import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,13 +10,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ChooseCategoryRowBinding
 import com.yes.tfgapp.domain.model.CategoryModel
+import com.yes.tfgapp.domain.model.ProductModel
+import com.yes.tfgapp.domain.model.ShoppingListModel
+import com.yes.tfgapp.domain.model.StockProductModel
 
-class ChooseCategoryAdapterManual: RecyclerView.Adapter<ChooseCategoryAdapterManual.ChooseCategoryViewHolder>(){
+class ChooseCategoryAdapterManual(
+    private val onChangeCategory: () -> Unit
+): RecyclerView.Adapter<ChooseCategoryAdapterManual.ChooseCategoryViewHolder>(){
 
     private var categoriesList = emptyList<CategoryModel>()
     var publicCategoriesList = emptyList<CategoryModel>()
     var selectedItemPosition = 0
     private var firstTimeClick = true
+
 
 
     inner class ChooseCategoryViewHolder(private val binding: ChooseCategoryRowBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -30,6 +37,7 @@ class ChooseCategoryAdapterManual: RecyclerView.Adapter<ChooseCategoryAdapterMan
                     previousItem.isSelected = false  // Desmarcar el anterior
                     item.isSelected = true  // Marcar el actual
                     selectedItemPosition = position  // Actualizar la posición seleccionada
+                    onChangeCategory()
                     notifyDataSetChanged()  // Notificar para rebind todos los ViewHolder
                 }
             }
@@ -40,7 +48,7 @@ class ChooseCategoryAdapterManual: RecyclerView.Adapter<ChooseCategoryAdapterMan
             binding.cvCategory.isSelected = currentItem.isSelected
         }
 
-        
+
     }
 
     override fun onCreateViewHolder(

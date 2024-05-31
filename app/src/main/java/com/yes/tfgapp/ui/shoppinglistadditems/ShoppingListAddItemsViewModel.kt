@@ -64,8 +64,9 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
         viewModelScope.launch(Dispatchers.IO) {
             categoryRepository.updateCategories(updatedCategories)
         }
-
     }
+
+
 
     fun addCategory(category: CategoryModel) {
         viewModelScope.launch(Dispatchers.IO) {

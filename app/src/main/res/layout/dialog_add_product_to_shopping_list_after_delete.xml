@@ -4,18 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tvTitleDialogChooseShoppingList"
-        style="@style/TitleToolbarDark"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:layout_marginHorizontal="32dp"
-        android:text="@string/add_to_list"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvShoppingLists"
@@ -26,7 +14,7 @@
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitleDialogChooseShoppingList"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

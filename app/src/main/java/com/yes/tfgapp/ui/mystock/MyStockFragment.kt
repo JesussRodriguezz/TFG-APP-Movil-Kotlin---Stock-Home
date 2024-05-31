@@ -386,6 +386,7 @@ class MyStockFragment : Fragment() {
     }
 
     private fun onClickDeleteStockProduct(stockProduct: StockProductModel) {
+        println("stock product cat id: ${stockProduct.categoryId}")
         showDeleteDialog(stockProduct)
         //mStockViewModel.deleteStockProduct(stockProduct)
     }
@@ -402,8 +403,7 @@ class MyStockFragment : Fragment() {
         dialog.show()
 
         dialog.findViewById<LinearLayout>(R.id.option1).setOnClickListener {
-            showChooseShoppingListDialog(stockProduct)
-            //mStockViewModel.deleteStockProduct(stockProduct)
+            checkShoppingListsAndProceed(stockProduct)
             dialog.dismiss()
         }
 
@@ -413,7 +413,31 @@ class MyStockFragment : Fragment() {
         }
     }
 
-    private fun showChooseShoppingListDialog(stockProduct: StockProductModel) {
+    private fun checkShoppingListsAndProceed(stockProduct: StockProductModel) {
+        mShoppingListViewModel.readAllData.observe(viewLifecycleOwner) { shoppingLists ->
+            mShoppingListViewModel.readAllData.removeObservers(viewLifecycleOwner)
+            when {
+                shoppingLists.isEmpty() -> {
+                    Toast.makeText(requireContext(),
+                        getString(R.string.doestn_exist_any_shopping_list), Toast.LENGTH_SHORT).show()
+                }
+                shoppingLists.size == 1 -> {
+                    val product = ProductModel(
+                        name = stockProduct.name,
+                        categoryId = stockProduct.categoryId
+                    )
+                    val singleShoppingList = shoppingLists[0]
+                    addExternalProductToList(product, singleShoppingList, null, stockProduct)
+
+                }
+                else -> {
+                    showChooseShoppingListDialog(stockProduct, shoppingLists)
+                }
+            }
+        }
+    }
+
+    private fun showChooseShoppingListDialog(stockProduct: StockProductModel, shoppingLists: List<ShoppingListModel>) {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_add_product_to_shopping_list_after_delete)
@@ -434,9 +458,7 @@ class MyStockFragment : Fragment() {
         )
 
         rvShoppingList.adapter = chooseShoppingListAdapter
-        mShoppingListViewModel.readAllData.observe(viewLifecycleOwner) { shoppingLists ->
-            chooseShoppingListAdapter.setShoppingLists(shoppingLists)
-        }
+        chooseShoppingListAdapter.setShoppingLists(shoppingLists)
 
         dialog.show()
     }
@@ -444,27 +466,24 @@ class MyStockFragment : Fragment() {
     private fun addExternalProductToList(
         product: ProductModel,
         shoppingList: ShoppingListModel,
-        dialog: Dialog,
+        dialog: Dialog?,
         stockProduct: StockProductModel
     ) {
-
         mShoppingListDetailViewModel = ViewModelProvider(
             this,
             ShoppingListDetailViewModelFactory(
                 requireActivity().application,
                 shoppingList
             )
-        )[ShoppingListDetailViewModel::
-        class.java]
+        )[ShoppingListDetailViewModel::class.java]
 
         mShoppingListAddItemsViewModel.addProduct(product)
         observeProductIDAndAddToList(shoppingList, dialog, stockProduct)
-
     }
 
     private fun observeProductIDAndAddToList(
         shoppingList: ShoppingListModel,
-        dialog: Dialog,
+        dialog: Dialog?,
         stockProduct: StockProductModel
     ) {
         val productIdObserver = object : Observer<Long?> {
@@ -475,11 +494,12 @@ class MyStockFragment : Fragment() {
                         productId = productId.toInt()
                     )
                     mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
-                    dialog.dismiss()
+                    dialog?.dismiss() // Cierra el diálogo si no es nulo
                     mStockViewModel.deleteStockProduct(stockProduct)
                     // Remove the observer after the operation is done
                     mShoppingListAddItemsViewModel.productIdLiveData.removeObserver(this)
                     mShoppingListAddItemsViewModel.productIdLiveData.value = null
+                    Toast.makeText(requireContext(),"Se añade el producto: ${stockProduct.name} a la lista de la compra : ${shoppingList.name}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

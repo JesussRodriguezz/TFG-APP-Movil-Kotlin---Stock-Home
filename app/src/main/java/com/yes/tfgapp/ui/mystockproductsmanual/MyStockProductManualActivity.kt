@@ -36,8 +36,11 @@ class MyStockProductManualActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMyStockProductManualBinding
     private lateinit var mStockViewModel: MyStockViewModel
-    private var chooseCategoryAdapter: ChooseCategoryAdapterManual = ChooseCategoryAdapterManual()
+    private var chooseCategoryAdapter: ChooseCategoryAdapterManual = ChooseCategoryAdapterManual(
+        onChangeCategory= {changeCategorySelected()}
+    )
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
+    private var selectedCategory: Int = 14
 
     private val icons = listOf(
         R.drawable.ic_fyv,
@@ -104,9 +107,6 @@ class MyStockProductManualActivity : AppCompatActivity() {
         initListeners()
     }
 
-    interface OnIconSelectedListener {
-        fun onIconSelected(selectedIcon: Int)
-    }
 
     private fun initUI() {
 
@@ -272,7 +272,8 @@ class MyStockProductManualActivity : AppCompatActivity() {
                 name = name,
                 image = imageUrl.toString(),
                 expirationDate = expirationDate,
-                daysToExpire = daysToExpire
+                daysToExpire = daysToExpire,
+                categoryId = selectedCategory
             )
         } else {
             StockProductModel(
@@ -280,7 +281,8 @@ class MyStockProductManualActivity : AppCompatActivity() {
                 name = name,
                 icon = selectedIconResource,
                 expirationDate = expirationDate,
-                daysToExpire = daysToExpire
+                daysToExpire = daysToExpire,
+                categoryId = selectedCategory
             )
         }
 
@@ -323,6 +325,8 @@ class MyStockProductManualActivity : AppCompatActivity() {
             val categoryId = FixedCategories.getCategoryIdByIcon(selectedIcon)
             val categoryName = FixedCategories.getCategoryNameById(categoryId)
 
+            selectedCategory = categoryId
+
             binding.ivCategoryIcon.setImageResource(selectedIcon)
             binding.tvCategoryName.text = categoryName
             changeVisibilities()
@@ -340,6 +344,10 @@ class MyStockProductManualActivity : AppCompatActivity() {
         binding.rvCategories.visibility = View.GONE
         binding.llCategorySuggested.visibility = View.VISIBLE
         binding.tvChangeCategory.visibility = View.VISIBLE
+    }
+
+    private fun changeCategorySelected(){
+        selectedCategory =chooseCategoryAdapter.publicCategoriesList[chooseCategoryAdapter.selectedItemPosition].id
     }
 
     private fun updateButtonStates(selectedButton: Button, otherButtons: List<Button>) {

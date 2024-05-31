@@ -47,7 +47,8 @@ class ChooseShoppingListAdapter(
             binding.progressBar.setDividerColorResource(progressBarColor)
 
             val product = ProductModel(
-                name = stockProduct.name
+                name = stockProduct.name,
+                categoryId = stockProduct.categoryId
             )
 
             binding.root.setOnClickListener {

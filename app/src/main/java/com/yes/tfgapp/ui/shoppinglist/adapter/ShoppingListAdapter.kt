@@ -41,10 +41,13 @@ class ShoppingListAdapter(
                 0
             }
             val progressBarColor = when {
-                percentage == 100 -> R.color.progress5
-                percentage >= 75 -> R.color.progress4
-                percentage >= 50 -> R.color.progress3
-                percentage >= 25 -> R.color.progress2
+                percentage == 100 -> R.color.progress8
+                percentage >= 80 -> R.color.progress7
+                percentage >= 65 -> R.color.progress6
+                percentage >= 50 -> R.color.progress5
+                percentage >= 35 -> R.color.progress4
+                percentage >= 20 -> R.color.progress5
+                percentage >= 5 -> R.color.progress2
                 else -> R.color.progress1
             }
 

@@ -20,9 +20,13 @@
 
 
     <!--Colores para la bar de la lista de compra-->
-    <color name="progress1" >#756C6C</color>
-    <color name="progress2" >#CF911F</color>
-    <color name="progress3" >#CCCC21</color>
-    <color name="progress4" >#187A18</color>
-    <color name="progress5" >#1C1C91</color>
+    <color name="progress1" >#6C6562</color>
+    <color name="progress2" >#DA512F</color>
+    <color name="progress3" >#C5902C</color>
+    <color name="progress4" >#C6BB2A</color>
+    <color name="progress5" >#79B827</color>
+    <color name="progress6" >#26B3A8</color>
+    <color name="progress7" >#1C82CF</color>
+    <color name="progress8" >#1818B1</color>
+
 </resources>
