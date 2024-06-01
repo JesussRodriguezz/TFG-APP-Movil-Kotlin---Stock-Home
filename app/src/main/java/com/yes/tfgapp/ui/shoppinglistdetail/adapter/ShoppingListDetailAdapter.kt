@@ -59,7 +59,6 @@ class ShoppingListDetailAdapter(
                     println("Product bought")
                 }
             }
-
         }
 
         private fun animateIconChange(

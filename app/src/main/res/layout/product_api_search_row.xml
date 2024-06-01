@@ -46,7 +46,6 @@
         android:layout_gravity="center_vertical"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_add"
-        app:tint="@color/black"
         android:contentDescription="@string/ibboughtproduct" />
 
 

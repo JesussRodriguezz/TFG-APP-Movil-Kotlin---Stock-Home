@@ -1,5 +1,8 @@
 package com.yes.tfgapp.ui.searchproducts
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
@@ -10,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -55,7 +59,7 @@ class SearchProductsFragment : Fragment() {
     private var productsAdapter: ProductSearchAdapter = ProductSearchAdapter(
         onAddProductToList = { product, position -> addProductToList(product, position) },
         getCategoryById = { id, callback -> getCategoryById(id, callback) },
-        changeCategory = { product, position -> changeCategory(product, position) },
+        changeCategory = { product, position, isproductadded -> changeCategory(product, position,isproductadded) },
         onDeleteProductFromList = { product -> deleteProductFromList(product) }
     )
     private var chooseCategoryAdapter: ChooseCategoryAdapter = ChooseCategoryAdapter()
@@ -67,7 +71,6 @@ class SearchProductsFragment : Fragment() {
 
     var searchModeLocal: Boolean = true
     private lateinit var retrofit: Retrofit
-
 
 
     override fun onCreateView(
@@ -165,7 +168,9 @@ class SearchProductsFragment : Fragment() {
         class.java]
         mShoppingListDetailViewModel.allProductsShoppingListLiveData.observe(viewLifecycleOwner) { productsInShoppingList ->
             productsAdapter.setProductsInShoppingList(productsInShoppingList)
+            productSearchApiAdapter.setProductsInShoppingList(productsInShoppingList)
         }
+
 
         binding.rvProductsSearchApi.setHasFixedSize(true)
         binding.rvProductsSearchApi.layoutManager = LinearLayoutManager(requireContext())
@@ -173,6 +178,11 @@ class SearchProductsFragment : Fragment() {
 
         mShoppingListAddItemsViewModel =
             ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
+
+        mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner) { products ->
+            productSearchApiAdapter.setProductList(products)
+            productsAdapter.notifyDataSetChanged()
+        }
 
         val productSearchRecyclerView = binding.rvProductsSearch
         productSearchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -233,11 +243,16 @@ class SearchProductsFragment : Fragment() {
                     (activity as MainActivity).runOnUiThread {
                         val filteredProducts = response.products.filter {
                             val productName = it.productName ?: ""
-                            productName.isNotBlank() && productName.contains(query.orEmpty(), ignoreCase = true)
+                            productName.isNotBlank() && productName.contains(
+                                query.orEmpty(),
+                                ignoreCase = true
+                            )
                         }
                         if (filteredProducts.isEmpty()) {
-                            Toast.makeText(requireContext(),
-                                getString(R.string.not_products_found), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.not_products_found), Toast.LENGTH_SHORT
+                            ).show()
                             productSearchApiAdapter.setData(emptyList())
                         } else {
                             productSearchApiAdapter.setData(filteredProducts)
@@ -247,8 +262,10 @@ class SearchProductsFragment : Fragment() {
                 } else {
                     Log.i("yes", "Respuesta vacía")
                     (activity as MainActivity).runOnUiThread {
-                        Toast.makeText(requireContext(),
-                            getString(R.string.error_obtaining_data), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.error_obtaining_data), Toast.LENGTH_SHORT
+                        ).show()
                         productSearchApiAdapter.setData(emptyList())
                         binding.progressBar.isVisible = false
                     }
@@ -257,8 +274,10 @@ class SearchProductsFragment : Fragment() {
             } else {
                 Log.i("yes", "No funciona")
                 (activity as MainActivity).runOnUiThread {
-                    Toast.makeText(requireContext(),
-                        getString(R.string.error_with_search), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.error_with_search), Toast.LENGTH_SHORT
+                    ).show()
                     productSearchApiAdapter.setData(emptyList())
                     binding.progressBar.isVisible = false
                 }
@@ -319,17 +338,51 @@ class SearchProductsFragment : Fragment() {
         }
     }
 
-    private fun changeCategory(product: ProductModel, position: Int) {
+    private fun changeCategory(product: ProductModel, position: Int, isProductAdded:Boolean) {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_change_category)
         configureDialog(dialog, product, position)
+        if (isProductAdded) {
+            dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory)
+                .setImageResource(R.drawable.ic_check)
+        }else{
+            dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory)
+                .setImageResource(R.drawable.ic_add)
+        }
         dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory)
             .setOnClickListener {
-                addProductWithNewCategory(product, position)
+                if (isProductAdded) {
+                    animateIconChange(
+                        dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory),
+                        R.drawable.ic_add
+                    ) {
+                        deleteProductFromList(product)
+                        dialog.dismiss()
+                    }
+                } else {
+                    animateIconChange(
+                        dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory),
+                        R.drawable.ic_check
+                    ) {
+                        addProductWithNewCategory(product, position)
+                        dialog.dismiss()
+                    }
+                }
+                /*animateIconChange(
+                    dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory),
+                    R.drawable.ic_check
+                ) {
+                    addProductWithNewCategory(product, position)
+                    dialog.dismiss()
+                }*/
+
             }
         dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).setOnClickListener {
-            updateCategoryProduct(product)
+            animateButtonClick(dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory)) {
+                updateCategoryProduct(product, dialog)
+            }
+
         }
         dialog.show()
         dialog.setOnDismissListener {
@@ -363,12 +416,16 @@ class SearchProductsFragment : Fragment() {
         chooseCategoryAdapter.setFirstTimeClick()
     }
 
-    private fun updateCategoryProduct(product: ProductModel) {
+    private fun updateCategoryProduct(product: ProductModel, dialog: Dialog) {
         val categorySelected = chooseCategoryAdapter.selectedItemPosition
         val category = chooseCategoryAdapter.publicCategoriesList[categorySelected]
         val newProduct = product.copy(categoryId = category.id)
         mShoppingListAddItemsViewModel.updateProduct(newProduct)
         chooseCategoryAdapter.notifyDataSetChanged()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            dialog.dismiss()
+        }, 500)
     }
 
     private fun addProductWithNewCategory(product: ProductModel, position: Int) {
@@ -387,6 +444,63 @@ class SearchProductsFragment : Fragment() {
         )
         mShoppingListAddItemsViewModel.deleteProductFromList(productShoppingList)
     }
+
+    private fun animateIconChange(
+        imageButton: ImageButton,
+        newIconResId: Int,
+        onAnimationEnd: () -> Unit
+    ) {
+        imageButton.setImageResource(newIconResId)
+        imageButton.scaleX = 0.8f
+        imageButton.scaleY = 0.8f
+        imageButton.animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(100)
+            .withEndAction {
+                imageButton.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(100)
+                    .withEndAction {
+                        onAnimationEnd()
+                    }.start()
+            }.start()
+    }
+
+    private fun animateButtonClick(
+        view: View,
+        action: () -> Unit
+    ) {
+        val scaleXUp = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.1f)
+        val scaleYUp = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.1f)
+        val scaleXDown = ObjectAnimator.ofFloat(view, "scaleX", 1.1f, 1f)
+        val scaleYDown = ObjectAnimator.ofFloat(view, "scaleY", 1.1f, 1f)
+
+        scaleXUp.duration = 100
+        scaleYUp.duration = 100
+        scaleXDown.duration = 100
+        scaleYDown.duration = 100
+
+        val animatorSet = AnimatorSet()
+        animatorSet.play(scaleXUp).with(scaleYUp).before(scaleXDown).before(scaleYDown)
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+
+        animatorSet.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+                action()
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+
+            }
+
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        animatorSet.start()
+    }
+
 
     private fun getRetrofit(): Retrofit {
         val okHttpClient = OkHttpClient.Builder()

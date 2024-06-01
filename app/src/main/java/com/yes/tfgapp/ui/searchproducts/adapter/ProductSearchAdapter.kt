@@ -14,7 +14,7 @@ import com.yes.tfgapp.domain.model.ProductShoppingListModel
 class ProductSearchAdapter(
     private val onAddProductToList: (ProductModel, Int) -> Unit,
     private val getCategoryById: (Int, (CategoryModel?) -> Unit) -> Unit,
-    private val changeCategory: (ProductModel, Int) -> Unit,
+    private val changeCategory: (ProductModel, Int, Boolean) -> Unit,
     private val onDeleteProductFromList: (ProductModel) -> Unit
 ) : RecyclerView.Adapter<ProductSearchAdapter.ProductSearchViewHolder>() {
 
@@ -30,7 +30,7 @@ class ProductSearchAdapter(
             currentItem: ProductModel,
             onAddProductToList: (ProductModel, Int) -> Unit,
             getCategoryById: (Int, (CategoryModel?) -> Unit) -> Unit,
-            changeCategory: (ProductModel, Int) -> Unit,
+            changeCategory: (ProductModel, Int,Boolean) -> Unit,
             onDeleteProductFromList: (ProductModel) -> Unit
         ) {
 
@@ -61,7 +61,7 @@ class ProductSearchAdapter(
             }
 
             binding.ivProductIcon.setOnClickListener {
-                changeCategory(currentItem, adapterPosition)
+                changeCategory(currentItem, adapterPosition, isProductAdded)
             }
 
             binding.ibAddProductToList.setOnClickListener {

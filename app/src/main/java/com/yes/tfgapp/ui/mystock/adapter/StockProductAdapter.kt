@@ -3,6 +3,7 @@ package com.yes.tfgapp.ui.mystock.adapter
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ class StockProductAdapter(
 ) : RecyclerView.Adapter<StockProductAdapter.StockProductViewHolder>() {
 
     private var stockProductList = emptyList<StockProductModel>()
+    private lateinit var context: Context
 
     inner class StockProductViewHolder(private val binding: ProductMyStockRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -44,6 +46,10 @@ class StockProductAdapter(
                 }
 
             }
+
+            val layoutParams = binding.root.layoutParams
+            layoutParams.width = (context.resources.displayMetrics.widthPixels * 0.3).toInt()
+            binding.root.layoutParams = layoutParams
         }
 
         private fun animateButtonClick(
@@ -77,6 +83,7 @@ class StockProductAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StockProductViewHolder {
+        context = parent.context
         val binding =
             ProductMyStockRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return StockProductViewHolder(binding)

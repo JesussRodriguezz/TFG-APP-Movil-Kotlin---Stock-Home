@@ -1,5 +1,6 @@
 package com.yes.tfgapp.ui.mystock
 
+import GridSpacingItemDecoration
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
@@ -166,6 +167,7 @@ class MyStockFragment : Fragment() {
 
 
     private fun getProductApi(productCode: String) {
+        println("product code: $productCode")
         CoroutineScope(Dispatchers.IO).launch {
             val myResponse: Response<StockProductResponse> =
                 retrofit.create(ProductsApiService::class.java).getProduct(productCode)
@@ -219,9 +221,14 @@ class MyStockFragment : Fragment() {
 
         val rvStockProduct = binding.rvMyStock
         rvStockProduct.adapter = stockProductAdapter
-        val layoutManager = GridLayoutManager(requireContext(), 3)
 
+        val layoutManager = GridLayoutManager(requireContext(), 3)
         rvStockProduct.layoutManager = layoutManager
+        val spacingInPixels = (resources.displayMetrics.widthPixels * 0.03).toInt() // 3% del ancho de la pantalla como margen
+        rvStockProduct.addItemDecoration(GridSpacingItemDecoration(3, spacingInPixels))
+
+
+
         mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
         mStockViewModel.readAllData.observe(viewLifecycleOwner) { stockProduct ->
             stockProductAdapter.setData(stockProduct)
