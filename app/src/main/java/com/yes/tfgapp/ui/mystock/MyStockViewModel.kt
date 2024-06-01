@@ -32,6 +32,32 @@ class MyStockViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun addProductIfNotExistsSameName(stockProduct: StockProductModel, callback: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val existingStockProduct = stockProductRepository.getStockProductByProductName(stockProduct.name)
+            println("existingStockProduct: $existingStockProduct")
+            if (existingStockProduct == null) {
+                stockProductRepository.addStockProduct(stockProduct)
+                callback(true) // Indica que el producto se añadió correctamente
+            } else {
+                callback(false) // Indica que el producto ya existe
+            }
+        }
+    }
+
+    fun addProductIfNotExists(stockProduct: StockProductModel, callback: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val existingStockProduct = stockProductRepository.getStockProductByProductId(stockProduct.id)
+            println("existingStockProduct: $existingStockProduct")
+            if (existingStockProduct == null) {
+                stockProductRepository.addStockProduct(stockProduct)
+                callback(true) // Indica que el producto se añadió correctamente
+            } else {
+                callback(false) // Indica que el producto ya existe
+            }
+        }
+    }
+
     fun updateStockProduct(stockProduct: StockProductModel) {
         viewModelScope.launch(Dispatchers.IO) {
             stockProductRepository.updateStockProduct(stockProduct)

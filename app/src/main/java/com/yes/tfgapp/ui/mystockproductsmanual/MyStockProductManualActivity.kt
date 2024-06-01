@@ -286,8 +286,18 @@ class MyStockProductManualActivity : AppCompatActivity() {
             )
         }
 
-        Toast.makeText(this, "Producto agregado: $name", Toast.LENGTH_SHORT).show()
-        mStockViewModel.addProduct(stockProduct)
+        //Toast.makeText(this, "Producto agregado: $name", Toast.LENGTH_SHORT).show()
+        //mStockViewModel.addProduct(stockProduct)
+
+        mStockViewModel.addProductIfNotExistsSameName(stockProduct) { productAdded ->
+            runOnUiThread {
+                if (productAdded) {
+                    Toast.makeText(this, "Producto añadido correctamente", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "¡El producto ya existe en tu stock!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         finish()
     }
 

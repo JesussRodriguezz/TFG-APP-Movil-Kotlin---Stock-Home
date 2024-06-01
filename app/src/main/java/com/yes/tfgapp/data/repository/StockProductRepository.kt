@@ -55,4 +55,14 @@ class StockProductRepository(private val stockProductDao: StockProductDao) {
     fun getStockProductsOrderedByExpiryDateDesc(): LiveData<List<StockProductModel>> {
         return stockProductDao.getStockProductsOrderedByExpiryDateDesc()
     }
+
+    fun getStockProductByProductId(productId: String): StockProductModel {
+        return stockProductDao.getStockProductByProductId(productId)
+
+    }
+
+    fun getStockProductByProductName(name: String): StockProductModel {
+        return stockProductDao.getStockProductByProductName(name)
+
+    }
 }

@@ -27,8 +27,12 @@
         android:windowSoftInputMode="stateVisible|adjustResize"
         tools:targetApi="31">
         <activity
+            android:name=".ui.mystockproductscan.MyStockProductScanActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.mystockproductsmanual.MyStockProductManualActivity"
             android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.yes.tfgapp.ui.mystockproductsmanual.FileProvider"
@@ -54,8 +58,6 @@
             android:screenOrientation="fullSensor"
             android:theme="@style/zxing_CaptureTheme"
             tools:replace="android:screenOrientation" />
-
     </application>
-
 
 </manifest>

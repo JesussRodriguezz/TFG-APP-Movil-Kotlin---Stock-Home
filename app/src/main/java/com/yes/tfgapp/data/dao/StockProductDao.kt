@@ -51,4 +51,10 @@ interface StockProductDao {
 
     @Query("SELECT * FROM stock_product ORDER BY expirationDate DESC")
     fun getStockProductsOrderedByExpiryDateDesc(): LiveData<List<StockProductModel>>
+
+    @Query("SELECT * FROM stock_product WHERE id = :productId LIMIT 1")
+    fun getStockProductByProductId(productId: String): StockProductModel
+
+    @Query("SELECT * FROM stock_product WHERE name = :name LIMIT 1")
+    fun getStockProductByProductName(name: String): StockProductModel
 }

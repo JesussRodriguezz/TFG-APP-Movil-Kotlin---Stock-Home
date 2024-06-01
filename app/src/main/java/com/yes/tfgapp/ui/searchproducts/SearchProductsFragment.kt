@@ -5,6 +5,8 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Application
 import android.app.Dialog
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -195,7 +197,11 @@ class SearchProductsFragment : Fragment() {
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!searchModeLocal) {
-                    searchByProductName(query)
+                    if (isNetworkAvailable(requireContext())) {
+                        searchByProductName(query)
+                    } else {
+                        Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 return false
             }
@@ -501,6 +507,11 @@ class SearchProductsFragment : Fragment() {
         animatorSet.start()
     }
 
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnected
+    }
 
     private fun getRetrofit(): Retrofit {
         val okHttpClient = OkHttpClient.Builder()

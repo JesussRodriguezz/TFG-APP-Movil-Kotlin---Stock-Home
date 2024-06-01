@@ -3,22 +3,19 @@ package com.yes.tfgapp.ui.mystock
 import GridSpacingItemDecoration
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.app.Application
 import android.app.Dialog
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -49,8 +46,8 @@ import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.adapter.ChooseShoppingListAdapter
 import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
 import com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment
+import com.yes.tfgapp.ui.mystockproductscan.MyStockProductScanActivity
 import com.yes.tfgapp.ui.mystockproductsmanual.MyStockProductManualActivity
-import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailViewModel
@@ -62,6 +59,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.SocketTimeoutException
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
@@ -117,7 +115,11 @@ class MyStockFragment : Fragment() {
         }
 
     private fun setResult(string: String) {
-        getProductApi(string)
+        if (isNetworkAvailable(requireContext())) {
+            getProductApi(string)
+        } else {
+            Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onResume() {
@@ -138,6 +140,7 @@ class MyStockFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMyStockBinding.inflate(inflater, container, false)
+
         initUI()
         retrofit = getRetrofit()
         initListeners()
@@ -169,29 +172,52 @@ class MyStockFragment : Fragment() {
     private fun getProductApi(productCode: String) {
         println("product code: $productCode")
         CoroutineScope(Dispatchers.IO).launch {
-            val myResponse: Response<StockProductResponse> =
-                retrofit.create(ProductsApiService::class.java).getProduct(productCode)
-            if (myResponse.isSuccessful) {
-                val response: StockProductResponse? = myResponse.body()
-                if (response != null) {
+            try {
+                val myResponse: Response<StockProductResponse> =
+                    retrofit.create(ProductsApiService::class.java).getProduct(productCode)
+                if (myResponse.isSuccessful) {
+                    val response: StockProductResponse? = myResponse.body()
                     withContext(Dispatchers.Main) {
                         openProductDetailDialog(response)
                     }
+                    Log.i("yes", "funciona :)")
                 } else {
                     withContext(Dispatchers.Main) {
                         openProductDetailDialog(null)
                     }
+                    Log.i("yes", "No funciona")
                 }
-                Log.i("yes", "funciona :)")
-            } else {
-                Log.i("yes", "No funciona")
+            } catch (e: SocketTimeoutException) {
+                withContext(Dispatchers.Main) {
+                    // Manejar la excepción y mostrar un mensaje al usuario
+                    Log.e("yes", "Tiempo de espera agotado", e)
+                    // Mostrar mensaje de error al usuario
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    // Manejar otras excepciones
+                    Log.e("yes", "Error desconocido", e)
+                    // Mostrar mensaje de error al usuario
+                }
             }
         }
     }
 
     private fun openProductDetailDialog(product: StockProductResponse?) {
-        currentDialog?.dismiss()
-        val stockProduct = if (product != null) {
+
+        if(product!=null){
+            val stockProduct = StockProductModel(
+                id = product.code,
+                name = product.product.productName,
+                image = product.product.productImage
+            )
+            val intent = Intent(activity, MyStockProductScanActivity::class.java)
+            intent.putExtra("currentStockProduct", stockProduct)
+            startActivity(intent)
+        }else{
+            Toast.makeText(context, "Producto no encontrado", Toast.LENGTH_SHORT).show()
+        }
+        /*val stockProduct = if (product != null) {
             StockProductModel(
                 id = product.code,
                 name = product.product.productName,
@@ -205,14 +231,10 @@ class MyStockFragment : Fragment() {
             )
         }
 
-        val dialogFragment = MyStockProductDetailFragment()
-        dialogFragment.arguments = Bundle().apply {
-            putParcelable("currentStockProduct", stockProduct)
-        }
-        (activity as MainActivity).hideBottomNav()
-        (activity as MainActivity).hideToolbar()
-        currentDialog = dialogFragment
-        dialogFragment.show(childFragmentManager, "MyStockProductDetailFragment")
+        val intent = Intent(activity, MyStockProductScanActivity::class.java)
+        intent.putExtra("currentStockProduct", stockProduct)
+        startActivity(intent)*/
+
 
     }
 
@@ -434,6 +456,8 @@ class MyStockFragment : Fragment() {
                         categoryId = stockProduct.categoryId
                     )
                     val singleShoppingList = shoppingLists[0]
+                    println("name stock product: ${stockProduct.name}")
+                    println("category id stock product: ${stockProduct.categoryId}")
                     addExternalProductToList(product, singleShoppingList, null, stockProduct)
 
                 }
@@ -484,6 +508,10 @@ class MyStockFragment : Fragment() {
             )
         )[ShoppingListDetailViewModel::class.java]
 
+        println("product name: ${product.name}")
+        println("product category id: ${product.categoryId}")
+        println("shopping list id: ${shoppingList.id}")
+
         mShoppingListAddItemsViewModel.addProduct(product)
         observeProductIDAndAddToList(shoppingList, dialog, stockProduct)
     }
@@ -500,6 +528,8 @@ class MyStockFragment : Fragment() {
                         shoppingListId = shoppingList.id,
                         productId = productId.toInt()
                     )
+                    println("product id: ${productShoppingList.productId}")
+                    println("shopping list id: ${productShoppingList.shoppingListId}")
                     mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
                     dialog?.dismiss() // Cierra el diálogo si no es nulo
                     mStockViewModel.deleteStockProduct(stockProduct)
@@ -528,6 +558,11 @@ class MyStockFragment : Fragment() {
         }
     }
 
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnected
+    }
 
     private fun getRetrofit(): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
