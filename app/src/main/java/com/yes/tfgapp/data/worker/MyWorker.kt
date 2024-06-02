@@ -59,6 +59,9 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
         }
 
         allStockProducts?.forEach { product ->
+            if(product.expirationDate=="__ / __ / ____"){
+                return@forEach
+            }
             val expireDate = product.expirationDate
             val currentDate = Calendar.getInstance()
             val daysToExpire = daysBetweenDates(

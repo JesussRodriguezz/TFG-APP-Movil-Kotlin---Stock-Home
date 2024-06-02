@@ -1,6 +1,7 @@
 package com.yes.tfgapp.ui.mystockproductsmanual
 
 
+import android.app.Dialog
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.core.app.ActivityCompat
@@ -8,10 +9,14 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +30,7 @@ import com.yes.tfgapp.ui.mystockproductsmanual.adapter.ChooseCategoryAdapterManu
 import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import java.io.File
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -37,7 +43,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMyStockProductManualBinding
     private lateinit var mStockViewModel: MyStockViewModel
     private var chooseCategoryAdapter: ChooseCategoryAdapterManual = ChooseCategoryAdapterManual(
-        onChangeCategory= {changeCategorySelected()}
+        onChangeCategory = { changeCategorySelected() }
     )
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
     private var selectedCategory: Int = 14
@@ -63,6 +69,8 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private var selectedExpireDateButton: Button? = null
     private lateinit var imageUrl: Uri
     private lateinit var captureIV: ImageView
+
+    private var expireData :String = "__ / __ / ____"
 
     private val cameraPermissionLauncher =
         registerForActivityResult(RequestPermission()) { isGranted ->
@@ -110,8 +118,12 @@ class MyStockProductManualActivity : AppCompatActivity() {
 
     private fun initUI() {
 
+
+
         binding.ivCategoryIcon.setImageResource(R.drawable.ic_others_category)
         binding.tvCategoryName.text = "Otros"
+
+        binding.tvChangeExpireData.text = expireData
 
         imageUrl = createImageUri()
         captureIV = binding.ivAddPhoto
@@ -138,6 +150,75 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }*/
     }
 
+    private fun configureManualData(dialog: Dialog) {
+        val npDay: NumberPicker = dialog.findViewById(R.id.npDay)
+        val npMonth: NumberPicker = dialog.findViewById(R.id.npMonth)
+        val npYear: NumberPicker = dialog.findViewById(R.id.npYear)
+
+        npDay.minValue = 1
+        npDay.maxValue = 31
+
+        val months = arrayOf(
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        )
+        npMonth.displayedValues = months
+        npMonth.minValue = 1
+        npMonth.maxValue = 12
+
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        npYear.minValue = currentYear
+        npYear.maxValue = currentYear + 100
+
+        if (expireData == "__ / __ / ____") {
+            // Set NumberPickers to the current date
+            val currentDate = Calendar.getInstance()
+            npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
+            npMonth.value = currentDate.get(Calendar.MONTH) + 1 // Months are 0-based
+            npYear.value = currentDate.get(Calendar.YEAR)
+        } else {
+            // Parse expireData
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            try {
+                val expireDate = dateFormat.parse(expireData)
+                expireDate?.let {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = it
+
+                    npDay.value = calendar.get(Calendar.DAY_OF_MONTH)
+                    npMonth.value = calendar.get(Calendar.MONTH) + 1 // Months are 0-based
+                    npYear.value = calendar.get(Calendar.YEAR)
+                }
+            } catch (e: ParseException) {
+                e.printStackTrace()
+                // Set NumberPickers to the current date if parsing fails
+                val currentDate = Calendar.getInstance()
+                npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
+                npMonth.value = currentDate.get(Calendar.MONTH) + 1
+                npYear.value = currentDate.get(Calendar.YEAR)
+            }
+        }
+
+        dialog.findViewById<Button>(R.id.btnOk).setOnClickListener {
+            val day = npDay.value
+            val month = npMonth.value
+            val year = npYear.value
+
+            expireData = "$day/$month/$year"
+
+            val formattedDate = formatDate(day, month, year)
+
+            binding.tvChangeExpireData.text = formattedDate
+
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+            dialog.dismiss()
+        }
+    }
+
+
     private fun createImageUri(): Uri {
         val imageDir = File(filesDir, "camera_photos")
         if (!imageDir.exists()) {
@@ -156,13 +237,20 @@ class MyStockProductManualActivity : AppCompatActivity() {
             finish()
         }
         binding.btn1Week.setOnClickListener {
+            expireData = addDaysToDate(getCurrentDate(), 7)
+            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn1Week,
                 listOf(binding.btn2Weeks, binding.btn1Month, binding.btn2Months)
             )
+
         }
 
         binding.btn2Weeks.setOnClickListener {
+            expireData = addDaysToDate(getCurrentDate(), 14)
+            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn2Weeks,
                 listOf(binding.btn1Week, binding.btn1Month, binding.btn2Months)
@@ -170,6 +258,9 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
 
         binding.btn1Month.setOnClickListener {
+            expireData = addDaysToDate(getCurrentDate(), 30)
+            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn1Month,
                 listOf(binding.btn1Week, binding.btn2Weeks, binding.btn2Months)
@@ -177,6 +268,9 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
 
         binding.btn2Months.setOnClickListener {
+            expireData = addDaysToDate(getCurrentDate(), 60)
+            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn2Months,
                 listOf(binding.btn1Week, binding.btn1Month, binding.btn2Weeks)
@@ -202,18 +296,54 @@ class MyStockProductManualActivity : AppCompatActivity() {
             } else {
                 View.VISIBLE
             }
-            binding.llCategorySuggested.visibility = if (binding.llCategorySuggested.visibility == View.VISIBLE) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            }
-            binding.tvChangeCategory.visibility = if (binding.tvChangeCategory.visibility == View.VISIBLE) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            }
+            binding.llCategorySuggested.visibility =
+                if (binding.llCategorySuggested.visibility == View.VISIBLE) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+            binding.tvChangeCategory.visibility =
+                if (binding.tvChangeCategory.visibility == View.VISIBLE) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+        }
+
+        binding.cvChangeExpireData.setOnClickListener {
+            showChangeExpireDataDialog()
         }
     }
+
+    private fun formatDate(day: Int, month: Int, year: Int): String {
+        val months = arrayOf(
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        )
+        return String.format("%02d/%s/%d", day, months[month - 1], year)
+    }
+
+    private fun formatDate(date: Date): String {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH)
+        val year = calendar.get(Calendar.YEAR)
+        return formatDate(day, month + 1, year)
+    }
+
+    private fun showChangeExpireDataDialog() {
+
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_change_expire_data)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        configureManualData(dialog)
+        dialog.show()
+    }
+
 
     private fun checkAndRequestPermissions(): Boolean {
         val cameraPermission =
@@ -264,14 +394,15 @@ class MyStockProductManualActivity : AppCompatActivity() {
             binding.btn2Months -> addDaysToDate(getCurrentDate(), 60)
             else -> getCurrentDate()
         }
-        val daysToExpire = daysBetweenDates(getCurrentDate(), expirationDate).toInt()
+        //val daysToExpire = daysBetweenDates(getCurrentDate(), expirationDate).toInt()
+        val daysToExpire = daysBetweenDates(getCurrentDate(), expireData).toInt()
 
         val stockProduct = if (isPhotoSelected) {
             StockProductModel(
                 id = UUID.randomUUID().toString(),
                 name = name,
                 image = imageUrl.toString(),
-                expirationDate = expirationDate,
+                expirationDate = expireData,
                 daysToExpire = daysToExpire,
                 categoryId = selectedCategory
             )
@@ -280,7 +411,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
                 id = UUID.randomUUID().toString(),
                 name = name,
                 icon = selectedIconResource,
-                expirationDate = expirationDate,
+                expirationDate = expireData,
                 daysToExpire = daysToExpire,
                 categoryId = selectedCategory
             )
@@ -292,9 +423,11 @@ class MyStockProductManualActivity : AppCompatActivity() {
         mStockViewModel.addProductIfNotExistsSameName(stockProduct) { productAdded ->
             runOnUiThread {
                 if (productAdded) {
-                    Toast.makeText(this, "Producto añadido correctamente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Producto añadido correctamente", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
-                    Toast.makeText(this, "¡El producto ya existe en tu stock!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡El producto ya existe en tu stock!", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -310,12 +443,14 @@ class MyStockProductManualActivity : AppCompatActivity() {
     }
 
     private fun daysBetweenDates(startDate: String, endDate: String): Long {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val start = dateFormat.parse(startDate)
-        val end = dateFormat.parse(endDate)
-        if (start != null && end != null) {
-            val diffInMillis = end.time - start.time
-            return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS)
+        if(expireData!="__ / __ / ____"){
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val start = dateFormat.parse(startDate)
+            val end = dateFormat.parse(endDate)
+            if (start != null && end != null) {
+                val diffInMillis = end.time - start.time
+                return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS)
+            }
         }
         return 0
     }
@@ -356,8 +491,9 @@ class MyStockProductManualActivity : AppCompatActivity() {
         binding.tvChangeCategory.visibility = View.VISIBLE
     }
 
-    private fun changeCategorySelected(){
-        selectedCategory =chooseCategoryAdapter.publicCategoriesList[chooseCategoryAdapter.selectedItemPosition].id
+    private fun changeCategorySelected() {
+        selectedCategory =
+            chooseCategoryAdapter.publicCategoriesList[chooseCategoryAdapter.selectedItemPosition].id
     }
 
     private fun updateButtonStates(selectedButton: Button, otherButtons: List<Button>) {

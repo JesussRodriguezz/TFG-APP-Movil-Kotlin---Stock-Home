@@ -28,6 +28,7 @@
             android:paddingVertical="4dp"
             android:paddingHorizontal="8dp"
             android:background="@color/semiTransparentLight"
+            android:visibility="invisible"
 
             />
 
@@ -99,7 +100,9 @@
                 android:text="@string/expiration_date"
                 android:textColor="@color/black"
                 android:textSize="12sp"
-                tools:text="23/05/2024" />
+                tools:text="23/05/2024"
+                android:visibility="invisible"
+                />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

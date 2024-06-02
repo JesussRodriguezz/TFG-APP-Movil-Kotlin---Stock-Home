@@ -82,5 +82,9 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+        <style name="NumberPickerStyle">
+            <item name="android:textColorSecondary">@color/transparent</item>
+        </style>
+
 
 </resources>

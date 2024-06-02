@@ -67,7 +67,6 @@ import java.util.concurrent.TimeUnit
 class MyStockFragment : Fragment() {
 
     private lateinit var binding: FragmentMyStockBinding
-    private var currentDialog: MyStockProductDetailFragment? = null
     private var rotate = false
 
     private lateinit var chooseShoppingListAdapter: ChooseShoppingListAdapter

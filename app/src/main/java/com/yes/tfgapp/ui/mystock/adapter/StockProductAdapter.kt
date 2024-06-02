@@ -27,6 +27,13 @@ class StockProductAdapter(
             currentItem: StockProductModel,
             onClickDelete: (StockProductModel) -> Unit
         ) {
+            if(currentItem.expirationDate!="__ / __ / ____"){
+                binding.tvStockProductExpireDate.visibility = View.VISIBLE
+                binding.tvStockProductDaysToExpire.visibility = View.VISIBLE
+            }else{
+                binding.tvStockProductExpireDate.visibility = View.INVISIBLE
+                binding.tvStockProductDaysToExpire.visibility = View.INVISIBLE
+            }
             binding.tvStockProductName.text = currentItem.name
             binding.tvStockProductExpireDate.text = currentItem.expirationDate
             binding.tvStockProductDaysToExpire.text = currentItem.daysToExpire.toString()
