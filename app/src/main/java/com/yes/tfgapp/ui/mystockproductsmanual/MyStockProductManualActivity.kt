@@ -205,6 +205,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
             val year = npYear.value
 
             expireData = "$day/$month/$year"
+            println("expireData: $expireData")
 
             val formattedDate = formatDate(day, month, year)
 
@@ -214,6 +215,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+            println("CANCELAR")
             dialog.dismiss()
         }
     }
@@ -268,7 +270,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
 
         binding.btn2Months.setOnClickListener {
-            expireData = addDaysToDate(getCurrentDate(), 60)
+            expireData = addDaysToDate(getCurrentDate(), 90)
             binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
             //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
