@@ -20,6 +20,20 @@ data class StockProductModel (
     val addedDate: String = getCurrentDate(),
     var daysToExpire: Int = 0,
     var categoryId: Int = 0,
+    var nutriscoreGrade: String = "",
+    var nutriscoreScore: Int = 0,
+    var ingredientsText: String = "",
+    var ingredientsTextEs: String = "",
+    var quantity: String = "",
+    var fatLevel: String = "",
+    var saltLevel: String = "",
+    var saturatedFatLevel: String = "",
+    var sugarsLevel: String = "",
+    var calories: String = "",
+    var fat: String = "",
+    var saturatedFat: String = "",
+    var carbohydrates: String = "",
+    var salt: String = ""
 
 ): Parcelable {
     companion object {

@@ -15,7 +15,8 @@ import com.yes.tfgapp.databinding.ProductMyStockRowBinding
 import com.yes.tfgapp.domain.model.StockProductModel
 
 class StockProductAdapter(
-    private val onClickDelete: (StockProductModel) -> Unit
+    private val onClickDelete: (StockProductModel) -> Unit,
+    private val onClickDetail: (StockProductModel) -> Unit
 ) : RecyclerView.Adapter<StockProductAdapter.StockProductViewHolder>() {
 
     private var stockProductList = emptyList<StockProductModel>()
@@ -37,7 +38,6 @@ class StockProductAdapter(
             binding.tvStockProductName.text = currentItem.name
             binding.tvStockProductExpireDate.text = currentItem.expirationDate
             binding.tvStockProductDaysToExpire.text = currentItem.daysToExpire.toString()
-            println("CURRENT DATE: "+currentItem.addedDate)
 
             if (currentItem.image != null) {
                 Picasso.get().load(currentItem.image).into(binding.ivStockProduct)
@@ -57,6 +57,12 @@ class StockProductAdapter(
             val layoutParams = binding.root.layoutParams
             layoutParams.width = (context.resources.displayMetrics.widthPixels * 0.3).toInt()
             binding.root.layoutParams = layoutParams
+
+            binding.root.setOnClickListener {
+                animateButtonClick(binding.root){
+                    onClickDetail(currentItem)
+                }
+            }
         }
 
         private fun animateButtonClick(
@@ -78,7 +84,9 @@ class StockProductAdapter(
             animatorSet.interpolator = AccelerateDecelerateInterpolator()
 
             animatorSet.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationStart(animation: Animator) {
+
+                }
                 override fun onAnimationEnd(animation: Animator) {
                     action()
                 }

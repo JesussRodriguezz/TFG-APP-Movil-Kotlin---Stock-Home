@@ -48,6 +48,7 @@ import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
 import com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment
 import com.yes.tfgapp.ui.mystockproductscan.MyStockProductScanActivity
 import com.yes.tfgapp.ui.mystockproductsmanual.MyStockProductManualActivity
+import com.yes.tfgapp.ui.nystockproductdetail.MyStockProductDetailActivity
 import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import com.yes.tfgapp.ui.shoppinglistdetail.ShoppingListDetailViewModel
@@ -83,7 +84,8 @@ class MyStockFragment : Fragment() {
     private lateinit var retrofit: Retrofit
 
     private val stockProductAdapter = StockProductAdapter(
-        onClickDelete = { onClickDeleteStockProduct(it) }
+        onClickDelete = { onClickDeleteStockProduct(it) },
+        onClickDetail = { onClickDetailStockProduct(it) }
     )
 
     private lateinit var mStockViewModel: MyStockViewModel
@@ -208,7 +210,21 @@ class MyStockFragment : Fragment() {
             val stockProduct = StockProductModel(
                 id = product.code,
                 name = product.product.productName,
-                image = product.product.productImage
+                image = product.product.productImage,
+                nutriscoreGrade = product.product.nutriscoreGrade,
+                nutriscoreScore = product.product.nutriscoreScore,
+                ingredientsText = product.product.ingredientsText,
+                ingredientsTextEs = product.product.ingredientsTextEs,
+                quantity = product.product.quantity,
+                fatLevel = product.product.nutrimentsLevels.fat,
+                saltLevel = product.product.nutrimentsLevels.salt,
+                saturatedFatLevel = product.product.nutrimentsLevels.saturatedFat,
+                sugarsLevel = product.product.nutrimentsLevels.sugars,
+                calories = product.product.nutriments.energyKcalServing.toString() + " " + product.product.nutriments.energyKcalUnit,
+                fat = product.product.nutriments.fatServing.toString() + " " + product.product.nutriments.fatUnit,
+                saturatedFat = product.product.nutriments.saturatedFatServing.toString() + " " + product.product.nutriments.saturatedFatUnit,
+                carbohydrates = product.product.nutriments.carbohydratesServing.toString() + " " + product.product.nutriments.carbohydratesUnit,
+                salt = product.product.nutriments.saltServing.toString() + " " + product.product.nutriments.saltUnit
             )
             val intent = Intent(activity, MyStockProductScanActivity::class.java)
             intent.putExtra("currentStockProduct", stockProduct)
@@ -414,9 +430,7 @@ class MyStockFragment : Fragment() {
     }
 
     private fun onClickDeleteStockProduct(stockProduct: StockProductModel) {
-        println("stock product cat id: ${stockProduct.categoryId}")
         showDeleteDialog(stockProduct)
-        //mStockViewModel.deleteStockProduct(stockProduct)
     }
 
     private fun showDeleteDialog(stockProduct: StockProductModel) {
@@ -543,6 +557,12 @@ class MyStockFragment : Fragment() {
             viewLifecycleOwner,
             productIdObserver
         )
+    }
+
+    private fun onClickDetailStockProduct(stockProduct: StockProductModel) {
+        val intent = Intent(activity, MyStockProductDetailActivity::class.java)
+        intent.putExtra("currentStockProduct", stockProduct)
+        startActivity(intent)
     }
 
     inner class ShoppingListDetailViewModelFactory(
