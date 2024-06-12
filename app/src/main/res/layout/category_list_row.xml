@@ -42,7 +42,7 @@
             android:textSize="14sp"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintWidth_default="wrap"
-            app:layout_constraintWidth_max="100dp"
+            app:layout_constraintWidth_max="120dp"
             app:layout_constraintWidth_min="0dp"
             tools:text="Category" />
 

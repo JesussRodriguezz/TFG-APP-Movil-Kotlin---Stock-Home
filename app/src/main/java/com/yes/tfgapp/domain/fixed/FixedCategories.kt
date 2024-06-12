@@ -20,7 +20,7 @@ enum class FixedCategories(
     CONGELADOS(10,"Congelados",R.drawable.ic_congelados),
     PASTA(11,"Pasta-Granos",R.drawable.ic_gyp),
     SNACKS(12,"Snacks-Dulces",R.drawable.ic_dys),
-    LIMPIEZA(13,"Limpieza",R.drawable.ic_others_category),
+    LIMPIEZA(13,"Limpieza",R.drawable.ic_limpieza),
     OTROS(14,"Otros",R.drawable.ic_others_category);
 
     companion object {

@@ -3,6 +3,7 @@ package com.yes.tfgapp.ui.shoppinglistadditems.adapter
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,25 @@ class ShoppingListCategoriesAdapter(
             )
             binding.root.setOnClickListener {
                 onItemSelected(currentItem)
+            }
+
+            fun dpToPx(dp: Int, context: Context): Int {
+                val scale = context.resources.displayMetrics.density
+                return (dp * scale + 0.5f).toInt()
+            }
+
+            if (currentItem.isDefault) {
+                val widthInPx = dpToPx(100, binding.tvCategoryName.context) // 100dp to pixels
+                val layoutParams = binding.tvCategoryName.layoutParams
+                layoutParams.width = widthInPx
+                binding.tvCategoryName.layoutParams = layoutParams
+                binding.ibSettingsCategory.visibility = View.INVISIBLE
+            } else {
+                val widthInPx = dpToPx(85, binding.tvCategoryName.context) // 70dp to pixels
+                val layoutParams = binding.tvCategoryName.layoutParams
+                layoutParams.width = widthInPx
+                binding.tvCategoryName.layoutParams = layoutParams
+                binding.ibSettingsCategory.visibility = View.VISIBLE
             }
 
             binding.ibSettingsCategory.setOnClickListener {

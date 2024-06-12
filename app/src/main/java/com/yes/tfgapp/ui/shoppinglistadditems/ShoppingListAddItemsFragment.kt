@@ -20,6 +20,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yes.tfgapp.R
@@ -30,6 +31,8 @@ import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
+import com.yes.tfgapp.ui.mystockproductsmanual.SelectIconDialogFragment
+import com.yes.tfgapp.ui.mystockproductsmanual.adapter.ChooseCategoryAdapterManual
 import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListCategoriesAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListProductsAdapter
@@ -48,8 +51,51 @@ class ShoppingListAddItemsFragment : Fragment() {
 
     private var isCategoriesLoaded = false
     private var isProductsLoaded = false
+    private var iconSelected = R.drawable.ic_nuevacategoria1
 
+    private val icons = listOf(
 
+        R.drawable.ic_new_cat1 ,
+        R.drawable.ic_new_cat2 ,
+        R.drawable.ic_new_cat3 ,
+        R.drawable.ic_new_cat4 ,
+        R.drawable.ic_new_cat5 ,
+        R.drawable.ic_new_cat6 ,
+        R.drawable.ic_new_cat7 ,
+        R.drawable.ic_new_cat8 ,
+        R.drawable.ic_new_cat9 ,
+        R.drawable.ic_new_cat10 ,
+        R.drawable.ic_new_cat11 ,
+        R.drawable.ic_new_cat12 ,
+        R.drawable.ic_new_cat13 ,
+        R.drawable.ic_new_cat14 ,
+        R.drawable.ic_new_cat15 ,
+        R.drawable.ic_new_cat16 ,
+        R.drawable.ic_new_cat17 ,
+        R.drawable.ic_new_cat18 ,
+        R.drawable.ic_new_cat19 ,
+        R.drawable.ic_new_cat20 ,
+        R.drawable.ic_new_cat21 ,
+        R.drawable.ic_new_cat22 ,
+        R.drawable.ic_new_cat23 ,
+        R.drawable.ic_new_cat24 ,
+        R.drawable.ic_new_cat25 ,
+        R.drawable.ic_new_cat26 ,
+        R.drawable.ic_new_cat27 ,
+        R.drawable.ic_new_cat28 ,
+        R.drawable.ic_new_cat29 ,
+        R.drawable.ic_new_cat30 ,
+        R.drawable.ic_new_cat31 ,
+        R.drawable.ic_new_cat32 ,
+        R.drawable.ic_new_cat33 ,
+        R.drawable.ic_new_cat34 ,
+        R.drawable.ic_new_cat35,
+        R.drawable.ic_others_category
+    )
+
+    private var chooseCategoryAdapter: ChooseCategoryAdapterManual = ChooseCategoryAdapterManual(
+        onChangeCategory = { changeCategorySelected() }
+    )
     private val categoriesAdapter = ShoppingListCategoriesAdapter(
         onItemSelected = { position -> updateCategories(position) },
         onConfigureSelected = { category -> configureCategories(category) })
@@ -164,6 +210,11 @@ class ShoppingListAddItemsFragment : Fragment() {
         dialog.setContentView(R.layout.dialog_new_category)
         dialog.show()
 
+        val btnChangeIcon = dialog.findViewById<ShapeableImageView>(R.id.ivAddIcon)
+        btnChangeIcon.setOnClickListener {
+            showSelectIconDialog(dialog)
+        }
+
         val btnSaveCategory = dialog.findViewById<View>(R.id.btnCreateCategory)
         btnSaveCategory.setOnClickListener {
             //createNewCategory(dialog)
@@ -173,13 +224,27 @@ class ShoppingListAddItemsFragment : Fragment() {
         }
     }
 
+    private fun showSelectIconDialog(dialog_new_category: Dialog) {
+
+        val icon_new_category = dialog_new_category.findViewById<ShapeableImageView>(R.id.ivAddIcon)
+        val dialog = SelectIconDialogFragment(icons) { selectedIcon ->
+            icon_new_category.setImageResource(selectedIcon)
+            iconSelected = selectedIcon
+        }
+        dialog.show(parentFragmentManager, "SelectIconDialogFragment")
+    }
+
+    private fun changeCategorySelected() {
+
+    }
+
     private fun createNewCategory(dialog: Dialog) {
         val newCategoryName =
             dialog.findViewById<TextInputEditText>(R.id.etNewCategoryName).text.toString()
 
         if (newCategoryName.isNotEmpty()) {
             val newCategory =
-                CategoryModel(id = 0, name = newCategoryName, isSelected = false, isDefault = false)
+                CategoryModel(id = 0, name = newCategoryName, isSelected = false, isDefault = false, icon = iconSelected)
             mShoppingListAddItemsViewModel.addCategory(newCategory)
             Toast.makeText(
                 requireContext(),
@@ -266,9 +331,16 @@ class ShoppingListAddItemsFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_configure_category)
+        val ivCategoryIcon = dialog.findViewById<ShapeableImageView>(R.id.ivAddIcon)
+        ivCategoryIcon.setImageResource(category.icon)
+        iconSelected = category.icon
         dialog.show()
         val textInputLayout: TextInputLayout = dialog.findViewById(R.id.tilUpdateNameCategory)
         textInputLayout.hint = category.name
+
+        ivCategoryIcon.setOnClickListener {
+            showSelectIconDialog(dialog)
+        }
 
         val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChangesCategory)
         btnSaveChanges.setOnClickListener {
@@ -279,7 +351,7 @@ class ShoppingListAddItemsFragment : Fragment() {
                     category.id,
                     newName,
                     category.isSelected,
-                    icon = category.icon,
+                    icon = iconSelected,
                     isDefault = category.isDefault
                 )
                 if (newName.isNotEmpty()) {
