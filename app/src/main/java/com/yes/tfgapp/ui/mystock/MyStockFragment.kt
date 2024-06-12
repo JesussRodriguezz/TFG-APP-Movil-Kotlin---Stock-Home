@@ -117,6 +117,7 @@ class MyStockFragment : Fragment() {
 
     private fun setResult(string: String) {
         if (isNetworkAvailable(requireContext())) {
+            println("string: $string")
             getProductApi(string)
         } else {
             Toast.makeText(context, "No hay conexión a internet", Toast.LENGTH_SHORT).show()
@@ -213,7 +214,7 @@ class MyStockFragment : Fragment() {
                 image = product.product.productImage,
                 isScanned = true,
 
-                nutriscoreGrade = product.product.nutriscoreGrade,
+                nutriscoreGrade = product.product.nutriscoreGrade ,
                 nutriscoreScore = product.product.nutriscoreScore,
 
                 ingredientsText = product.product.ingredientsText,
@@ -602,9 +603,9 @@ class MyStockFragment : Fragment() {
 
     private fun getRetrofit(): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la conexión.
-            .readTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la lectura de datos.
-            .writeTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la escritura de datos.
+            .connectTimeout(10, TimeUnit.SECONDS) // Tiempo de espera para la conexión.
+            .readTimeout(10, TimeUnit.SECONDS) // Tiempo de espera para la lectura de datos.
+            .writeTimeout(10, TimeUnit.SECONDS) // Tiempo de espera para la escritura de datos.
             .build()
 
         return Retrofit

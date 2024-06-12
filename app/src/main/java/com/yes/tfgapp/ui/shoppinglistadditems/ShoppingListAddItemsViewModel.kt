@@ -26,6 +26,9 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
     val readAllDataProduct: LiveData<List<ProductModel>>
     val readAllDataCategory: LiveData<List<CategoryModel>>
 
+    private val allCategoriesLiveData: LiveData<List<CategoryModel>>
+    private var allCategories: List<CategoryModel> = emptyList()
+
     private val allProductsLiveData: LiveData<List<ProductModel>>
     private var allProducts: List<ProductModel> = emptyList()
 
@@ -47,6 +50,11 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
         productShoppingListRepository = ProductShoppingListRepository(productShoppingListDato)
 
         allProductsLiveData = productRepository.readAllData
+        allCategoriesLiveData = categoryRepository.readAllData
+
+        allCategoriesLiveData.observeForever { categories ->
+            allCategories = categories ?: emptyList()
+        }
 
         allProductsLiveData.observeForever { products ->
             allProducts = products ?: emptyList()

@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ActivityMyStockProductManualBinding
 import com.yes.tfgapp.domain.fixed.FixedCategories
+import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.MyStockViewModel
 import com.yes.tfgapp.ui.mystockproductsmanual.adapter.ChooseCategoryAdapterManual
@@ -71,6 +72,8 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private lateinit var captureIV: ImageView
 
     private var expireData :String = "__ / __ / ____"
+    private lateinit var iconsCategories : List<Int>
+    private lateinit var iconToCategoryMap: Map<Int, CategoryModel>
 
     private val cameraPermissionLauncher =
         registerForActivityResult(RequestPermission()) { isGranted ->
@@ -119,7 +122,6 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private fun initUI() {
 
 
-
         binding.ivCategoryIcon.setImageResource(R.drawable.ic_others_category)
         binding.tvCategoryName.text = "Otros"
 
@@ -132,11 +134,14 @@ class MyStockProductManualActivity : AppCompatActivity() {
         mShoppingListAddItemsViewModel =
             ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
+
         val rvCategories = binding.rvCategories
         rvCategories.layoutManager = GridLayoutManager(this, 3, GridLayoutManager.HORIZONTAL, false)
         rvCategories.adapter = chooseCategoryAdapter
         mShoppingListAddItemsViewModel.readAllDataCategory.observe(this) { categories ->
             chooseCategoryAdapter.setCategoriesListModified(categories, 14)
+            iconsCategories = categories.map { it.icon }
+            iconToCategoryMap = categories.associateBy { it.icon }
             chooseCategoryAdapter.notifyDataSetChanged()
         }
 
@@ -463,14 +468,18 @@ class MyStockProductManualActivity : AppCompatActivity() {
     }
 
     private fun showIconDialog() {
-        val dialog = SelectIconDialogFragment(icons) { selectedIcon ->
+        val dialog = SelectIconDialogFragment(iconsCategories) { selectedIcon ->
             binding.ivAddIcon.setImageResource(selectedIcon)
             binding.ivAddIcon.setBackgroundResource(R.drawable.image_border)
             binding.ivAddPhoto.setBackgroundResource(0)
             isPhotoSelected = false
             selectedIconResource = selectedIcon
-            val categoryId = FixedCategories.getCategoryIdByIcon(selectedIcon)
-            val categoryName = FixedCategories.getCategoryNameById(categoryId)
+
+            //val categoryId = FixedCategories.getCategoryIdByIcon(selectedIcon)
+            //val categoryName = FixedCategories.getCategoryNameById(categoryId)
+
+            val categoryId = iconToCategoryMap[selectedIcon]?.id ?: 14
+            val categoryName = iconToCategoryMap[selectedIcon]?.name ?: "Otros"
 
             selectedCategory = categoryId
 

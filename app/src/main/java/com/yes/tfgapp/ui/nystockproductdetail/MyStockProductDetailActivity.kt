@@ -89,23 +89,31 @@ class MyStockProductDetailActivity : AppCompatActivity() {
 
         }
 
-        if (stockProduct.ingredientsTextEs != "") {
+        if (stockProduct.ingredientsTextEs != "" && stockProduct.ingredientsTextEs != null) {
             binding.tvIngredientsText.text = stockProduct.ingredientsTextEs
-        } else if(stockProduct.ingredientsText != "") {
+        } else if(stockProduct.ingredientsText != "" && stockProduct.ingredientsText != null) {
             binding.tvIngredientsText.text = stockProduct.ingredientsText
         }else{
             binding.tvIngredientsText.text = "No hay información disponible"
         }
 
 
+
         binding.tvBarCode.text = stockProduct.id
-        binding.tvCuantity.text = stockProduct.quantity
+
+        binding.tvCuantity.text = replaceIfNullOrEmpty(stockProduct.quantity)
+        binding.tvServingSize.text = replaceIfNullOrEmpty(stockProduct.servingSize)
+        binding.tvPerServingSize.text = replaceIfNullOrEmpty(stockProduct.servingSize)
+        binding.tvBrands.text = replaceIfNullOrEmpty(stockProduct.brands)
+        binding.tvGeneralName.text = replaceIfNullOrEmpty(stockProduct.genericNameEs)
+
+        /*binding.tvCuantity.text = stockProduct.quantity
         binding.tvServingSize.text = stockProduct.servingSize
         binding.tvPerServingSize.text = stockProduct.servingSize
         binding.tvBrands.text = stockProduct.brands
-        binding.tvGeneralName.text = stockProduct.genericNameEs
+        binding.tvGeneralName.text = stockProduct.genericNameEs*/
 
-        binding.tvCalories.text = stockProduct.calories
+        /*binding.tvCalories.text = stockProduct.calories
         binding.tvGrasas.text = stockProduct.fat
         binding.tvSatFat.text = stockProduct.saturatedFat
         binding.tvCarbohydrates.text = stockProduct.carbohydrates
@@ -117,7 +125,20 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         binding.tvSatFat100g.text = stockProduct.saturatedFat100g
         binding.tvCarbohydrates100g.text = stockProduct.carbohydrates100g
         binding.tvSalt100g.text = stockProduct.salt100g
-        binding.tvProteins100g.text = stockProduct.proteins100g
+        binding.tvProteins100g.text = stockProduct.proteins100g*/
+        binding.tvCalories.text = formatNutrientValue(stockProduct.calories)
+        binding.tvGrasas.text = formatNutrientValue(stockProduct.fat)
+        binding.tvSatFat.text = formatNutrientValue(stockProduct.saturatedFat)
+        binding.tvCarbohydrates.text = formatNutrientValue(stockProduct.carbohydrates)
+        binding.tvSalt.text = formatNutrientValue(stockProduct.salt)
+        binding.tvProteins.text = formatNutrientValue(stockProduct.proteins)
+
+        binding.tvCalories100g.text = formatNutrientValue(stockProduct.calories100g)
+        binding.tvGrasas100g.text = formatNutrientValue(stockProduct.fat100g)
+        binding.tvSatFat100g.text = formatNutrientValue(stockProduct.saturatedFat100g)
+        binding.tvCarbohydrates100g.text = formatNutrientValue(stockProduct.carbohydrates100g)
+        binding.tvSalt100g.text = formatNutrientValue(stockProduct.salt100g)
+        binding.tvProteins100g.text = formatNutrientValue(stockProduct.proteins100g)
 
         when (stockProduct.nutriscoreGrade) {
             "a" -> {
@@ -144,6 +165,9 @@ class MyStockProductDetailActivity : AppCompatActivity() {
                 binding.ivNutriScore.setImageResource(R.drawable.nutriscore_e)
                 binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_e)
                 binding.tvMsgNutriScore.text="¡Muy bajo puntaje nutricional! Es posible que existan alternativas más saludables."
+            }else -> {
+                binding.ivNutriScore2.setImageResource(R.drawable.ic_warning)
+                binding.tvMsgNutriScore.text="No se ha podido calcular el puntaje nutricional de este producto."
             }
         }
 
@@ -167,8 +191,21 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun formatNutrientValue(unit: String?): String {
+        if (unit != null) {
+            return if (!unit.contains("null")) {
+                "$unit"
+            } else {
+                binding.tvNutritionalInfoTitle.text = "Información nutricional (incompleto)"
+                "?"
+            }
+        }
+        return "?"
+    }
 
-
+    private fun replaceIfNullOrEmpty(value: String?): String {
+        return value?.takeIf { it.isNotEmpty() } ?: "?"
+    }
 
 
     private fun initListeners() {
