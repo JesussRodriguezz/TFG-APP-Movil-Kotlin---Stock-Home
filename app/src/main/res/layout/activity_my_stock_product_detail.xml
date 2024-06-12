@@ -1,259 +1,942 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.mystockproductscan.MyStockProductDetailFragment">
+        android:fillViewport="true">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/ivProductApiSearchImage"
-            android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:contentDescription="@string/product_image"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/fotopruebaagua" />
-
-        <TextView
-            android:id="@+id/tvProductId"
-            style="@style/ProductsListTextStyle"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:gravity="center_horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivProductApiSearchImage"
-            tools:text="Prueba item name" />
+            tools:context=".ui.mystockproductscan.MyStockProductDetailFragment">
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginVertical="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvProductId" />
-
-        <LinearLayout
-            android:id="@+id/llExpireData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider">
-
-            <TextView
-                android:id="@+id/tvExpireDataTitle"
-                style="@style/ProductsListTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="16dp"
-                android:text="@string/expire_in" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvChangeExpireData"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivProductApiSearchImage"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="20dp"
-                android:outlineSpotShadowColor="@color/transparent"
-                app:cardBackgroundColor="@color/primaryGrey"
-                app:cardCornerRadius="5dp">
+                android:layout_height="340dp"
+                android:contentDescription="@string/product_image"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/fotopruebaagua" />
 
-                <TextView
-                    android:id="@+id/tvChangeExpireData"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginStart="8dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/roboto_light"
-                    android:gravity="center_horizontal"
-                    android:maxLines="1"
-                    android:text="__ / __ / __"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    app:layout_constraintHorizontal_bias="0"
-                    app:layout_constraintWidth_default="wrap"
-                    app:layout_constraintWidth_max="100dp"
-                    app:layout_constraintWidth_min="0dp" />
-            </androidx.cardview.widget.CardView>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivNutriScore"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginHorizontal="16dp"
+                android:contentDescription="@string/product_image"
+                android:scaleType="fitCenter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/nutriscore_a" />
 
 
-        </LinearLayout>
 
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llExpireData" />
-
-        <LinearLayout
-            android:id="@+id/llCategorySuggested"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2">
 
             <TextView
-                android:id="@+id/tvSuggestedCategory"
+                android:id="@+id/tvProductId"
                 style="@style/ProductsListTextStyle"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="16dp"
-                android:text="Categoria" />
+                android:background="@color/semiTransparentLight"
+                android:gravity="center_horizontal"
+                android:padding="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProductApiSearchImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Prueba item name" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvCategory"
-                android:layout_width="160dp"
-                android:layout_height="44dp"
-                android:layout_gravity="center_vertical"
-                app:cardBackgroundColor="@color/accentRed"
-                app:cardCornerRadius="16dp">
+            <LinearLayout
+                android:id="@+id/llExpireData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivProductApiSearchImage">
 
                 <LinearLayout
-                    android:id="@+id/llContentContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="start|center_vertical"
+                    android:layout_height="80dp"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/ivCategoryIcon"
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginStart="4dp"
-                        android:contentDescription="@string/ivcategoryicon"
-                        tools:src="@drawable/ic_panaderia" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:contentDescription="@string/product_image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_expire_data" />
 
 
                     <TextView
-                        android:id="@+id/tvCategoryName"
-                        android:layout_width="100dp"
+                        android:id="@+id/tvExpireDataTitle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="8dp"
-                        android:ellipsize="end"
+                        android:layout_margin="16dp"
+
                         android:fontFamily="@font/roboto_medium"
-                        android:maxLines="1"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintWidth_default="wrap"
-                        app:layout_constraintWidth_max="100dp"
-                        app:layout_constraintWidth_min="0dp"
-                        tools:text="Categoryaaaaaaa" />
+                        android:text="Fecha de caducidad"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <Space
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
+                    <ImageButton
+                        android:id="@+id/ibExpireDataArrow"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/ibbackarrow"
+                        android:src="@drawable/ic_right_arrow"
+                        app:tint="@color/black" />
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+                <LinearLayout
+                    android:id="@+id/llExpireDataContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-        </LinearLayout>
+                    <!-- Elementos adicionales que se mostrarán al expandir -->
+                    <LinearLayout
+                        android:id="@+id/llExpireDataElements"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider">
 
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cvChangeExpireData"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="16dp"
+                            android:outlineSpotShadowColor="@color/transparent"
+                            app:cardBackgroundColor="@color/primaryGrey"
+                            app:cardCornerRadius="5dp">
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider3"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llCategorySuggested" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCategories"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
-            android:layout_marginStart="12dp"
-            android:scrollbars="none"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-        <ImageButton
-            android:id="@+id/ibDropUp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/ibbackarrow"
-            android:src="@drawable/ic_drop_up"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvCategories"
-            app:tint="@color/black" />
-
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider4"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ibDropUp" />
+                            <TextView
+                                android:id="@+id/tvChangeExpireData"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginHorizontal="16dp"
+                                android:layout_marginStart="8dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/roboto_light"
+                                android:gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:text="__ / __ / __"
+                                android:textColor="@color/black"
+                                android:textSize="20sp"
+                                app:layout_constraintHorizontal_bias="0"
+                                app:layout_constraintWidth_default="wrap"
+                                app:layout_constraintWidth_max="100dp"
+                                app:layout_constraintWidth_min="0dp" />
+                        </androidx.cardview.widget.CardView>
 
 
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llExpireData" />
+
+            <LinearLayout
+                android:id="@+id/llCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:contentDescription="@string/product_image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_food_category" />
+
+                    <TextView
+                        android:id="@+id/tvCategoryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="16dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Categoria"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/ibCategoryArrow"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/ibbackarrow"
+                        android:src="@drawable/ic_right_arrow"
+                        app:tint="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCategoriaContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/efAddStockItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
-            android:backgroundTint="@color/accentRed"
-            android:src="@drawable/ic_add"
-            app:backgroundTint="@color/accentRed"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
-            app:tint="@color/white" />
+                    <!-- Elementos adicionales que se mostrarán al expandir -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvCategories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:scrollbars="none"
+                        android:visibility="visible" />
 
-        <ImageButton
-            android:id="@+id/ibBackArrow"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="16dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/ibbackarrow"
-            android:src="@drawable/ic_back_arrow_big"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llCategoria" />
+
+            <LinearLayout
+                android:id="@+id/llProductInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:contentDescription="@string/product_image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_product_info" />
+
+                    <TextView
+                        android:id="@+id/tvNutrientsLevelsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="16dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Detalles del producto"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/ibProductInfoArrow"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/ibbackarrow"
+                        android:src="@drawable/ic_right_arrow"
+                        app:tint="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llProductInfoContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <!-- Elementos adicionales que se mostrarán al expandir -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Codigo de barras"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvBarCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                    </LinearLayout>
+
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Denominación general"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/tvGeneralName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Cantidad"
+                            android:textStyle="bold" />
+
+
+                        <TextView
+                            android:id="@+id/tvCuantity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Marcas"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvBrands"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llProductInfo" />
+
+            <LinearLayout
+                android:id="@+id/llNutritionalInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:contentDescription="@string/product_image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_nutrition_infopng" />
+
+                    <TextView
+                        android:id="@+id/tvNutritionalInfoTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="16dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Informacion Nutricional"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/ibNutritionalInfoArrow"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/ibbackarrow"
+                        android:src="@drawable/ic_right_arrow"
+                        app:tint="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llNutritionalInfoContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <!-- Elementos adicionales que se mostrarán al expandir -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/ivNutriScore2"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginHorizontal="16dp"
+                            android:contentDescription="@string/product_image"
+                            android:scaleType="fitCenter"
+                            tools:src="@drawable/nutriscore_a" />
+
+
+                        <TextView
+                            android:id="@+id/tvMsgNutriScore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="16dp"
+                            tools:text="Low Nutritional Score! Healthier alternatives may be avaliable" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Tamaño de la porcion"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvServingSize"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Tamaño de la porcion" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primaryGrey"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="16dp"
+                            android:text="Información"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="16dp"
+                            android:text="100 g / 100 ml"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvPerServingSize"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="8dp"
+                            android:text="por 330ml"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Energía"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+
+                        <TextView
+                            android:id="@+id/tvCalories100g"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvCalories"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Calorias" />
+                    </LinearLayout>
+
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Grasas"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+
+                        <TextView
+                            android:id="@+id/tvGrasas100g"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvGrasas"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Calorias" />
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Grasas Saturadas"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+
+                        <TextView
+                            android:id="@+id/tvSatFat100g"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvSatFat"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Calorias" />
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Carbohidratos"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+
+                        <TextView
+                            android:id="@+id/tvCarbohydrates100g"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvCarbohydrates"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Calorias" />
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Sal"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+
+                        <TextView
+                            android:id="@+id/tvSalt100g"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvSalt"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Calorias" />
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginHorizontal="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Proteinas"
+                            android:textStyle="bold" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3" />
+
+                        <TextView
+                            android:id="@+id/tvProteins100g"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:text="Calorias" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/tvProteins"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Calorias" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llNutritionalInfo" />
+
+            <LinearLayout
+                android:id="@+id/llIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider4">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:contentDescription="@string/product_image"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_recipes" />
+
+                    <TextView
+                        android:id="@+id/tvIngredientsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="16dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:text="Ingredientes"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/ibIngredientsArrow"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/ibbackarrow"
+                        android:src="@drawable/ic_right_arrow"
+                        app:tint="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llIngredientsContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <!-- Elementos adicionales que se mostrarán al expandir -->
+                    <TextView
+                        android:id="@+id/tvIngredientsText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="Contenido adicional para Niveles nutrientes" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llIngredients" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llIngredients" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ImageButton
+        android:id="@+id/ibBackArrow"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="top|start"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/ibbackarrow"
+        android:src="@drawable/ic_back_arrow_big"
+        app:tint="@color/black" />
+</FrameLayout>

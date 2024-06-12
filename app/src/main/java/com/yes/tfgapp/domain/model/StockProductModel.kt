@@ -13,6 +13,7 @@ import java.util.Locale
 data class StockProductModel (
     @PrimaryKey
     val id: String,
+    var isScanned: Boolean = false,
     val name: String,
     var expirationDate: String = "",
     val image: String? = null,
@@ -25,15 +26,26 @@ data class StockProductModel (
     var ingredientsText: String = "",
     var ingredientsTextEs: String = "",
     var quantity: String = "",
+    var servingSize: String = "",
+    var genericNameEs: String = "",
+    var brands: String = "",
     var fatLevel: String = "",
     var saltLevel: String = "",
     var saturatedFatLevel: String = "",
     var sugarsLevel: String = "",
     var calories: String = "",
+    var calories100g : String = "",
     var fat: String = "",
+    var fat100g: String = "",
     var saturatedFat: String = "",
+    var saturatedFat100g: String = "",
     var carbohydrates: String = "",
-    var salt: String = ""
+    var carbohydrates100g: String = "",
+    var salt: String = "",
+    var salt100g: String = "",
+    var proteins: String = "",
+    var proteins100g: String = ""
+
 
 ): Parcelable {
     companion object {

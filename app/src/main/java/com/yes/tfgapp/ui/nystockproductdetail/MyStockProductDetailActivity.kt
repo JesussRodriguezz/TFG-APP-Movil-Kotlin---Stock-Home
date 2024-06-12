@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -39,7 +41,6 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         onChangeCategory = { changeCategorySelected() }
     )
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
-    private lateinit var btnAddStockProduct: View
     private lateinit var btnCloseDialog: View
     private lateinit var mStockViewModel: MyStockViewModel
     private var selectedExpireDateButton: Button? = null
@@ -54,7 +55,14 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         initListeners()
     }
 
+
+    /*getCategoryById(stockProduct.categoryId){category ->
+        binding.ivCategoryIcon.setImageResource(category!!.icon)
+        binding.tvCategoryName.text = category.name
+    }*/
+
     private fun initUI() {
+        setupExpandableRows()
 
         stockProduct = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra("currentStockProduct", StockProductModel::class.java)!!
@@ -66,20 +74,77 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         mShoppingListAddItemsViewModel =
             ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
-        btnAddStockProduct = binding.efAddStockItem
         btnCloseDialog = binding.ibBackArrow
-        binding.tvProductId.text = stockProduct.name
-       /* binding.tvNutriScoreGrade.text = stockProduct.nutriscoreGrade
-        binding.tvNutriScoreScore.text = stockProduct.nutriscoreScore.toString()
+        if(stockProduct.isScanned){
+            binding.tvProductId.text = stockProduct.name + " - " + stockProduct.quantity
+        }else{
+            binding.tvProductId.text = stockProduct.name
+            binding.llProductInfo.visibility = View.GONE
+            binding.llNutritionalInfo.visibility = View.GONE
+            binding.llIngredients.visibility = View.GONE
+            binding.divider3.visibility = View.GONE
+            binding.divider4.visibility = View.GONE
+            binding.divider5.visibility = View.GONE
+            binding.divider6.visibility = View.GONE
+
+        }
+
         if (stockProduct.ingredientsTextEs != "") {
             binding.tvIngredientsText.text = stockProduct.ingredientsTextEs
-        } else {
+        } else if(stockProduct.ingredientsText != "") {
             binding.tvIngredientsText.text = stockProduct.ingredientsText
-        }*/
+        }else{
+            binding.tvIngredientsText.text = "No hay información disponible"
+        }
 
-        getCategoryById(stockProduct.categoryId){category ->
-            binding.ivCategoryIcon.setImageResource(category!!.icon)
-            binding.tvCategoryName.text = category.name
+
+        binding.tvBarCode.text = stockProduct.id
+        binding.tvCuantity.text = stockProduct.quantity
+        binding.tvServingSize.text = stockProduct.servingSize
+        binding.tvPerServingSize.text = stockProduct.servingSize
+        binding.tvBrands.text = stockProduct.brands
+        binding.tvGeneralName.text = stockProduct.genericNameEs
+
+        binding.tvCalories.text = stockProduct.calories
+        binding.tvGrasas.text = stockProduct.fat
+        binding.tvSatFat.text = stockProduct.saturatedFat
+        binding.tvCarbohydrates.text = stockProduct.carbohydrates
+        binding.tvSalt.text = stockProduct.salt
+        binding.tvProteins.text = stockProduct.proteins
+
+        binding.tvCalories100g.text = stockProduct.calories100g
+        binding.tvGrasas100g.text = stockProduct.fat100g
+        binding.tvSatFat100g.text = stockProduct.saturatedFat100g
+        binding.tvCarbohydrates100g.text = stockProduct.carbohydrates100g
+        binding.tvSalt100g.text = stockProduct.salt100g
+        binding.tvProteins100g.text = stockProduct.proteins100g
+
+        when (stockProduct.nutriscoreGrade) {
+            "a" -> {
+                binding.ivNutriScore.setImageResource(R.drawable.nutriscore_a)
+                binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_a)
+                binding.tvMsgNutriScore.text="¡Excelente elección! Este producto tiene un alto puntaje nutricional y es una opción muy saludable."
+            }
+            "b" -> {
+                binding.ivNutriScore.setImageResource(R.drawable.nutriscore_b)
+                binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_b)
+                binding.tvMsgNutriScore.text="Buena opción nutricional. Este producto es una opción bastante saludable."
+            }
+            "c" -> {
+                binding.ivNutriScore.setImageResource(R.drawable.nutriscore_c)
+                binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_c)
+                binding.tvMsgNutriScore.text="Moderado puntaje nutricional. Este producto está en un punto medio en términos de salud. "
+            }
+            "d" -> {
+                binding.ivNutriScore.setImageResource(R.drawable.nutriscore_d)
+                binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_d)
+                binding.tvMsgNutriScore.text="¡Bajo puntaje nutricional! Es posible que existan alternativas más saludables."
+            }
+            "e" -> {
+                binding.ivNutriScore.setImageResource(R.drawable.nutriscore_e)
+                binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_e)
+                binding.tvMsgNutriScore.text="¡Muy bajo puntaje nutricional! Es posible que existan alternativas más saludables."
+            }
         }
 
         if (stockProduct.image != null) {
@@ -102,20 +167,21 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         }
     }
 
+
+
+
+
     private fun initListeners() {
 
 
-        btnAddStockProduct.setOnClickListener {
-            addStockProduct()
-            finish()
-        }
+
 
         btnCloseDialog.setOnClickListener {
             finish()
         }
 
 
-
+/*
         binding.cvCategory.setOnClickListener {
             binding.rvCategories.visibility = View.VISIBLE
             binding.llCategorySuggested.visibility = View.GONE
@@ -160,12 +226,80 @@ class MyStockProductDetailActivity : AppCompatActivity() {
             // Aplica las nuevas restricciones al ConstraintLayout
             constraintSet.applyTo(binding.constraintLayout)
 
-        }
+        }*/
 
         binding.cvChangeExpireData.setOnClickListener {
             showChangeExpireDataDialog()
         }
 
+    }
+
+    private fun setupExpandableRows() {
+        val llExpireData = findViewById<LinearLayout>(R.id.llExpireData)
+        val llExpireDataContent = findViewById<LinearLayout>(R.id.llExpireDataContent)
+        val ibExpireDataArrow= binding.ibExpireDataArrow
+
+        val llCategoria = findViewById<LinearLayout>(R.id.llCategoria)
+        val llCategoriaContent = findViewById<LinearLayout>(R.id.llCategoriaContent)
+        val ibCategoryArrow= binding.ibCategoryArrow
+
+        val llProductInfo = findViewById<LinearLayout>(R.id.llProductInfo)
+        val llProductInfoContent = findViewById<LinearLayout>(R.id.llProductInfoContent)
+        val ibProductInfoArrow= binding.ibProductInfoArrow
+
+        val llNutritionalInfo = findViewById<LinearLayout>(R.id.llNutritionalInfo)
+        val llNutritionalInfoContent = findViewById<LinearLayout>(R.id.llNutritionalInfoContent)
+        val ibNutritionalInfoArrow= binding.ibNutritionalInfoArrow
+
+        val llIngredients = findViewById<LinearLayout>(R.id.llIngredients)
+        val llIngredientsContent = findViewById<LinearLayout>(R.id.llIngredientsContent)
+        val ibIngredientsArrow= binding.ibIngredientsArrow
+
+        llExpireData.setOnClickListener {
+            toggleVisibility(llExpireDataContent,ibExpireDataArrow)
+        }
+        ibExpireDataArrow.setOnClickListener {
+            toggleVisibility(llExpireDataContent,ibExpireDataArrow)
+        }
+
+        llCategoria.setOnClickListener {
+            toggleVisibility(llCategoriaContent,ibCategoryArrow)
+        }
+        ibCategoryArrow.setOnClickListener {
+            toggleVisibility(llCategoriaContent,ibCategoryArrow)
+        }
+
+        llProductInfo.setOnClickListener {
+            toggleVisibility(llProductInfoContent,ibProductInfoArrow)
+        }
+        ibProductInfoArrow.setOnClickListener {
+            toggleVisibility(llProductInfoContent,ibProductInfoArrow)
+        }
+
+        llNutritionalInfo.setOnClickListener {
+            toggleVisibility(llNutritionalInfoContent,ibNutritionalInfoArrow)
+        }
+        ibNutritionalInfoArrow.setOnClickListener {
+            toggleVisibility(llNutritionalInfoContent,ibNutritionalInfoArrow)
+        }
+
+        llIngredients.setOnClickListener {
+            toggleVisibility(llIngredientsContent,ibIngredientsArrow)
+        }
+        ibIngredientsArrow.setOnClickListener {
+            toggleVisibility(llIngredientsContent,ibIngredientsArrow)
+        }
+
+    }
+
+    private fun toggleVisibility(view: View, arrow: ImageButton?) {
+        if (view.visibility == View.GONE) {
+            view.visibility = View.VISIBLE
+            arrow?.setImageResource(R.drawable.ic_drop_down_arrow) // Cambia el icono a ic_dropdown
+        } else {
+            view.visibility = View.GONE
+            arrow?.setImageResource(R.drawable.ic_right_arrow) // Cambia el icono a ic_right_arrow
+        }
     }
 
 
@@ -180,6 +314,7 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         configureManualData(dialog)
         dialog.show()
     }
+
 
     private fun configureManualData(dialog: Dialog) {
         val npDay: NumberPicker = dialog.findViewById(R.id.npDay)
@@ -234,12 +369,10 @@ class MyStockProductDetailActivity : AppCompatActivity() {
             val day = npDay.value
             val month = npMonth.value
             val year = npYear.value
-
             expireData = "$day/$month/$year"
-
             val formattedDate = formatDate(day, month, year)
-
             binding.tvChangeExpireData.text = formattedDate
+            updateStockProductExpireData()
 
             dialog.dismiss()
         }
@@ -268,6 +401,24 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateStockProductExpireData(){
+        val stockProduct = this.stockProduct
+        val daysToExpire = daysBetweenDates(stockProduct.addedDate, expireData).toInt()
+        val updatedStockProduct = stockProduct.copy(
+            expirationDate = expireData,
+            daysToExpire = daysToExpire,
+            categoryId = selectedCategory
+        )
+        mStockViewModel.updateStockProduct(updatedStockProduct)
+    }
+
+    private fun updateStockProductCategory(){
+        val stockProduct = this.stockProduct
+        val updatedStockProduct = stockProduct.copy(
+            categoryId = selectedCategory
+        )
+        mStockViewModel.updateStockProduct(updatedStockProduct)
+    }
 
     private fun addStockProduct() {
         val stockProduct = this.stockProduct
@@ -318,5 +469,6 @@ class MyStockProductDetailActivity : AppCompatActivity() {
     private fun changeCategorySelected() {
         selectedCategory =
             chooseCategoryAdapter.publicCategoriesList[chooseCategoryAdapter.selectedItemPosition].id
+        updateStockProductCategory()
     }
 }
