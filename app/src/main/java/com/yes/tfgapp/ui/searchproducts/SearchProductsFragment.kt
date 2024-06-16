@@ -7,6 +7,7 @@ import android.app.Application
 import android.app.Dialog
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -248,7 +249,7 @@ class SearchProductsFragment : Fragment() {
                     Log.i("yes", "Funciona: contenido : $response")
                     (activity as MainActivity).runOnUiThread {
                         val filteredProducts = response.products.filter {
-                            val productName = it.productName ?: ""
+                            val productName = it.productName
                             productName.isNotBlank() && productName.contains(
                                 query.orEmpty(),
                                 ignoreCase = true
@@ -348,6 +349,10 @@ class SearchProductsFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_change_category)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         configureDialog(dialog, product, position)
         if (isProductAdded) {
             dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory)
@@ -360,7 +365,7 @@ class SearchProductsFragment : Fragment() {
             .setOnClickListener {
                 if (isProductAdded) {
                     animateIconChange(
-                        dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory),
+                        dialog.findViewById(R.id.ibAddProductToListDialogChangeCategory),
                         R.drawable.ic_add
                     ) {
                         deleteProductFromList(product)
@@ -368,7 +373,7 @@ class SearchProductsFragment : Fragment() {
                     }
                 } else {
                     animateIconChange(
-                        dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory),
+                        dialog.findViewById(R.id.ibAddProductToListDialogChangeCategory),
                         R.drawable.ic_check
                     ) {
                         addProductWithNewCategory(product, position)
@@ -508,9 +513,12 @@ class SearchProductsFragment : Fragment() {
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
     private fun getRetrofit(): Retrofit {

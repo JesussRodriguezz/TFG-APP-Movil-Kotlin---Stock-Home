@@ -16,8 +16,7 @@ import com.yes.tfgapp.ui.shoppinglist.ShoppingListFragmentDirections
 import kotlin.math.roundToInt
 
 class ShoppingListAdapter(
-    private val onClickOpenConfiguration: (ShoppingListModel) -> Unit,
-    private val onGetShoppingListProductsCount: (ShoppingListModel) -> Int
+    private val onClickOpenConfiguration: (ShoppingListModel) -> Unit
 ) : RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder>() {
 
     private var shoppingListList = emptyList<ShoppingListModel>()
@@ -26,13 +25,11 @@ class ShoppingListAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
             currentItem: ShoppingListModel,
-            onClickOpenConfiguration: (ShoppingListModel) -> Unit,
-            onGetShoppingListProductsCount: (ShoppingListModel) -> Int
+            onClickOpenConfiguration: (ShoppingListModel) -> Unit
         ) {
             binding.tvShoppingListName.text = currentItem.name
             binding.tvShoppingListNumBoughtItems.text = currentItem.quantityBought.toString()
             binding.tvShoppingListNumItems.text = currentItem.quantity.toString()
-            //binding.tvShoppingListNumItems.text = onGetShoppingListProductsCount(currentItem).toString()
 
 
             val percentage = if (currentItem.quantity != 0) {
@@ -79,12 +76,6 @@ class ShoppingListAdapter(
                     }
                 }
 
-
-                //if (currentItem.quantity > 0) {
-                //    binding.root.findNavController().navigate(actionToDetail)
-                //} else {
-                //    binding.root.findNavController().navigate(actionToAddItems)
-                //}
             }
         }
 
@@ -133,7 +124,7 @@ class ShoppingListAdapter(
 
     override fun onBindViewHolder(holder: ShoppingListViewHolder, position: Int) {
         val currentItem = shoppingListList[position]
-        holder.bind(currentItem, onClickOpenConfiguration, onGetShoppingListProductsCount)
+        holder.bind(currentItem, onClickOpenConfiguration)
     }
 
     fun setData(shoppingList: List<ShoppingListModel>) {

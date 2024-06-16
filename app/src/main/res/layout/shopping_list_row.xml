@@ -53,7 +53,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_settings"
                 app:tint="@color/accentRed"
-                android:contentDescription="ibSettings" />
+                android:contentDescription="@string/ibsettings" />
 
         </LinearLayout>
 

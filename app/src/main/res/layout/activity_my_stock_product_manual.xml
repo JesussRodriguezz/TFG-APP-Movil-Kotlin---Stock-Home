@@ -24,8 +24,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:hint="Nombre del producto"
+            android:layout_marginTop="0dp"
+            android:hint="@string/product_name_es"
             app:boxBackgroundColor="@color/primaryGrey"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
@@ -75,7 +75,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/SmallButtonTextStyle"
+                    style="@style/StockProductTitles"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -96,7 +96,8 @@
                         android:background="@color/primaryGrey"
                         android:padding="25dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_camera" />
+                        android:src="@drawable/ic_camera"
+                        android:contentDescription="@string/ivaddphoto" />
                 </FrameLayout>
 
             </LinearLayout>
@@ -119,7 +120,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/SmallButtonTextStyle"
+                    style="@style/StockProductTitles"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -133,7 +134,8 @@
                     android:layout_height="120dp"
                     android:background="@color/primaryGrey"
                     android:padding="25dp"
-                    android:src="@drawable/ic_icon" /> <!-- Reemplaza con el icono de tu martini -->
+                    android:src="@drawable/ic_icon"
+                    android:contentDescription="@string/ivaddicon" /> <!-- Reemplaza con el icono de tu martini -->
 
             </LinearLayout>
 
@@ -159,19 +161,21 @@
 
             <TextView
                 android:id="@+id/tvExpireDataTitle"
-                style="@style/ProductsListTextStyle"
+                style="@style/StockProductTitles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
-                android:text="@string/expire_in" />
+                android:text="@string/expire_data" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvChangeExpireData"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="20dp"
+                android:layout_marginVertical="20dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="10dp"
                 android:outlineSpotShadowColor="@color/transparent"
                 app:cardBackgroundColor="@color/primaryGrey"
                 app:cardCornerRadius="5dp">
@@ -184,12 +188,12 @@
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginStart="8dp"
                     android:ellipsize="end"
-                    android:fontFamily="@font/roboto_light"
+                    android:fontFamily="@font/roboto_medium"
                     android:gravity="center_horizontal"
                     android:maxLines="1"
-                    android:text="__ / __ / __"
+                    android:text="@string/empty_expire_data"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintWidth_default="wrap"
                     app:layout_constraintWidth_max="100dp"
@@ -219,7 +223,8 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginVertical="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -236,7 +241,8 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginVertical="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -253,7 +259,8 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginVertical="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -270,7 +277,8 @@
                 android:layout_height="35dp"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:layout_margin="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginVertical="4dp"
                 android:backgroundTint="@color/primaryGrey"
                 android:includeFontPadding="false"
                 android:paddingHorizontal="0dp"
@@ -303,7 +311,7 @@
 
             <TextView
                 android:id="@+id/tvSuggestedCategory"
-                style="@style/ProductsListTextStyle"
+                style="@style/StockProductTitles"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="16dp"
@@ -353,7 +361,7 @@
                         tools:text="Categoryaaaaaaa" />
 
                     <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -369,7 +377,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Cambiar categoria"
+            android:text="@string/change_category"
             android:textColor="@color/primaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -401,7 +409,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            android:contentDescription="@string/efaddstockitem" />
 
         <ImageButton
             android:id="@+id/ibBackArrow"

@@ -1,18 +1,12 @@
 package com.yes.tfgapp.ui.mystockproductsmanual.adapter
 
 
-import android.app.Dialog
-import android.content.Context
-import android.util.TypedValue
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ChooseCategoryRowBinding
 import com.yes.tfgapp.domain.model.CategoryModel
-import com.yes.tfgapp.domain.model.ProductModel
-import com.yes.tfgapp.domain.model.ShoppingListModel
-import com.yes.tfgapp.domain.model.StockProductModel
 
 class ChooseCategoryAdapterManual(
     private val onChangeCategory: () -> Unit
@@ -21,7 +15,6 @@ class ChooseCategoryAdapterManual(
     private var categoriesList = emptyList<CategoryModel>()
     var publicCategoriesList = emptyList<CategoryModel>()
     var selectedItemPosition = 0
-    private var firstTimeClick = true
 
 
 

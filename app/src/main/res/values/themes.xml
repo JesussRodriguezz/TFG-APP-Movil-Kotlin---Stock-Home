@@ -1,23 +1,23 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="Base.Theme.TFGapp" parent="Theme.Material3.DayNight.NoActionBar">
-    </style>
+
+    <style name="Base.Theme.TFGapp" parent="Theme.Material3.DayNight.NoActionBar"></style>
 
     <style name="Theme.TFGapp" parent="Base.Theme.TFGapp" />
 
     <style name="TitleToolbar" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/primaryWhite</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
     <style name="TitleToolbarDark" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:textColor">@color/primaryDark</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
     <style name="TextInputEditTextStyle">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/primaryDark</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
@@ -40,22 +40,19 @@
         <item name="android:layout_margin">0dp</item>
     </style>
 
-    <style name="image_rounded" >
+    <style name="image_rounded">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
-    <style name="image_roundedstock" >
+
+    <style name="image_roundedstock">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10%</item>
     </style>
+
     <style name="ActiveItemIndicatorStyle">
         <item name="android:background">@color/transparent</item>
     </style>
-
-
-
-
-
 
     <style name="RoundedFab" parent="">
         <item name="cornerFamily">rounded</item>
@@ -72,6 +69,7 @@
         <item name="cornerSize">50%</item>
         <item name="boxBackgroundColor">@color/accentRed</item> <!-- Usar boxBackgroundColor -->
     </style>
+
     <style name="FullScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
@@ -82,9 +80,16 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-        <style name="NumberPickerStyle">
-            <item name="android:textColorSecondary">@color/transparent</item>
-        </style>
+    <style name="NumberPickerStyle">
+        <item name="android:textColorSecondary">@color/transparent</item>
+    </style>
+
+    <!-- STOCK PRODUCT -->
+    <style name="StockProductTitles">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
 
 
 </resources>

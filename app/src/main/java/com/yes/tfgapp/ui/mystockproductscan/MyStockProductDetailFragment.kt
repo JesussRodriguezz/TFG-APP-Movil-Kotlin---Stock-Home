@@ -25,12 +25,10 @@ class MyStockProductDetailFragment : DialogFragment() {
     private lateinit var binding: FragmentMyStockProductDetailBinding
 
     private val args: MyStockProductDetailFragmentArgs by navArgs()
-    private lateinit var btnAddStockProduct : View
-    private lateinit var btnCloseDialog : View
+    private lateinit var btnAddStockProduct: View
+    private lateinit var btnCloseDialog: View
     private lateinit var mStockViewModel: MyStockViewModel
     private var selectedExpireDateButton: Button? = null
-
-
 
 
     override fun onCreateView(
@@ -50,6 +48,7 @@ class MyStockProductDetailFragment : DialogFragment() {
         )
         super.onStart()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setLayout(
@@ -59,16 +58,15 @@ class MyStockProductDetailFragment : DialogFragment() {
     }
 
     private fun initUI() {
-        mStockViewModel= ViewModelProvider(this)[MyStockViewModel::class.java]
+        mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
 
 
         btnAddStockProduct = binding.efAddStockItem
         btnCloseDialog = binding.ibBackArrow
 
-        if(args.currentStockProduct.id=="error"){
+        if (args.currentStockProduct.id == "error") {
             binding.tvProductId.text = "Product not found"
-            //binding.ivProductApiSearchImage.setImageResource(R.drawable.ic_delete)
-        }else{
+        } else {
             binding.tvProductId.text = args.currentStockProduct.name
             Picasso.get()
                 .load(args.currentStockProduct.image)
@@ -92,27 +90,44 @@ class MyStockProductDetailFragment : DialogFragment() {
         }
 
         binding.btn1Week.setOnClickListener {
-            updateButtonStates(binding.btn1Week, listOf(binding.btn2Weeks, binding.btn1Month, binding.btn2Months))
+            updateButtonStates(
+                binding.btn1Week,
+                listOf(binding.btn2Weeks, binding.btn1Month, binding.btn2Months)
+            )
         }
 
         binding.btn2Weeks.setOnClickListener {
-            updateButtonStates(binding.btn2Weeks, listOf(binding.btn1Week, binding.btn1Month, binding.btn2Months))
+            updateButtonStates(
+                binding.btn2Weeks,
+                listOf(binding.btn1Week, binding.btn1Month, binding.btn2Months)
+            )
         }
 
         binding.btn1Month.setOnClickListener {
-            updateButtonStates(binding.btn1Month, listOf(binding.btn1Week, binding.btn2Weeks, binding.btn2Months))
+            updateButtonStates(
+                binding.btn1Month,
+                listOf(binding.btn1Week, binding.btn2Weeks, binding.btn2Months)
+            )
         }
 
         binding.btn2Months.setOnClickListener {
-            updateButtonStates(binding.btn2Months, listOf(binding.btn1Week, binding.btn2Weeks, binding.btn1Month))
+            updateButtonStates(
+                binding.btn2Months,
+                listOf(binding.btn1Week, binding.btn2Weeks, binding.btn1Month)
+            )
         }
 
     }
 
     private fun updateButtonStates(selectedButton: Button, otherButtons: List<Button>) {
-        selectedButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.accentRed))
+        selectedButton.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.accentRed
+            )
+        )
         selectedButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-        selectedExpireDateButton=selectedButton
+        selectedExpireDateButton = selectedButton
 
         otherButtons.forEach { button ->
             button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primaryGrey))
@@ -131,7 +146,8 @@ class MyStockProductDetailFragment : DialogFragment() {
             else -> stockProduct.addedDate
         }
         val daysToExpire = daysBetweenDates(stockProduct.addedDate, expirationDate).toInt()
-        val updatedStockProduct = stockProduct.copy(expirationDate = expirationDate, daysToExpire = daysToExpire)
+        val updatedStockProduct =
+            stockProduct.copy(expirationDate = expirationDate, daysToExpire = daysToExpire)
         mStockViewModel.updateStockProduct(updatedStockProduct)
         mStockViewModel.addProduct(updatedStockProduct)
     }

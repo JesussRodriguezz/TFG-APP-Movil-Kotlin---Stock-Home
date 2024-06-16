@@ -58,6 +58,35 @@
     <string name="category_suggested">Categoria sugerida</string>
     <string name="doestn_exist_any_shopping_list">No existe ninguna lista de la compra</string>
     <string name="scan_barcode">Escanear codigo de barras</string>
+    <string name="bar_code">Código de barras</string>
+    <string name="expire_data">Fecha de caducidad</string>
+    <string name="serving_size">Tamaño de la porción</string>
+    <string name="info">Información</string>
+    <string name="_100_g_100_ml">100 g / 100 ml</string>
+    <string name="empty_expire_data">__ / __ / __</string>
+    <string name="category">Categoria</string>
+    <string name="product_details">Detalles del producto</string>
+    <string name="calories">Calorias</string>
+    <string name="general_name">Denominación general</string>
+    <string name="cuantity">Cantidad</string>
+    <string name="brands">Marcas</string>
+    <string name="nutritional_information">Informacion Nutricional</string>
+    <string name="energy">Energía</string>
+    <string name="fats">Grasas</string>
+    <string name="saturated_fats">Grasas Saturadas</string>
+    <string name="carbohydrates">Carbohidratos</string>
+    <string name="salt">Sal</string>
+    <string name="proteins">Proteinas</string>
+    <string name="ingredients">Ingredientes</string>
+    <string name="aditional_content_for_nutrients_levels">Contenido adicional para Niveles nutrientes</string>
+    <string name="change_category">Cambiar categoria</string>
+    <string name="product_nae">Nombre del producto</string>
+    <string name="product_name_es">Nombre del producto</string>
+    <string name="efaddstockitem">efAddStockItem</string>
+    <string name="ivaddphoto">ivAddPhoto</string>
+    <string name="ivaddicon">ivAddIcon</string>
+    <string name="efaddstockitem_">efAddStockItem</string>
+    <string name="ibsettings">ibSettings</string>
 
     <!--CONTENT DESCRIPTIONS-->
 

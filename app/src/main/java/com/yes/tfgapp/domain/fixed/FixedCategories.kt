@@ -24,27 +24,10 @@ enum class FixedCategories(
     OTROS(14,"Otros",R.drawable.ic_others_category);
 
     companion object {
-        fun getCategoryIdByIcon(icon: Int): Int {
-            return values().find { it.icon == icon }?.id ?: OTROS.id
-        }
-
         fun getCategoryIdByName(name: String): Int {
-            return values().find { it.categoryName == name }?.id ?: OTROS.id
+            return entries.find { it.categoryName == name }?.id ?: OTROS.id
         }
 
-
-        fun getCategoryNameById(id: Int): String {
-            return values().find { it.id == id }?.categoryName ?: OTROS.categoryName
-        }
     }
-
-
-    /*FOOD(1, "Frutas", R.drawable.nestea),
-    DRINKS(2, "Panadería",R.drawable.ic_panaderia),
-    CLEANING(3, "Cleaning",R.drawable.ic_panaderia),
-    COMIDA(4,"Comida",R.drawable.image_removebg_preview),
-    BEBIDAS(5,"Bebidas",R.drawable.ic_panaderia),
-    LIMPIEZA(6,"Limpieza",R.drawable.ic_panaderia),
-    OTHERS(7,"Otros",R.drawable.ic_others_category)*/
 
 }

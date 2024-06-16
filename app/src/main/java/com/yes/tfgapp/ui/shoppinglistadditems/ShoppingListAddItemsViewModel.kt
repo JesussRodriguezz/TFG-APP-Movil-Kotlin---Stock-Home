@@ -74,11 +74,6 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
         }
     }
 
-    fun updateItemsToOtherCategory(oldCategory: CategoryModel, otherCategory: CategoryModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            productRepository.updateItemsCategory(oldCategory.id, otherCategory.id)
-        }
-    }
 
     fun deleteCategoryWithItemsUpdate(oldCategory: CategoryModel, otherCategory: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -98,11 +93,6 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
         }
     }
 
-    fun deleteCategory(category: CategoryModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            categoryRepository.deleteCategory(category)
-        }
-    }
 
     fun addProductToList(productShoppingList: ProductShoppingListModel) {
         viewModelScope.launch(Dispatchers.IO) {

@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
 
         tvTitle = binding.tvTitleToolbar
 
-        // Setup OnDestinationChangedListener to handle navigation manually
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.shoppingListFragment, R.id.myStockFragment -> {
@@ -103,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         binding.ibBackArrow.visibility = View.INVISIBLE
     }
 
-    fun hideBottomNav() {
+    private fun hideBottomNav() {
         binding.bottomNavView.visibility = View.GONE
     }
 
@@ -117,19 +116,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    fun hideToolbar() {
-        binding.toolbar.visibility = View.GONE
-    }
-
     private fun showBottomNav() {
         binding.bottomNavView.apply {
-            alpha = 0f // Configura la transparencia inicialmente a 0
+            alpha = 0f
             visibility = View.VISIBLE
             animate()
-                .alpha(1f) // Establece la transparencia final a 1
-                .setDuration(500) // Duración de la animación en milisegundos
-                .setInterpolator(AccelerateDecelerateInterpolator()) // Interpolador para suavizar la animación
-                .start() // Inicia la animación
+                .alpha(1f)
+                .setDuration(500)
+                .setInterpolator(AccelerateDecelerateInterpolator())
+                .start()
         }
     }
 }

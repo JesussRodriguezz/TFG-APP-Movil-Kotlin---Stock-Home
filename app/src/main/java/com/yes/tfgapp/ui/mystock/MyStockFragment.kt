@@ -1,6 +1,5 @@
 package com.yes.tfgapp.ui.mystock
 
-import GridSpacingItemDecoration
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Application
@@ -10,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -45,7 +45,6 @@ import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.adapter.ChooseShoppingListAdapter
 import com.yes.tfgapp.ui.mystock.adapter.StockProductAdapter
-import com.yes.tfgapp.ui.mystockproductscan.MyStockProductDetailFragment
 import com.yes.tfgapp.ui.mystockproductscan.MyStockProductScanActivity
 import com.yes.tfgapp.ui.mystockproductsmanual.MyStockProductManualActivity
 import com.yes.tfgapp.ui.nystockproductdetail.MyStockProductDetailActivity
@@ -70,7 +69,6 @@ class MyStockFragment : Fragment() {
     private lateinit var binding: FragmentMyStockBinding
     private var rotate = false
 
-    private lateinit var chooseShoppingListAdapter: ChooseShoppingListAdapter
     private lateinit var mShoppingListViewModel: ShoppingListViewModel
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
     private lateinit var mShoppingListDetailViewModel: ShoppingListDetailViewModel
@@ -207,14 +205,14 @@ class MyStockFragment : Fragment() {
 
     private fun openProductDetailDialog(product: StockProductResponse?) {
 
-        if(product!=null){
+        if (product != null) {
             val stockProduct = StockProductModel(
                 id = product.code,
                 name = product.product.productName,
                 image = product.product.productImage,
                 isScanned = true,
 
-                nutriscoreGrade = product.product.nutriscoreGrade ,
+                nutriscoreGrade = product.product.nutriscoreGrade,
                 nutriscoreScore = product.product.nutriscoreScore,
 
                 ingredientsText = product.product.ingredientsText,
@@ -247,7 +245,7 @@ class MyStockFragment : Fragment() {
             val intent = Intent(activity, MyStockProductScanActivity::class.java)
             intent.putExtra("currentStockProduct", stockProduct)
             startActivity(intent)
-        }else{
+        } else {
             Toast.makeText(context, "Producto no encontrado", Toast.LENGTH_SHORT).show()
         }
         /*val stockProduct = if (product != null) {
@@ -279,7 +277,8 @@ class MyStockFragment : Fragment() {
 
         val layoutManager = GridLayoutManager(requireContext(), 3)
         rvStockProduct.layoutManager = layoutManager
-        val spacingInPixels = (resources.displayMetrics.widthPixels * 0.03).toInt() // 3% del ancho de la pantalla como margen
+        val spacingInPixels =
+            (resources.displayMetrics.widthPixels * 0.03).toInt() // 3% del ancho de la pantalla como margen
         rvStockProduct.addItemDecoration(GridSpacingItemDecoration(3, spacingInPixels))
 
 
@@ -348,10 +347,6 @@ class MyStockFragment : Fragment() {
 
     }
 
-
-    private fun requestCameraPermission() {
-        requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-    }
 
     private fun checkPermissionCamera() {
         if (ContextCompat.checkSelfPermission(
@@ -478,9 +473,12 @@ class MyStockFragment : Fragment() {
             mShoppingListViewModel.readAllData.removeObservers(viewLifecycleOwner)
             when {
                 shoppingLists.isEmpty() -> {
-                    Toast.makeText(requireContext(),
-                        getString(R.string.doestn_exist_any_shopping_list), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.doestn_exist_any_shopping_list), Toast.LENGTH_SHORT
+                    ).show()
                 }
+
                 shoppingLists.size == 1 -> {
                     val product = ProductModel(
                         name = stockProduct.name,
@@ -492,6 +490,7 @@ class MyStockFragment : Fragment() {
                     addExternalProductToList(product, singleShoppingList, null, stockProduct)
 
                 }
+
                 else -> {
                     showChooseShoppingListDialog(stockProduct, shoppingLists)
                 }
@@ -499,7 +498,10 @@ class MyStockFragment : Fragment() {
         }
     }
 
-    private fun showChooseShoppingListDialog(stockProduct: StockProductModel, shoppingLists: List<ShoppingListModel>) {
+    private fun showChooseShoppingListDialog(
+        stockProduct: StockProductModel,
+        shoppingLists: List<ShoppingListModel>
+    ) {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_add_product_to_shopping_list_after_delete)
@@ -513,8 +515,8 @@ class MyStockFragment : Fragment() {
 
         val chooseShoppingListAdapter = ChooseShoppingListAdapter(
             stockProduct = stockProduct,
-            onAddProductToList = { product, shoppingList, dialog, stockproduct ->
-                addExternalProductToList(product, shoppingList, dialog, stockproduct)
+            onAddProductToList = { product, shoppingList, dialogI, stockproduct ->
+                addExternalProductToList(product, shoppingList, dialogI, stockproduct)
             },
             dialog = dialog
         )
@@ -553,21 +555,22 @@ class MyStockFragment : Fragment() {
         stockProduct: StockProductModel
     ) {
         val productIdObserver = object : Observer<Long?> {
-            override fun onChanged(productId: Long?) {
-                if (productId != null) {
+            override fun onChanged(value: Long?) {
+                if (value != null) {
                     val productShoppingList = ProductShoppingListModel(
                         shoppingListId = shoppingList.id,
-                        productId = productId.toInt()
+                        productId = value.toInt()
                     )
-                    println("product id: ${productShoppingList.productId}")
-                    println("shopping list id: ${productShoppingList.shoppingListId}")
                     mShoppingListAddItemsViewModel.addProductToList(productShoppingList)
-                    dialog?.dismiss() // Cierra el diálogo si no es nulo
+                    dialog?.dismiss()
                     mStockViewModel.deleteStockProduct(stockProduct)
-                    // Remove the observer after the operation is done
                     mShoppingListAddItemsViewModel.productIdLiveData.removeObserver(this)
                     mShoppingListAddItemsViewModel.productIdLiveData.value = null
-                    Toast.makeText(requireContext(),"Se añade el producto: ${stockProduct.name} a la lista de la compra : ${shoppingList.name}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Se añade el producto: ${stockProduct.name} a la lista de la compra : ${shoppingList.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -603,9 +606,9 @@ class MyStockFragment : Fragment() {
 
     private fun getRetrofit(): Retrofit {
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS) // Tiempo de espera para la conexión.
-            .readTimeout(10, TimeUnit.SECONDS) // Tiempo de espera para la lectura de datos.
-            .writeTimeout(10, TimeUnit.SECONDS) // Tiempo de espera para la escritura de datos.
+            .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la conexión.
+            .readTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la lectura de datos.
+            .writeTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la escritura de datos.
             .build()
 
         return Retrofit

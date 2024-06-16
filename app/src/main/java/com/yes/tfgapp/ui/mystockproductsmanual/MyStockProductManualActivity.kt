@@ -3,7 +3,6 @@ package com.yes.tfgapp.ui.mystockproductsmanual
 
 import android.app.Dialog
 import android.content.pm.PackageManager
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.core.app.ActivityCompat
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -12,23 +11,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ActivityMyStockProductManualBinding
-import com.yes.tfgapp.domain.fixed.FixedCategories
 import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.MyStockViewModel
 import com.yes.tfgapp.ui.mystockproductsmanual.adapter.ChooseCategoryAdapterManual
-import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
 import java.io.File
 import java.text.ParseException
@@ -49,21 +44,6 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
     private var selectedCategory: Int = 14
 
-    private val icons = listOf(
-        R.drawable.ic_fyv,
-        R.drawable.ic_carnes,
-        R.drawable.ic_pescados,
-        R.drawable.ic_latas,
-        R.drawable.ic_lacteos,
-        R.drawable.ic_panaderia,
-        R.drawable.ic_bebidas,
-        R.drawable.ic_desayuno,
-        R.drawable.ic_eys,
-        R.drawable.ic_congelados,
-        R.drawable.ic_gyp,
-        R.drawable.ic_dys,
-        R.drawable.ic_others_category,
-    )
     private var isPhotoSelected: Boolean = false
     private var selectedIconResource: Int? = null
 
@@ -75,24 +55,6 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private lateinit var iconsCategories : List<Int>
     private lateinit var iconToCategoryMap: Map<Int, CategoryModel>
 
-    private val cameraPermissionLauncher =
-        registerForActivityResult(RequestPermission()) { isGranted ->
-            if (isGranted) {
-                launchCamera()
-            } else {
-                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    private val storagePermissionLauncher =
-        registerForActivityResult(RequestPermission()) { isGranted ->
-            if (isGranted) {
-                captureIV.performClick()
-            } else {
-                Toast.makeText(this, "Permiso de almacenamiento denegado", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
 
     private val contract =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -145,14 +107,6 @@ class MyStockProductManualActivity : AppCompatActivity() {
             chooseCategoryAdapter.notifyDataSetChanged()
         }
 
-
-        /*val rvCategories = dialog.findViewById<RecyclerView>(R.id.rvCategories)
-        rvCategories.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
-        rvCategories.adapter = chooseCategoryAdapter
-        mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner) { categories ->
-            chooseCategoryAdapter.setCategoriesListModified(categories, 14)
-            chooseCategoryAdapter.notifyDataSetChanged()
-        }*/
     }
 
     private fun configureManualData(dialog: Dialog) {
@@ -394,14 +348,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
             ).show()
             return
         }
-        val expirationDate = when (selectedExpireDateButton) {
-            binding.btn1Week -> addDaysToDate(getCurrentDate(), 7)
-            binding.btn2Weeks -> addDaysToDate(getCurrentDate(), 14)
-            binding.btn1Month -> addDaysToDate(getCurrentDate(), 30)
-            binding.btn2Months -> addDaysToDate(getCurrentDate(), 60)
-            else -> getCurrentDate()
-        }
-        //val daysToExpire = daysBetweenDates(getCurrentDate(), expirationDate).toInt()
+
         val daysToExpire = daysBetweenDates(getCurrentDate(), expireData).toInt()
 
         val stockProduct = if (isPhotoSelected) {

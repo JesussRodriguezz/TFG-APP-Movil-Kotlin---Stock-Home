@@ -15,8 +15,6 @@ class ProductShoppingListRepository(private val productShoppingListDAO: ProductS
         if (existingProductShoppingList == null) {
             productShoppingListDAO.addProductShoppingList(productShoppingList)
             productShoppingListDAO.incrementQuantity(productShoppingList.shoppingListId)
-        } else {
-            println("Product shopping list already exists")
         }
     }
 

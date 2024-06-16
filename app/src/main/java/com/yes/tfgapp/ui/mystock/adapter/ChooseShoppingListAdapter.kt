@@ -9,7 +9,6 @@ import com.yes.tfgapp.databinding.ChooseShoppingListRowBinding
 import com.yes.tfgapp.domain.model.ProductModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.domain.model.StockProductModel
-import com.yes.tfgapp.ui.searchproducts.adapter.ChooseCategoryAdapter
 import kotlin.math.roundToInt
 
 class ChooseShoppingListAdapter(
@@ -31,7 +30,6 @@ class ChooseShoppingListAdapter(
             binding.tvShoppingListName.text = currentItem.name
             binding.tvShoppingListNumBoughtItems.text = currentItem.quantityBought.toString()
             binding.tvShoppingListNumItems.text = currentItem.quantity.toString()
-            //binding.tvShoppingListNumItems.text = onGetShoppingListProductsCount(currentItem).toString()
             val percentage = if (currentItem.quantity != 0) {
                 (currentItem.quantityBought.toDouble() / currentItem.quantity.toDouble() * 100).roundToInt()
             } else {
@@ -52,7 +50,7 @@ class ChooseShoppingListAdapter(
             )
 
             binding.root.setOnClickListener {
-                onAddProductToList(product, currentItem, dialog,stockProduct)
+                onAddProductToList(product, currentItem, dialog, stockProduct)
             }
         }
     }

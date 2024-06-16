@@ -5,12 +5,7 @@ enum class FixedProducts(
     val productName: String,
     val categoryId: Int
 ) {
-    /*Manzana(productName="Manzana", categoryId= FixedCategories.COMIDA.id),
-    Pera( productName="Pera",categoryId= FixedCategories.COMIDA.id),
-    Pan( productName="Pan", categoryId= FixedCategories.BEBIDAS.id),
-    Leche( productName="Leche", categoryId= FixedCategories.BEBIDAS.id),
-    Detergente( productName="Detergente", categoryId= FixedCategories.LIMPIEZA.id),
-    Lavavajillas( productName="Lavavajillas", categoryId= FixedCategories.LIMPIEZA.id),*/
+
 
     //Frutas-Verduras
     Manzanas(productName="Manzanas", categoryId=FixedCategories.FYV.id),
@@ -183,7 +178,7 @@ enum class FixedProducts(
     Tostadas(productName="Tostadas", categoryId=FixedCategories.DESAYUNO.id),
     FrutasSecas(productName="Frutas secas", categoryId=FixedCategories.DESAYUNO.id),
     Te(productName="Té", categoryId=FixedCategories.DESAYUNO.id),
-    CaféSoluble(productName="Café soluble", categoryId=FixedCategories.DESAYUNO.id),
+    CafeSoluble(productName="Café soluble", categoryId=FixedCategories.DESAYUNO.id),
     LecheConChocolate(productName="Leche con chocolate", categoryId=FixedCategories.DESAYUNO.id),
     Infusiones(productName="Infusiones", categoryId=FixedCategories.DESAYUNO.id),
     LecheEnPolvo(productName="Leche en polvo", categoryId=FixedCategories.DESAYUNO.id),

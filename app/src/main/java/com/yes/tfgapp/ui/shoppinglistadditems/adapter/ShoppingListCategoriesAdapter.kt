@@ -52,13 +52,13 @@ class ShoppingListCategoriesAdapter(
             }
 
             if (currentItem.isDefault) {
-                val widthInPx = dpToPx(100, binding.tvCategoryName.context) // 100dp to pixels
+                val widthInPx = dpToPx(100, binding.tvCategoryName.context)
                 val layoutParams = binding.tvCategoryName.layoutParams
                 layoutParams.width = widthInPx
                 binding.tvCategoryName.layoutParams = layoutParams
                 binding.ibSettingsCategory.visibility = View.INVISIBLE
             } else {
-                val widthInPx = dpToPx(85, binding.tvCategoryName.context) // 70dp to pixels
+                val widthInPx = dpToPx(85, binding.tvCategoryName.context)
                 val layoutParams = binding.tvCategoryName.layoutParams
                 layoutParams.width = widthInPx
                 binding.tvCategoryName.layoutParams = layoutParams
@@ -70,7 +70,6 @@ class ShoppingListCategoriesAdapter(
                     onConfigureSelected(currentItem)
                 }
 
-                //onConfigureSelected(currentItem)
             }
         }
 

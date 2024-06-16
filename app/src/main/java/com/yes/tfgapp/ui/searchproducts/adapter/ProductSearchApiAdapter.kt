@@ -43,10 +43,10 @@ class ProductSearchApiAdapter(private val onAddProductToList: (ProductModel, Int
             Picasso.get().load(currentItem.productImage).into(binding.ivProductApiSearchImage)
 
             val matchedProduct = productsAll.find { it.name == currentItem.productName }
-            if (matchedProduct != null) {
-                isProductAdded = productsInShoppingList.any { it.productId == matchedProduct.id }
+            isProductAdded = if (matchedProduct != null) {
+                productsInShoppingList.any { it.productId == matchedProduct.id }
             } else {
-                isProductAdded = false
+                false
             }
 
             if (isProductAdded) {

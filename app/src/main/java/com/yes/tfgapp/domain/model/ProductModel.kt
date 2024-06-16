@@ -14,7 +14,7 @@ import kotlinx.android.parcel.Parcelize
         entity = CategoryModel::class,
         parentColumns = ["id"],
         childColumns = ["categoryId"],
-        onDelete = ForeignKey.CASCADE // Esto especifica que si se elimina una categoría, se eliminarán todos los productos relacionados
+        onDelete = ForeignKey.CASCADE
     )]
 )
 data class ProductModel(

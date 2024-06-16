@@ -34,8 +34,7 @@ class ShoppingListFragment : Fragment() {
 
 
     private val adapter = ShoppingListAdapter(
-        onClickOpenConfiguration = { onConfigureItem(it) },
-        onGetShoppingListProductsCount={ getShoppingListProductsCount(it)}
+        onClickOpenConfiguration = { onConfigureItem(it) }
     )
 
     override fun onResume() {
@@ -85,42 +84,7 @@ class ShoppingListFragment : Fragment() {
     private fun onConfigureItem(shoppingList: ShoppingListModel) {
 
         showOptionsDialog(shoppingList)
-        /*
-        val dialog = Dialog(requireContext())
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setContentView(R.layout.dialog_configure_shopping_list)
-        dialog.show()
-        val textInputLayout: TextInputLayout = dialog.findViewById(R.id.tilUpdateNameList)
-        textInputLayout.hint = shoppingList.name
 
-        val btnSaveChanges = dialog.findViewById<Button>(R.id.btnSaveChanges)
-        btnSaveChanges.setOnClickListener {
-            val newName =
-                dialog.findViewById<TextInputEditText?>(R.id.etUpdateNameList).text.toString()
-            val newShoppingList = ShoppingListModel(shoppingList.id, newName, shoppingList.quantity)
-
-            animateButtonClick(btnSaveChanges) {
-                if (newName.isNotEmpty()) {
-                    mShoppingListViewModel.updateShoppingList(newShoppingList)
-                    dialog.hide()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Please fill out all fields.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-
-        }
-
-        val btnDeleteList = dialog.findViewById<ImageButton>(R.id.ibDeleteList)
-        btnDeleteList.setOnClickListener {
-            animateButtonClick(btnDeleteList) {
-                mShoppingListViewModel.deleteShoppingList(shoppingList)
-                dialog.hide()
-            }
-        }*/
     }
 
     private fun showOptionsDialog(shoppingList: ShoppingListModel) {
@@ -128,6 +92,10 @@ class ShoppingListFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_edit_shopping_list)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         dialog.show()
 
         dialog.findViewById<LinearLayout>(R.id.option1).setOnClickListener {
@@ -173,6 +141,10 @@ class ShoppingListFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_configure_shopping_list)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         dialog.show()
         val textInputLayout: TextInputLayout = dialog.findViewById(R.id.tilUpdateNameList)
         textInputLayout.hint = shoppingList.name
@@ -247,6 +219,10 @@ class ShoppingListFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         dialog.setContentView(R.layout.dialog_new_shopping_list)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         dialog.show()
         val btnAdd: Button = dialog.findViewById(R.id.btnCreateList)
         btnAdd.setOnClickListener {

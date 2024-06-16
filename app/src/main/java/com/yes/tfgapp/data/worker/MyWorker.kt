@@ -4,26 +4,21 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.yes.tfgapp.R
 import com.yes.tfgapp.data.AppDataBase
 import com.yes.tfgapp.data.repository.StockProductRepository
 import com.yes.tfgapp.ui.home.MainActivity
-import com.yes.tfgapp.ui.mystock.MyStockViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -68,7 +63,6 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
                 SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(currentDate.time),
                 expireDate
             )
-            Log.d(TAG, "DAYS TO EXPIRE: $daysToExpire")
             if(daysToExpire<=3){
                 showNotification(product.name, daysToExpire.toInt())
             }
@@ -95,7 +89,6 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
         val currentDate = Calendar.getInstance()
         val nextRun = Calendar.getInstance()
 
-        // Establecer la próxima ejecución a las 12 AM del siguiente día
         nextRun.set(Calendar.HOUR_OF_DAY, 0)
         nextRun.set(Calendar.MINUTE, 5)
         nextRun.set(Calendar.SECOND, 0)

@@ -10,8 +10,6 @@ class StockProductRepository(private val stockProductDao: StockProductDao) {
         stockProductDao.addStockProduct(stockProduct)
     }
 
-
-
     suspend fun updateStockProduct(stockProduct: StockProductModel){
         stockProductDao.updateStockProduct(stockProduct)
     }

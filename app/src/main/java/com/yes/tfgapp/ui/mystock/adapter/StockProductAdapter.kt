@@ -44,7 +44,7 @@ class StockProductAdapter(
             } else if (currentItem.icon != null) {
                 binding.ivStockProduct.setImageResource(currentItem.icon)
             } else {
-                binding.ivStockProduct.setImageResource(R.drawable.ic_others_category) // Imagen por defecto si no hay imagen ni icono
+                binding.ivStockProduct.setImageResource(R.drawable.ic_others_category)
             }
 
             binding.ibDeleteStockProduct.setOnClickListener {

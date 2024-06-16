@@ -32,7 +32,6 @@ import com.yes.tfgapp.domain.model.ProductShoppingListModel
 import com.yes.tfgapp.domain.model.ShoppingListModel
 import com.yes.tfgapp.ui.home.MainActivity
 import com.yes.tfgapp.ui.mystockproductsmanual.SelectIconDialogFragment
-import com.yes.tfgapp.ui.mystockproductsmanual.adapter.ChooseCategoryAdapterManual
 import com.yes.tfgapp.ui.shoppinglist.ShoppingListViewModel
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListCategoriesAdapter
 import com.yes.tfgapp.ui.shoppinglistadditems.adapter.ShoppingListProductsAdapter
@@ -93,9 +92,6 @@ class ShoppingListAddItemsFragment : Fragment() {
         R.drawable.ic_others_category
     )
 
-    private var chooseCategoryAdapter: ChooseCategoryAdapterManual = ChooseCategoryAdapterManual(
-        onChangeCategory = { changeCategorySelected() }
-    )
     private val categoriesAdapter = ShoppingListCategoriesAdapter(
         onItemSelected = { position -> updateCategories(position) },
         onConfigureSelected = { category -> configureCategories(category) })
@@ -208,6 +204,10 @@ class ShoppingListAddItemsFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_new_category)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         dialog.show()
 
         val btnChangeIcon = dialog.findViewById<ShapeableImageView>(R.id.ivAddIcon)
@@ -224,19 +224,16 @@ class ShoppingListAddItemsFragment : Fragment() {
         }
     }
 
-    private fun showSelectIconDialog(dialog_new_category: Dialog) {
+    private fun showSelectIconDialog(dialogNewCategory: Dialog) {
 
-        val icon_new_category = dialog_new_category.findViewById<ShapeableImageView>(R.id.ivAddIcon)
+        val iconNewCategory = dialogNewCategory.findViewById<ShapeableImageView>(R.id.ivAddIcon)
         val dialog = SelectIconDialogFragment(icons) { selectedIcon ->
-            icon_new_category.setImageResource(selectedIcon)
+            iconNewCategory.setImageResource(selectedIcon)
             iconSelected = selectedIcon
         }
         dialog.show(parentFragmentManager, "SelectIconDialogFragment")
     }
 
-    private fun changeCategorySelected() {
-
-    }
 
     private fun createNewCategory(dialog: Dialog) {
         val newCategoryName =
@@ -331,6 +328,10 @@ class ShoppingListAddItemsFragment : Fragment() {
         val dialog = Dialog(requireContext())
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.dialog_configure_category)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         val ivCategoryIcon = dialog.findViewById<ShapeableImageView>(R.id.ivAddIcon)
         ivCategoryIcon.setImageResource(category.icon)
         iconSelected = category.icon

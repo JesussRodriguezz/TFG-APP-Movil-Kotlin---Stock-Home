@@ -90,12 +90,12 @@
                         android:layout_margin="16dp"
 
                         android:fontFamily="@font/roboto_medium"
-                        android:text="Fecha de caducidad"
+                        android:text="@string/expire_data"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -148,7 +148,7 @@
                                 android:fontFamily="@font/roboto_light"
                                 android:gravity="center_horizontal"
                                 android:maxLines="1"
-                                android:text="__ / __ / __"
+                                android:text="@string/empty_expire_data"
                                 android:textColor="@color/black"
                                 android:textSize="20sp"
                                 app:layout_constraintHorizontal_bias="0"
@@ -203,12 +203,12 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="16dp"
                         android:fontFamily="@font/roboto_medium"
-                        android:text="Categoria"
+                        android:text="@string/category"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -285,12 +285,12 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="16dp"
                         android:fontFamily="@font/roboto_medium"
-                        android:text="Detalles del producto"
+                        android:text="@string/product_details"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -322,7 +322,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Codigo de barras"
+                            android:text="@string/bar_code"
                             android:textStyle="bold" />
 
                         <TextView
@@ -330,7 +330,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            android:text="@string/calories" />
 
                     </LinearLayout>
 
@@ -349,7 +349,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Denominación general"
+                            android:text="@string/general_name"
                             android:textStyle="bold" />
 
 
@@ -358,7 +358,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                     </LinearLayout>
 
@@ -376,7 +376,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Cantidad"
+                            android:text="@string/cuantity"
                             android:textStyle="bold" />
 
 
@@ -385,7 +385,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                     </LinearLayout>
 
@@ -403,7 +403,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Marcas"
+                            android:text="@string/brands"
                             android:textStyle="bold" />
 
                         <TextView
@@ -411,7 +411,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                     </LinearLayout>
 
@@ -458,12 +458,12 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="16dp"
                         android:fontFamily="@font/roboto_medium"
-                        android:text="Informacion Nutricional"
+                        android:text="@string/nutritional_information"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -521,7 +521,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Tamaño de la porcion"
+                            android:text="@string/serving_size"
                             android:textStyle="bold" />
 
                         <TextView
@@ -529,7 +529,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Tamaño de la porcion" />
+                            android:text="@string/serving_size" />
 
 
                     </LinearLayout>
@@ -545,7 +545,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:padding="16dp"
-                            android:text="Información"
+                            android:text="@string/info"
                             android:textStyle="bold" />
 
                         <Space
@@ -558,7 +558,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:padding="16dp"
-                            android:text="100 g / 100 ml"
+                            android:text="@string/_100_g_100_ml"
                             android:textStyle="bold" />
 
                         <Space
@@ -572,7 +572,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:padding="8dp"
-                            android:text="por 330ml"
+                            tools:text="por 330ml"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -586,7 +586,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Energía"
+                            android:text="@string/energy"
                             android:textStyle="bold" />
 
                         <Space
@@ -599,7 +599,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -611,7 +611,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
                     </LinearLayout>
 
 
@@ -629,7 +629,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Grasas"
+                            android:text="@string/fats"
                             android:textStyle="bold" />
 
                         <Space
@@ -642,7 +642,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -654,7 +654,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
                     </LinearLayout>
 
                     <com.google.android.material.divider.MaterialDivider
@@ -671,7 +671,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Grasas Saturadas"
+                            android:text="@string/saturated_fats"
                             android:textStyle="bold" />
 
                         <Space
@@ -684,7 +684,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -696,7 +696,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
                     </LinearLayout>
 
                     <com.google.android.material.divider.MaterialDivider
@@ -713,7 +713,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Carbohidratos"
+                            android:text="@string/carbohydrates"
                             android:textStyle="bold" />
 
                         <Space
@@ -726,7 +726,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -738,7 +738,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
                     </LinearLayout>
 
                     <com.google.android.material.divider.MaterialDivider
@@ -755,7 +755,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Sal"
+                            android:text="@string/salt"
                             android:textStyle="bold" />
 
                         <Space
@@ -768,7 +768,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -780,7 +780,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
                     </LinearLayout>
 
                     <com.google.android.material.divider.MaterialDivider
@@ -797,7 +797,7 @@
                             android:layout_width="170dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Proteinas"
+                            android:text="@string/proteins"
                             android:textStyle="bold" />
 
                         <Space
@@ -810,7 +810,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -822,7 +822,7 @@
                             android:layout_width="120dp"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
-                            android:text="Calorias" />
+                            tools:text="Calorias" />
                     </LinearLayout>
 
 
@@ -871,12 +871,12 @@
                         android:layout_gravity="center_vertical"
                         android:layout_margin="16dp"
                         android:fontFamily="@font/roboto_medium"
-                        android:text="Ingredientes"
+                        android:text="@string/ingredients"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <Space
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
@@ -904,7 +904,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="Contenido adicional para Niveles nutrientes" />
+                        android:text="@string/aditional_content_for_nutrients_levels" />
                 </LinearLayout>
             </LinearLayout>
 

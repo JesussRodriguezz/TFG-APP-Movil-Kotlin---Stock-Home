@@ -36,7 +36,7 @@
             android:id="@+id/ivStockProduct"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="Product Image"
+            android:contentDescription="@string/product_image"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

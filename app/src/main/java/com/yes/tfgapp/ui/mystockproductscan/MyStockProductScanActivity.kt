@@ -28,19 +28,19 @@ import java.util.concurrent.TimeUnit
 
 class MyStockProductScanActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityMyStockProductScanBinding
+    private lateinit var binding: ActivityMyStockProductScanBinding
     private lateinit var stockProduct: StockProductModel
     private var chooseCategoryAdapter: ChooseCategoryAdapterManual = ChooseCategoryAdapterManual(
-        onChangeCategory= {changeCategorySelected()}
+        onChangeCategory = { changeCategorySelected() }
     )
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
-    private lateinit var btnAddStockProduct : View
-    private lateinit var btnCloseDialog : View
+    private lateinit var btnAddStockProduct: View
+    private lateinit var btnCloseDialog: View
     private lateinit var mStockViewModel: MyStockViewModel
     private var selectedExpireDateButton: Button? = null
     private var selectedCategory: Int = 14
 
-    private var expireData :String = "__ / __ / ____"
+    private var expireData: String = "__ / __ / ____"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyStockProductScanBinding.inflate(layoutInflater)
@@ -51,6 +51,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
 
 
     }
+
     private fun initUI() {
         binding.ivCategoryIcon.setImageResource(R.drawable.ic_others_category)
         binding.tvCategoryName.text = "Otros"
@@ -59,18 +60,18 @@ class MyStockProductScanActivity : AppCompatActivity() {
             intent.getParcelableExtra("currentStockProduct", StockProductModel::class.java)!!
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra<StockProductModel>("currentStockProduct")!!
+            intent.getParcelableExtra("currentStockProduct")!!
         }
-        mStockViewModel= ViewModelProvider(this)[MyStockViewModel::class.java]
+        mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
         mShoppingListAddItemsViewModel =
             ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
         btnAddStockProduct = binding.efAddStockItem
         btnCloseDialog = binding.ibBackArrow
 
-        if(stockProduct.id=="error"){
+        if (stockProduct.id == "error") {
             binding.tvProductId.text = "Product not found"
-        }else{
+        } else {
             binding.tvProductId.text = stockProduct.name
             Picasso.get()
                 .load(stockProduct.image)
@@ -87,6 +88,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
             chooseCategoryAdapter.notifyDataSetChanged()
         }
     }
+
     private fun initListeners() {
 
 
@@ -101,7 +103,8 @@ class MyStockProductScanActivity : AppCompatActivity() {
 
         binding.btn1Week.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 7)
-            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            binding.tvChangeExpireData.text =
+                formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
             //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn1Week,
@@ -112,7 +115,8 @@ class MyStockProductScanActivity : AppCompatActivity() {
 
         binding.btn2Weeks.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 14)
-            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            binding.tvChangeExpireData.text =
+                formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
             //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn2Weeks,
@@ -122,7 +126,8 @@ class MyStockProductScanActivity : AppCompatActivity() {
 
         binding.btn1Month.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 30)
-            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            binding.tvChangeExpireData.text =
+                formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
             //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn1Month,
@@ -132,7 +137,8 @@ class MyStockProductScanActivity : AppCompatActivity() {
 
         binding.btn2Months.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 90)
-            binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
+            binding.tvChangeExpireData.text =
+                formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
             //binding.tvChangeExpireData.text = expireData
             updateButtonStates(
                 binding.btn2Months,
@@ -146,16 +152,18 @@ class MyStockProductScanActivity : AppCompatActivity() {
             } else {
                 View.VISIBLE
             }
-            binding.llCategorySuggested.visibility = if (binding.llCategorySuggested.visibility == View.VISIBLE) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            }
-            binding.tvChangeCategory.visibility = if (binding.tvChangeCategory.visibility == View.VISIBLE) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            }
+            binding.llCategorySuggested.visibility =
+                if (binding.llCategorySuggested.visibility == View.VISIBLE) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+            binding.tvChangeCategory.visibility =
+                if (binding.tvChangeCategory.visibility == View.VISIBLE) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
         }
 
         binding.cvChangeExpireData.setOnClickListener {
@@ -167,7 +175,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
     private fun updateButtonStates(selectedButton: Button, otherButtons: List<Button>) {
         selectedButton.setBackgroundColor(ContextCompat.getColor(this, R.color.accentRed))
         selectedButton.setTextColor(ContextCompat.getColor(this, R.color.white))
-        selectedExpireDateButton=selectedButton
+        selectedExpireDateButton = selectedButton
 
         otherButtons.forEach { button ->
             button.setBackgroundColor(ContextCompat.getColor(this, R.color.primaryGrey))
@@ -280,24 +288,24 @@ class MyStockProductScanActivity : AppCompatActivity() {
 
     private fun addStockProduct() {
         val stockProduct = this.stockProduct
-        val expirationDate = when (selectedExpireDateButton) {
-            binding.btn1Week -> addDaysToDate(stockProduct.addedDate, 7)
-            binding.btn2Weeks -> addDaysToDate(stockProduct.addedDate, 14)
-            binding.btn1Month -> addDaysToDate(stockProduct.addedDate, 30)
-            binding.btn2Months -> addDaysToDate(stockProduct.addedDate, 60)
-            else -> stockProduct.addedDate
-        }
+
         val daysToExpire = daysBetweenDates(stockProduct.addedDate, expireData).toInt()
-        val updatedStockProduct = stockProduct.copy(expirationDate = expireData, daysToExpire = daysToExpire, categoryId = selectedCategory)
+        val updatedStockProduct = stockProduct.copy(
+            expirationDate = expireData,
+            daysToExpire = daysToExpire,
+            categoryId = selectedCategory
+        )
         mStockViewModel.addProductIfNotExists(updatedStockProduct) { productAdded ->
             runOnUiThread {
                 if (productAdded) {
                     // Si el producto se añadió correctamente, actualiza y muestra un Toast
                     mStockViewModel.updateStockProduct(updatedStockProduct)
-                    Toast.makeText(this, "Producto añadido correctamente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Producto añadido correctamente", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     // Si el producto ya existe, muestra un Toast de advertencia
-                    Toast.makeText(this, "¡El producto ya existe en tu stock!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡El producto ya existe en tu stock!", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -313,7 +321,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
     }
 
     private fun daysBetweenDates(startDate: String, endDate: String): Long {
-        if(expireData!="__ / __ / ____"){
+        if (expireData != "__ / __ / ____") {
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             val start = dateFormat.parse(startDate)
             val end = dateFormat.parse(endDate)
@@ -325,8 +333,9 @@ class MyStockProductScanActivity : AppCompatActivity() {
         return 0
     }
 
-    private fun changeCategorySelected(){
-        selectedCategory =chooseCategoryAdapter.publicCategoriesList[chooseCategoryAdapter.selectedItemPosition].id
+    private fun changeCategorySelected() {
+        selectedCategory =
+            chooseCategoryAdapter.publicCategoriesList[chooseCategoryAdapter.selectedItemPosition].id
     }
 
 

@@ -1,5 +1,6 @@
 package com.yes.tfgapp.ui.nystockproductdetail
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,27 +11,19 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.NumberPicker
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.constraintlayout.widget.ConstraintSet
 
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.squareup.picasso.Picasso
 import com.yes.tfgapp.R
 import com.yes.tfgapp.databinding.ActivityMyStockProductDetailBinding
-import com.yes.tfgapp.databinding.ActivityMyStockProductScanBinding
-import com.yes.tfgapp.domain.model.CategoryModel
 import com.yes.tfgapp.domain.model.StockProductModel
 import com.yes.tfgapp.ui.mystock.MyStockViewModel
 import com.yes.tfgapp.ui.mystockproductsmanual.adapter.ChooseCategoryAdapterManual
 import com.yes.tfgapp.ui.shoppinglistadditems.ShoppingListAddItemsViewModel
-import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -43,7 +36,6 @@ class MyStockProductDetailActivity : AppCompatActivity() {
     private lateinit var mShoppingListAddItemsViewModel: ShoppingListAddItemsViewModel
     private lateinit var btnCloseDialog: View
     private lateinit var mStockViewModel: MyStockViewModel
-    private var selectedExpireDateButton: Button? = null
     private var selectedCategory: Int = 14
 
     private var expireData: String = "__ / __ / ____"
@@ -61,6 +53,7 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         binding.tvCategoryName.text = category.name
     }*/
 
+    @SuppressLint("SetTextI18n")
     private fun initUI() {
         setupExpandableRows()
 
@@ -68,16 +61,16 @@ class MyStockProductDetailActivity : AppCompatActivity() {
             intent.getParcelableExtra("currentStockProduct", StockProductModel::class.java)!!
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra<StockProductModel>("currentStockProduct")!!
+            intent.getParcelableExtra("currentStockProduct")!!
         }
         mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
         mShoppingListAddItemsViewModel =
             ViewModelProvider(this)[ShoppingListAddItemsViewModel::class.java]
 
         btnCloseDialog = binding.ibBackArrow
-        if(stockProduct.isScanned){
+        if (stockProduct.isScanned) {
             binding.tvProductId.text = stockProduct.name + " - " + stockProduct.quantity
-        }else{
+        } else {
             binding.tvProductId.text = stockProduct.name
             binding.llProductInfo.visibility = View.GONE
             binding.llNutritionalInfo.visibility = View.GONE
@@ -91,9 +84,9 @@ class MyStockProductDetailActivity : AppCompatActivity() {
 
         if (stockProduct.ingredientsTextEs != "" && stockProduct.ingredientsTextEs != null) {
             binding.tvIngredientsText.text = stockProduct.ingredientsTextEs
-        } else if(stockProduct.ingredientsText != "" && stockProduct.ingredientsText != null) {
+        } else if (stockProduct.ingredientsText != "" && stockProduct.ingredientsText != null) {
             binding.tvIngredientsText.text = stockProduct.ingredientsText
-        }else{
+        } else {
             binding.tvIngredientsText.text = "No hay información disponible"
         }
 
@@ -144,30 +137,42 @@ class MyStockProductDetailActivity : AppCompatActivity() {
             "a" -> {
                 binding.ivNutriScore.setImageResource(R.drawable.nutriscore_a)
                 binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_a)
-                binding.tvMsgNutriScore.text="¡Excelente elección! Este producto tiene un alto puntaje nutricional y es una opción muy saludable."
+                binding.tvMsgNutriScore.text =
+                    "¡Excelente elección! Este producto tiene un alto puntaje nutricional y es una opción muy saludable."
             }
+
             "b" -> {
                 binding.ivNutriScore.setImageResource(R.drawable.nutriscore_b)
                 binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_b)
-                binding.tvMsgNutriScore.text="Buena opción nutricional. Este producto es una opción bastante saludable."
+                binding.tvMsgNutriScore.text =
+                    "Buena opción nutricional. Este producto es una opción bastante saludable."
             }
+
             "c" -> {
                 binding.ivNutriScore.setImageResource(R.drawable.nutriscore_c)
                 binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_c)
-                binding.tvMsgNutriScore.text="Moderado puntaje nutricional. Este producto está en un punto medio en términos de salud. "
+                binding.tvMsgNutriScore.text =
+                    "Moderado puntaje nutricional. Este producto está en un punto medio en términos de salud. "
             }
+
             "d" -> {
                 binding.ivNutriScore.setImageResource(R.drawable.nutriscore_d)
                 binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_d)
-                binding.tvMsgNutriScore.text="¡Bajo puntaje nutricional! Es posible que existan alternativas más saludables."
+                binding.tvMsgNutriScore.text =
+                    "¡Bajo puntaje nutricional! Es posible que existan alternativas más saludables."
             }
+
             "e" -> {
                 binding.ivNutriScore.setImageResource(R.drawable.nutriscore_e)
                 binding.ivNutriScore2.setImageResource(R.drawable.nutriscore_e)
-                binding.tvMsgNutriScore.text="¡Muy bajo puntaje nutricional! Es posible que existan alternativas más saludables."
-            }else -> {
+                binding.tvMsgNutriScore.text =
+                    "¡Muy bajo puntaje nutricional! Es posible que existan alternativas más saludables."
+            }
+
+            else -> {
                 binding.ivNutriScore2.setImageResource(R.drawable.ic_warning)
-                binding.tvMsgNutriScore.text="No se ha podido calcular el puntaje nutricional de este producto."
+                binding.tvMsgNutriScore.text =
+                    "No se ha podido calcular el puntaje nutricional de este producto."
             }
         }
 
@@ -196,7 +201,6 @@ class MyStockProductDetailActivity : AppCompatActivity() {
             return if (!unit.contains("null")) {
                 "$unit"
             } else {
-                binding.tvNutritionalInfoTitle.text = "Información nutricional (incompleto)"
                 "?"
             }
         }
@@ -211,59 +215,57 @@ class MyStockProductDetailActivity : AppCompatActivity() {
     private fun initListeners() {
 
 
-
-
         btnCloseDialog.setOnClickListener {
             finish()
         }
 
 
-/*
-        binding.cvCategory.setOnClickListener {
-            binding.rvCategories.visibility = View.VISIBLE
-            binding.llCategorySuggested.visibility = View.GONE
-            binding.divider3.visibility = View.GONE
-            binding.divider4.visibility = View.VISIBLE
-            binding.ibDropUp.visibility = View.VISIBLE
+        /*
+                binding.cvCategory.setOnClickListener {
+                    binding.rvCategories.visibility = View.VISIBLE
+                    binding.llCategorySuggested.visibility = View.GONE
+                    binding.divider3.visibility = View.GONE
+                    binding.divider4.visibility = View.VISIBLE
+                    binding.ibDropUp.visibility = View.VISIBLE
 
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(binding.constraintLayout)
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(binding.constraintLayout)
 
-            // Cambia la restricción de layout_constraintTop_toBottomOf de llNutrients
-            constraintSet.connect(
-                R.id.llNutrients, // ID de la vista cuyo constraint se quiere cambiar
-                ConstraintSet.TOP, // Lado al que queremos conectar
-                R.id.divider4, // ID de la vista a la que queremos conectar
-                ConstraintSet.BOTTOM // Lado de la vista a la que queremos conectar
-            )
+                    // Cambia la restricción de layout_constraintTop_toBottomOf de llNutrients
+                    constraintSet.connect(
+                        R.id.llNutrients, // ID de la vista cuyo constraint se quiere cambiar
+                        ConstraintSet.TOP, // Lado al que queremos conectar
+                        R.id.divider4, // ID de la vista a la que queremos conectar
+                        ConstraintSet.BOTTOM // Lado de la vista a la que queremos conectar
+                    )
 
-            // Aplica las nuevas restricciones al ConstraintLayout
-            constraintSet.applyTo(binding.constraintLayout)
+                    // Aplica las nuevas restricciones al ConstraintLayout
+                    constraintSet.applyTo(binding.constraintLayout)
 
-        }
-        binding.ibDropUp.setOnClickListener{
-            binding.rvCategories.visibility = View.GONE
-            binding.llCategorySuggested.visibility = View.VISIBLE
-            binding.divider3.visibility = View.VISIBLE
-            binding.divider4.visibility = View.GONE
-            binding.ibDropUp.visibility = View.GONE
+                }
+                binding.ibDropUp.setOnClickListener{
+                    binding.rvCategories.visibility = View.GONE
+                    binding.llCategorySuggested.visibility = View.VISIBLE
+                    binding.divider3.visibility = View.VISIBLE
+                    binding.divider4.visibility = View.GONE
+                    binding.ibDropUp.visibility = View.GONE
 
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(binding.constraintLayout)
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(binding.constraintLayout)
 
-            // Establece la restricción de layout_constraintTop_toBottomOf de llNutrients
-            constraintSet.connect(
-                R.id.llNutrients, // ID de la vista cuyo constraint se quiere cambiar
-                ConstraintSet.TOP, // Lado al que queremos conectar
-                R.id.divider3, // ID de la vista a la que queremos conectar
-                ConstraintSet.BOTTOM, // Lado de la vista a la que queremos conectar
-                0 // Margen
-            )
+                    // Establece la restricción de layout_constraintTop_toBottomOf de llNutrients
+                    constraintSet.connect(
+                        R.id.llNutrients, // ID de la vista cuyo constraint se quiere cambiar
+                        ConstraintSet.TOP, // Lado al que queremos conectar
+                        R.id.divider3, // ID de la vista a la que queremos conectar
+                        ConstraintSet.BOTTOM, // Lado de la vista a la que queremos conectar
+                        0 // Margen
+                    )
 
-            // Aplica las nuevas restricciones al ConstraintLayout
-            constraintSet.applyTo(binding.constraintLayout)
+                    // Aplica las nuevas restricciones al ConstraintLayout
+                    constraintSet.applyTo(binding.constraintLayout)
 
-        }*/
+                }*/
 
         binding.cvChangeExpireData.setOnClickListener {
             showChangeExpireDataDialog()
@@ -274,57 +276,57 @@ class MyStockProductDetailActivity : AppCompatActivity() {
     private fun setupExpandableRows() {
         val llExpireData = findViewById<LinearLayout>(R.id.llExpireData)
         val llExpireDataContent = findViewById<LinearLayout>(R.id.llExpireDataContent)
-        val ibExpireDataArrow= binding.ibExpireDataArrow
+        val ibExpireDataArrow = binding.ibExpireDataArrow
 
         val llCategoria = findViewById<LinearLayout>(R.id.llCategoria)
         val llCategoriaContent = findViewById<LinearLayout>(R.id.llCategoriaContent)
-        val ibCategoryArrow= binding.ibCategoryArrow
+        val ibCategoryArrow = binding.ibCategoryArrow
 
         val llProductInfo = findViewById<LinearLayout>(R.id.llProductInfo)
         val llProductInfoContent = findViewById<LinearLayout>(R.id.llProductInfoContent)
-        val ibProductInfoArrow= binding.ibProductInfoArrow
+        val ibProductInfoArrow = binding.ibProductInfoArrow
 
         val llNutritionalInfo = findViewById<LinearLayout>(R.id.llNutritionalInfo)
         val llNutritionalInfoContent = findViewById<LinearLayout>(R.id.llNutritionalInfoContent)
-        val ibNutritionalInfoArrow= binding.ibNutritionalInfoArrow
+        val ibNutritionalInfoArrow = binding.ibNutritionalInfoArrow
 
         val llIngredients = findViewById<LinearLayout>(R.id.llIngredients)
         val llIngredientsContent = findViewById<LinearLayout>(R.id.llIngredientsContent)
-        val ibIngredientsArrow= binding.ibIngredientsArrow
+        val ibIngredientsArrow = binding.ibIngredientsArrow
 
         llExpireData.setOnClickListener {
-            toggleVisibility(llExpireDataContent,ibExpireDataArrow)
+            toggleVisibility(llExpireDataContent, ibExpireDataArrow)
         }
         ibExpireDataArrow.setOnClickListener {
-            toggleVisibility(llExpireDataContent,ibExpireDataArrow)
+            toggleVisibility(llExpireDataContent, ibExpireDataArrow)
         }
 
         llCategoria.setOnClickListener {
-            toggleVisibility(llCategoriaContent,ibCategoryArrow)
+            toggleVisibility(llCategoriaContent, ibCategoryArrow)
         }
         ibCategoryArrow.setOnClickListener {
-            toggleVisibility(llCategoriaContent,ibCategoryArrow)
+            toggleVisibility(llCategoriaContent, ibCategoryArrow)
         }
 
         llProductInfo.setOnClickListener {
-            toggleVisibility(llProductInfoContent,ibProductInfoArrow)
+            toggleVisibility(llProductInfoContent, ibProductInfoArrow)
         }
         ibProductInfoArrow.setOnClickListener {
-            toggleVisibility(llProductInfoContent,ibProductInfoArrow)
+            toggleVisibility(llProductInfoContent, ibProductInfoArrow)
         }
 
         llNutritionalInfo.setOnClickListener {
-            toggleVisibility(llNutritionalInfoContent,ibNutritionalInfoArrow)
+            toggleVisibility(llNutritionalInfoContent, ibNutritionalInfoArrow)
         }
         ibNutritionalInfoArrow.setOnClickListener {
-            toggleVisibility(llNutritionalInfoContent,ibNutritionalInfoArrow)
+            toggleVisibility(llNutritionalInfoContent, ibNutritionalInfoArrow)
         }
 
         llIngredients.setOnClickListener {
-            toggleVisibility(llIngredientsContent,ibIngredientsArrow)
+            toggleVisibility(llIngredientsContent, ibIngredientsArrow)
         }
         ibIngredientsArrow.setOnClickListener {
-            toggleVisibility(llIngredientsContent,ibIngredientsArrow)
+            toggleVisibility(llIngredientsContent, ibIngredientsArrow)
         }
 
     }
@@ -427,18 +429,8 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         return String.format("%02d/%s/%d", day, months[month - 1], year)
     }
 
-    private fun getCategoryById(id: Int, callback: (CategoryModel?) -> Unit) {
-        lifecycleScope.launch {
-            try {
-                val category = mShoppingListAddItemsViewModel.getCategoryById(id)
-                callback(category)  // Pasamos el resultado al callback
-            } catch (e: Exception) {
-                callback(null)  // En caso de error, podríamos pasar null o manejar el error de otra forma
-            }
-        }
-    }
 
-    private fun updateStockProductExpireData(){
+    private fun updateStockProductExpireData() {
         val stockProduct = this.stockProduct
         val daysToExpire = daysBetweenDates(stockProduct.addedDate, expireData).toInt()
         val updatedStockProduct = stockProduct.copy(
@@ -449,7 +441,7 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         mStockViewModel.updateStockProduct(updatedStockProduct)
     }
 
-    private fun updateStockProductCategory(){
+    private fun updateStockProductCategory() {
         val stockProduct = this.stockProduct
         val updatedStockProduct = stockProduct.copy(
             categoryId = selectedCategory
@@ -457,38 +449,6 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         mStockViewModel.updateStockProduct(updatedStockProduct)
     }
 
-    private fun addStockProduct() {
-        val stockProduct = this.stockProduct
-        val daysToExpire = daysBetweenDates(stockProduct.addedDate, expireData).toInt()
-        val updatedStockProduct = stockProduct.copy(
-            expirationDate = expireData,
-            daysToExpire = daysToExpire,
-            categoryId = selectedCategory
-        )
-        mStockViewModel.addProductIfNotExists(updatedStockProduct) { productAdded ->
-            runOnUiThread {
-                if (productAdded) {
-                    // Si el producto se añadió correctamente, actualiza y muestra un Toast
-                    mStockViewModel.updateStockProduct(updatedStockProduct)
-                    Toast.makeText(this, "Producto añadido correctamente", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    // Si el producto ya existe, muestra un Toast de advertencia
-                    Toast.makeText(this, "¡El producto ya existe en tu stock!", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-        }
-    }
-
-
-    private fun addDaysToDate(date: String, days: Int): String {
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        calendar.time = dateFormat.parse(date) ?: return date
-        calendar.add(Calendar.DAY_OF_YEAR, days)
-        return dateFormat.format(calendar.time)
-    }
 
     private fun daysBetweenDates(startDate: String, endDate: String): Long {
         if (expireData != "__ / __ / ____") {

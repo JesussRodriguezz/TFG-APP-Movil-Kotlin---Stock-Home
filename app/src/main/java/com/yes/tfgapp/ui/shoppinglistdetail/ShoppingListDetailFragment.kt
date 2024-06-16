@@ -65,11 +65,6 @@ class ShoppingListDetailFragment : Fragment() {
                 binding.root.findNavController().navigate(action)
             }
 
-            //val action =
-            //    ShoppingListDetailFragmentDirections.actionShoppingListDetailFragmentToShoppingListAddItemsFragment(
-            //        args.currentShoppingList
-            //    )
-            //binding.root.findNavController().navigate(action)
         }
 
 
