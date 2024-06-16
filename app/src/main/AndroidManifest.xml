@@ -28,12 +28,15 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.nystockproductdetail.MyStockProductDetailActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.mystockproductscan.MyStockProductScanActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ui.mystockproductsmanual.MyStockProductManualActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <provider
@@ -48,6 +51,7 @@
 
         <activity
             android:name=".ui.home.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,8 +61,8 @@
         </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
-            android:screenOrientation="fullSensor"
             android:theme="@style/zxing_CaptureTheme"
             tools:replace="android:screenOrientation" />
     </application>

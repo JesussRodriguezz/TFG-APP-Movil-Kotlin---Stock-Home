@@ -63,7 +63,7 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
                 SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(currentDate.time),
                 expireDate
             )
-            if(daysToExpire<=3){
+            if(daysToExpire<=2 && daysToExpire>=0){
                 showNotification(product.name, daysToExpire.toInt())
             }
             val updatedProduct = product.copy(daysToExpire = daysToExpire.toInt())

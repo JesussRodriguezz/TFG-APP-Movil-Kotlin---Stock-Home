@@ -251,7 +251,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
             addStockProduct()
         }
 
-        binding.tvChangeCategory.setOnClickListener {
+        binding.cvCategory.setOnClickListener {
             binding.rvCategories.visibility = if (binding.rvCategories.visibility == View.VISIBLE) {
                 View.GONE
             } else {
@@ -263,12 +263,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
                 } else {
                     View.VISIBLE
                 }
-            binding.tvChangeCategory.visibility =
-                if (binding.tvChangeCategory.visibility == View.VISIBLE) {
-                    View.GONE
-                } else {
-                    View.VISIBLE
-                }
+
         }
 
         binding.cvChangeExpireData.setOnClickListener {
@@ -446,7 +441,6 @@ class MyStockProductManualActivity : AppCompatActivity() {
     private fun changeVisibilities() {
         binding.rvCategories.visibility = View.GONE
         binding.llCategorySuggested.visibility = View.VISIBLE
-        binding.tvChangeCategory.visibility = View.VISIBLE
     }
 
     private fun changeCategorySelected() {

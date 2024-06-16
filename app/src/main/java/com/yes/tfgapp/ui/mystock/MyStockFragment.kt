@@ -30,11 +30,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.google.gson.GsonBuilder
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.yes.tfgapp.R
 import com.yes.tfgapp.data.network.ProductsApiService
+import com.yes.tfgapp.data.network.response.FloatTypeAdapter
 import com.yes.tfgapp.data.network.response.StockProductResponse
 import com.yes.tfgapp.data.worker.MyWorker
 import com.yes.tfgapp.ui.home.MainActivity
@@ -286,6 +288,16 @@ class MyStockFragment : Fragment() {
         mStockViewModel = ViewModelProvider(this)[MyStockViewModel::class.java]
         mStockViewModel.readAllData.observe(viewLifecycleOwner) { stockProduct ->
             stockProductAdapter.setData(stockProduct)
+            if (stockProduct.isEmpty()) {
+                binding.llNoStock.visibility = View.VISIBLE
+                binding.tvNoStock1.visibility = View.VISIBLE
+                binding.tvNoStock2.visibility = View.VISIBLE
+                binding.tvNoStock1.alpha = 1f
+                binding.tvNoStock2.alpha = 1f
+            } else {
+                binding.llNoStock.visibility = View.GONE
+
+            }
         }
         mShoppingListViewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
         mShoppingListAddItemsViewModel =
@@ -384,11 +396,47 @@ class MyStockFragment : Fragment() {
     private fun toogleFabMode(v: View) {
         rotate = rotateFab(v, !rotate)
         if (rotate) {
+            showOutTvNoStock()
             showIn(scanBarcode)
             showIn(manualAdd)
         } else {
+            showInTvNoStock()
             showOut(scanBarcode)
             showOut(manualAdd)
+        }
+    }
+
+    private fun showInTvNoStock() {
+        binding.tvNoStock1.apply {
+            visibility = View.VISIBLE
+            animate()
+                .setDuration(200)
+                .alpha(1f)
+                .start()
+        }
+        binding.tvNoStock2.apply {
+            visibility = View.VISIBLE
+            animate()
+                .setDuration(200)
+                .alpha(1f)
+                .start()
+        }
+    }
+
+    private fun showOutTvNoStock() {
+        binding.tvNoStock1.apply {
+            visibility = View.VISIBLE
+            animate()
+                .setDuration(200)
+                .alpha(0f)
+                .start()
+        }
+        binding.tvNoStock2.apply {
+            visibility = View.VISIBLE
+            animate()
+                .setDuration(200)
+                .alpha(0f)
+                .start()
         }
     }
 
@@ -605,17 +653,22 @@ class MyStockFragment : Fragment() {
     }
 
     private fun getRetrofit(): Retrofit {
+        val gson = GsonBuilder()
+            .registerTypeAdapter(Float::class.java, FloatTypeAdapter())
+            .registerTypeAdapter(Float::class.javaObjectType, FloatTypeAdapter())
+            .create()
+
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la conexión.
-            .readTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la lectura de datos.
-            .writeTimeout(30, TimeUnit.SECONDS) // Tiempo de espera para la escritura de datos.
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .build()
 
-        return Retrofit
-            .Builder()
+        return Retrofit.Builder()
             .baseUrl("https://es.openfoodfacts.org/")
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 

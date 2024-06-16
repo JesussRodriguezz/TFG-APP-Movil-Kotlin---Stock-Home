@@ -64,8 +64,14 @@ class ShoppingListFragment : Fragment() {
 
 
         mShoppingListViewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
-        mShoppingListViewModel.readAllData.observe(viewLifecycleOwner){ shoppingList ->
+        mShoppingListViewModel.readAllData.observe(viewLifecycleOwner) { shoppingList ->
             adapter.setData(shoppingList)
+            // Ajustar visibilidad del LinearLayout
+            if (shoppingList.isEmpty()) {
+                binding.llNoLists.visibility = View.VISIBLE
+            } else {
+                binding.llNoLists.visibility = View.GONE
+            }
         }
     }
 

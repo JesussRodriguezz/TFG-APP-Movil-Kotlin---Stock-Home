@@ -88,10 +88,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="16dp"
-
+                        android:textColor="@color/black"
                         android:fontFamily="@font/roboto_medium"
                         android:text="@string/expire_data"
-                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <Space
@@ -145,12 +144,12 @@
                                 android:layout_marginHorizontal="16dp"
                                 android:layout_marginStart="8dp"
                                 android:ellipsize="end"
-                                android:fontFamily="@font/roboto_light"
+                                android:fontFamily="@font/roboto_medium"
                                 android:gravity="center_horizontal"
                                 android:maxLines="1"
                                 android:text="@string/empty_expire_data"
                                 android:textColor="@color/black"
-                                android:textSize="20sp"
+                                android:textSize="16sp"
                                 app:layout_constraintHorizontal_bias="0"
                                 app:layout_constraintWidth_default="wrap"
                                 app:layout_constraintWidth_max="100dp"

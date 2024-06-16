@@ -100,25 +100,7 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         binding.tvBrands.text = replaceIfNullOrEmpty(stockProduct.brands)
         binding.tvGeneralName.text = replaceIfNullOrEmpty(stockProduct.genericNameEs)
 
-        /*binding.tvCuantity.text = stockProduct.quantity
-        binding.tvServingSize.text = stockProduct.servingSize
-        binding.tvPerServingSize.text = stockProduct.servingSize
-        binding.tvBrands.text = stockProduct.brands
-        binding.tvGeneralName.text = stockProduct.genericNameEs*/
 
-        /*binding.tvCalories.text = stockProduct.calories
-        binding.tvGrasas.text = stockProduct.fat
-        binding.tvSatFat.text = stockProduct.saturatedFat
-        binding.tvCarbohydrates.text = stockProduct.carbohydrates
-        binding.tvSalt.text = stockProduct.salt
-        binding.tvProteins.text = stockProduct.proteins
-
-        binding.tvCalories100g.text = stockProduct.calories100g
-        binding.tvGrasas100g.text = stockProduct.fat100g
-        binding.tvSatFat100g.text = stockProduct.saturatedFat100g
-        binding.tvCarbohydrates100g.text = stockProduct.carbohydrates100g
-        binding.tvSalt100g.text = stockProduct.salt100g
-        binding.tvProteins100g.text = stockProduct.proteins100g*/
         binding.tvCalories.text = formatNutrientValue(stockProduct.calories)
         binding.tvGrasas.text = formatNutrientValue(stockProduct.fat)
         binding.tvSatFat.text = formatNutrientValue(stockProduct.saturatedFat)
@@ -198,7 +180,7 @@ class MyStockProductDetailActivity : AppCompatActivity() {
 
     private fun formatNutrientValue(unit: String?): String {
         if (unit != null) {
-            return if (!unit.contains("null")) {
+            return if (!unit.contains("null") && !unit.contains("-1.0")) {
                 "$unit"
             } else {
                 "?"

@@ -7,6 +7,50 @@
     android:background="@color/primaryWhite"
     tools:context=".ui.shoppinglist.ShoppingListFragment">
 
+    <LinearLayout
+        android:id="@+id/llNoLists"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="10dp"
+        android:translationZ="10dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/background_sl"
+            app:strokeColor="@android:color/transparent"
+            app:strokeWidth="0dp"
+            android:outlineProvider="none"
+            android:clipToOutline="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="¡Aún no has creado ninguna lista de la compra!"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:layout_marginTop="16dp"
+            android:textSize="16dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Pulsa el botón para crear una"/>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvShoppingList"
         android:layout_width="0dp"
@@ -18,7 +62,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/extended_fab"
@@ -34,8 +77,4 @@
         app:shapeAppearanceOverlay="@style/RoundedExtendedFab"
         app:tint="@color/white"
         android:contentDescription="@string/create_list"/>
-
-        />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

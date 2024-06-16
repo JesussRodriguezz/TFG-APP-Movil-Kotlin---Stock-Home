@@ -34,6 +34,52 @@
             android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/llNoStock"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="10dp"
+        android:translationZ="10dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/background_stock"
+            app:strokeColor="@android:color/transparent"
+            app:strokeWidth="0dp"
+            android:outlineProvider="none"
+            android:clipToOutline="false"/>
+
+        <TextView
+            android:id="@+id/tvNoStock1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="¡Aún no has añadido ningún producto!"/>
+        <TextView
+            android:id="@+id/tvNoStock2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:layout_marginTop="16dp"
+            android:textSize="16dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Pulsa el botón para añadir uno"/>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMyStock"

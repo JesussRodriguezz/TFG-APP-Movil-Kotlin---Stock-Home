@@ -3,6 +3,7 @@ package com.yes.tfgapp.ui.mystock.adapter
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ class StockProductAdapter(
 
     inner class StockProductViewHolder(private val binding: ProductMyStockRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(
             currentItem: StockProductModel,
             onClickDelete: (StockProductModel) -> Unit
@@ -37,7 +39,21 @@ class StockProductAdapter(
             }
             binding.tvStockProductName.text = currentItem.name
             binding.tvStockProductExpireDate.text = currentItem.expirationDate
-            binding.tvStockProductDaysToExpire.text = currentItem.daysToExpire.toString()
+            binding.tvStockProductDaysToExpire.text = currentItem.daysToExpire.toString() + " d"
+            if(currentItem.daysToExpire <=3 ){
+                binding.tvStockProductDaysToExpire.setTextColor(context.resources.getColor(R.color.red))
+            }else{
+                binding.tvStockProductDaysToExpire.setTextColor(context.resources.getColor(R.color.black))
+            }
+            if (currentItem.daysToExpire<0){
+                binding.infoLayout.setBackgroundColor(context.resources.getColor(R.color.transparentRed))
+                binding.tvStockProductExpireDate.setTextColor(context.resources.getColor(R.color.white))
+                binding.tvStockProductName.setTextColor(context.resources.getColor(R.color.white))
+            }else{
+                binding.infoLayout.setBackgroundColor(context.resources.getColor(R.color.semiTransparentLight))
+                binding.tvStockProductExpireDate.setTextColor(context.resources.getColor(R.color.black))
+                binding.tvStockProductName.setTextColor(context.resources.getColor(R.color.black))
+            }
 
             if (currentItem.image != null) {
                 Picasso.get().load(currentItem.image).into(binding.ivStockProduct)
