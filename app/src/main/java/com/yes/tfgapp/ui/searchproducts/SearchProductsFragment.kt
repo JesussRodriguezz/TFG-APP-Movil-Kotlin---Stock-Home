@@ -250,7 +250,7 @@ class SearchProductsFragment : Fragment() {
                     (activity as MainActivity).runOnUiThread {
                         val filteredProducts = response.products.filter {
                             val productName = it.productName
-                            productName.isNotBlank() && productName.contains(
+                            !productName.isNullOrBlank() && productName.contains(
                                 query.orEmpty(),
                                 ignoreCase = true
                             )

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         initUI()
     }
     private fun initUI() {
+        window.statusBarColor = ContextCompat.getColor(this, R.color.primaryDark)
         initNavigation()
         keyboardBehaviour()
     }
