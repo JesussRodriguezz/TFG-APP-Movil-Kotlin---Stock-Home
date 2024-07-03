@@ -35,10 +35,10 @@ class ChooseCategoryAdapter: RecyclerView.Adapter<ChooseCategoryAdapter.ChooseCa
                 if (position != RecyclerView.NO_POSITION) {
                     val item = categoriesList[position]
                     val previousItem = categoriesList[selectedItemPosition]
-                    previousItem.isSelected = false  // Desmarcar el anterior
-                    item.isSelected = true  // Marcar el actual
-                    selectedItemPosition = position  // Actualizar la posición seleccionada
-                    notifyDataSetChanged()  // Notificar para rebind todos los ViewHolder
+                    previousItem.isSelected = false
+                    item.isSelected = true
+                    selectedItemPosition = position
+                    notifyDataSetChanged()
 
                 }
             }
@@ -55,10 +55,10 @@ class ChooseCategoryAdapter: RecyclerView.Adapter<ChooseCategoryAdapter.ChooseCa
         }
 
         private fun setCategoryToCenterPosition() {
-            val dialogWidthPx = dpToPx(400, binding.root.context)  // Ancho del diálogo en píxeles
+            val dialogWidthPx = dpToPx(400, binding.root.context)
             val cardWidthPx = binding.root.context.resources.getDimensionPixelSize(R.dimen.card_width)
             val totalPadding = dialogWidthPx - cardWidthPx
-            val sidePadding = (totalPadding / 2) - dpToPx(12, binding.root.context)  // Restar el margen izquierdo del diálogo
+            val sidePadding = (totalPadding / 2) - dpToPx(12, binding.root.context)
 
             val layoutParams = binding.cvCategory.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.setMargins(sidePadding, 0, sidePadding, 0)

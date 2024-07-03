@@ -70,8 +70,8 @@ class MyStockProductDetailFragment : DialogFragment() {
             binding.tvProductId.text = args.currentStockProduct.name
             Picasso.get()
                 .load(args.currentStockProduct.image)
-                .resize(300, 350)  // Ajusta las dimensiones de la imagen a las deseadas
-                .centerCrop()      // Ajusta la imagen para llenar las dimensiones
+                .resize(300, 350)
+                .centerCrop()
                 .into(binding.ivProductApiSearchImage)
         }
 

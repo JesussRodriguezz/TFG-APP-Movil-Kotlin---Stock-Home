@@ -105,7 +105,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
             expireData = addDaysToDate(getCurrentDate(), 7)
             binding.tvChangeExpireData.text =
                 formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn1Week,
                 listOf(binding.btn2Weeks, binding.btn1Month, binding.btn2Months)
@@ -117,7 +117,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
             expireData = addDaysToDate(getCurrentDate(), 14)
             binding.tvChangeExpireData.text =
                 formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn2Weeks,
                 listOf(binding.btn1Week, binding.btn1Month, binding.btn2Months)
@@ -128,7 +128,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
             expireData = addDaysToDate(getCurrentDate(), 30)
             binding.tvChangeExpireData.text =
                 formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn1Month,
                 listOf(binding.btn1Week, binding.btn2Weeks, binding.btn2Months)
@@ -139,7 +139,7 @@ class MyStockProductScanActivity : AppCompatActivity() {
             expireData = addDaysToDate(getCurrentDate(), 90)
             binding.tvChangeExpireData.text =
                 formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn2Months,
                 listOf(binding.btn1Week, binding.btn1Month, binding.btn2Weeks)
@@ -216,13 +216,13 @@ class MyStockProductScanActivity : AppCompatActivity() {
         npYear.maxValue = currentYear + 100
 
         if (expireData == "__ / __ / ____") {
-            // Set NumberPickers to the current date
+
             val currentDate = Calendar.getInstance()
             npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
-            npMonth.value = currentDate.get(Calendar.MONTH) + 1 // Months are 0-based
+            npMonth.value = currentDate.get(Calendar.MONTH) + 1
             npYear.value = currentDate.get(Calendar.YEAR)
         } else {
-            // Parse expireData
+
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             try {
                 val expireDate = dateFormat.parse(expireData)
@@ -231,12 +231,12 @@ class MyStockProductScanActivity : AppCompatActivity() {
                     calendar.time = it
 
                     npDay.value = calendar.get(Calendar.DAY_OF_MONTH)
-                    npMonth.value = calendar.get(Calendar.MONTH) + 1 // Months are 0-based
+                    npMonth.value = calendar.get(Calendar.MONTH) + 1
                     npYear.value = calendar.get(Calendar.YEAR)
                 }
             } catch (e: ParseException) {
                 e.printStackTrace()
-                // Set NumberPickers to the current date if parsing fails
+
                 val currentDate = Calendar.getInstance()
                 npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
                 npMonth.value = currentDate.get(Calendar.MONTH) + 1
@@ -298,12 +298,12 @@ class MyStockProductScanActivity : AppCompatActivity() {
         mStockViewModel.addProductIfNotExists(updatedStockProduct) { productAdded ->
             runOnUiThread {
                 if (productAdded) {
-                    // Si el producto se añadió correctamente, actualiza y muestra un Toast
+
                     mStockViewModel.updateStockProduct(updatedStockProduct)
                     Toast.makeText(this, "Producto añadido correctamente", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    // Si el producto ya existe, muestra un Toast de advertencia
+
                     Toast.makeText(this, "¡El producto ya existe en tu stock!", Toast.LENGTH_SHORT)
                         .show()
                 }

@@ -230,9 +230,9 @@ class SearchProductsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val category = mShoppingListAddItemsViewModel.getCategoryById(id)
-                callback(category)  // Pasamos el resultado al callback
+                callback(category)
             } catch (e: Exception) {
-                callback(null)  // En caso de error, podríamos pasar null o manejar el error de otra forma
+                callback(null)
             }
         }
     }
@@ -246,7 +246,7 @@ class SearchProductsFragment : Fragment() {
             if (myResponse.isSuccessful) {
                 val response: ProductSearchResponse? = myResponse.body()
                 if (response != null) {
-                    Log.i("yes", "Funciona: contenido : $response")
+
                     (activity as MainActivity).runOnUiThread {
                         val filteredProducts = response.products.filter {
                             val productName = it.productName
@@ -267,7 +267,7 @@ class SearchProductsFragment : Fragment() {
                         binding.progressBar.isVisible = false
                     }
                 } else {
-                    Log.i("yes", "Respuesta vacía")
+
                     (activity as MainActivity).runOnUiThread {
                         Toast.makeText(
                             requireContext(),
@@ -277,9 +277,9 @@ class SearchProductsFragment : Fragment() {
                         binding.progressBar.isVisible = false
                     }
                 }
-                Log.i("yes", "funciona :)")
+
             } else {
-                Log.i("yes", "No funciona")
+
                 (activity as MainActivity).runOnUiThread {
                     Toast.makeText(
                         requireContext(),
@@ -335,9 +335,9 @@ class SearchProductsFragment : Fragment() {
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     val currentText = binding.searchView.query.toString()
-                    println("currentText: $currentText")
+
                     val filteredList = mShoppingListAddItemsViewModel.filterProducts(currentText)
-                    println("filteredList: $filteredList")
+
                     productsAdapter.setProductList(filteredList)
                     productsAdapter.notifyDataSetChanged()
                 }, 100)
@@ -380,13 +380,7 @@ class SearchProductsFragment : Fragment() {
                         dialog.dismiss()
                     }
                 }
-                /*animateIconChange(
-                    dialog.findViewById<ImageButton>(R.id.ibAddProductToListDialogChangeCategory),
-                    R.drawable.ic_check
-                ) {
-                    addProductWithNewCategory(product, position)
-                    dialog.dismiss()
-                }*/
+
 
             }
         dialog.findViewById<Button>(R.id.btnChangeCategoryChangeCategory).setOnClickListener {
@@ -421,7 +415,7 @@ class SearchProductsFragment : Fragment() {
         rvCategories.adapter = chooseCategoryAdapter
         mShoppingListAddItemsViewModel.readAllDataCategory.observe(viewLifecycleOwner) { categories ->
             chooseCategoryAdapter.setCategoriesListModified(categories, product.categoryId)
-            chooseCategoryAdapter.notifyDataSetChanged() // Asegura que el adaptador se actualice
+            chooseCategoryAdapter.notifyDataSetChanged()
         }
 
         chooseCategoryAdapter.setFirstTimeClick()
@@ -448,7 +442,7 @@ class SearchProductsFragment : Fragment() {
     }
 
     private fun deleteProductFromList(product: ProductModel) {
-        println("deleteProductFromList")
+
         val productShoppingList = ProductShoppingListModel(
             shoppingListId = this.args.CurrentShoppingList.id,
             productId = product.id

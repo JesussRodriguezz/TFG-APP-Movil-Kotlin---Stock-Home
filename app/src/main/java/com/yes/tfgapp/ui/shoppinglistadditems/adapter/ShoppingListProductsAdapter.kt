@@ -45,7 +45,7 @@ class ShoppingListProductsAdapter(
             )
             binding.tvProductName.text = currentItem.name
 
-            println("productsInShoppingList: $productsInShoppingList")
+
 
             isProductAdded = if (productsInShoppingList.any { it.productId == currentItem.id }) {
                 binding.ibAddProductToList.setImageResource(R.drawable.ic_check)

@@ -105,10 +105,10 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
     }
 
     private fun showNotification(name:String, daysToExpire: Int) {
-        // Check if the notification permission is granted
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted, handle the case accordingly
+
                 return
             }
         }
@@ -125,8 +125,8 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
 
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_check)
-            .setContentTitle("Product $name will expire in $daysToExpire days")
-            .setContentText("Check your stock")
+            .setContentTitle("El $name va a caducar en $daysToExpire dias")
+            .setContentText("Revisa tu stock")
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
@@ -149,7 +149,7 @@ class MyWorker(context: Context, workerParameters: WorkerParameters) : Coroutine
             }
         } catch (e: SecurityException) {
             e.printStackTrace()
-            // Handle the security exception, e.g., log it or notify the user
+
         }
     }
 }

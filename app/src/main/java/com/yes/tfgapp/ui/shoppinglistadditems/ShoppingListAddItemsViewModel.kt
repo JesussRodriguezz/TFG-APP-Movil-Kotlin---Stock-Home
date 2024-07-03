@@ -77,10 +77,10 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
 
     fun deleteCategoryWithItemsUpdate(oldCategory: CategoryModel, otherCategory: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            // Actualizar ítems a la categoría "otros"
+
             productRepository.updateItemsCategory(oldCategory.id, otherCategory)
 
-            // Eliminar la categoría
+
             categoryRepository.deleteCategory(oldCategory)
         }
     }
@@ -118,18 +118,18 @@ class ShoppingListAddItemsViewModel(application: Application) : AndroidViewModel
         viewModelScope.launch(Dispatchers.IO) {
             val existingProduct = productRepository.findProductByName(product.name)
             if (existingProduct == null) {
-                // El producto no existe, insertar en la base de datos
+
                 val productId = productRepository.insertProduct(product)
                 productIdLiveData.postValue(productId)
             } else {
-                // El producto ya existe, opcionalmente actualizar o simplemente usar el ID existente
+
                 productIdLiveData.postValue(existingProduct.id.toLong())
             }
         }
     }
 
     override fun onCleared() {
-        //remove observer
+
         allProductsLiveData.removeObserver { }
         super.onCleared()
     }

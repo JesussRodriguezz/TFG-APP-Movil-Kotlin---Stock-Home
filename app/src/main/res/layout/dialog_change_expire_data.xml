@@ -40,23 +40,24 @@
         <Button
 
             android:id="@+id/btnCancel"
-            style="@style/SmallButtonTextStyle"
+            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/primaryGrey"
             android:textColor="@color/black"
-            android:text="CANCEL" />
+            android:text="Cancelar" />
 
         <Button
             android:id="@+id/btnOk"
-            style="@style/SmallButtonTextStyle"
+            android:textSize="12sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
             android:backgroundTint="@color/accentRed"
-            android:text="OK" />
+            android:text="Ok
+" />
 
     </LinearLayout>
 

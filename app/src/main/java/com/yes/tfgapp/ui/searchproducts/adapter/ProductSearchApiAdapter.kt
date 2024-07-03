@@ -61,19 +61,7 @@ class ProductSearchApiAdapter(private val onAddProductToList: (ProductModel, Int
                 }
             }
 
-            /*binding.ibAddProductToList.setOnClickListener {
 
-                if (isProductAdded) {
-                    animateIconChange(binding.ibAddProductToList, R.drawable.ic_add) {
-                        onDeleteProductFromList(currentItem)
-                    }
-                } else {
-                    animateIconChange(binding.ibAddProductToList, R.drawable.ic_check) {
-                        onAddProductToList(currentItem, adapterPosition)
-                    }
-                }
-
-            }*/
 
 
         }

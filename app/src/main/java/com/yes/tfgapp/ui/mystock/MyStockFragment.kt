@@ -161,7 +161,7 @@ class MyStockFragment : Fragment() {
         nextRun.add(Calendar.DAY_OF_YEAR, 1)
 
         val initialDelay = nextRun.timeInMillis - currentDate.timeInMillis
-        Log.d(ContentValues.TAG, "Initial delay: $initialDelay")
+
 
         val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
             .setInitialDelay(50, TimeUnit.SECONDS)
@@ -172,7 +172,7 @@ class MyStockFragment : Fragment() {
 
 
     private fun getProductApi(productCode: String) {
-        println("product code: $productCode")
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val myResponse: Response<StockProductResponse> =
@@ -182,24 +182,18 @@ class MyStockFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         openProductDetailDialog(response)
                     }
-                    Log.i("yes", "funciona :)")
                 } else {
                     withContext(Dispatchers.Main) {
                         openProductDetailDialog(null)
                     }
-                    Log.i("yes", "No funciona")
                 }
             } catch (e: SocketTimeoutException) {
                 withContext(Dispatchers.Main) {
-                    // Manejar la excepción y mostrar un mensaje al usuario
                     Log.e("yes", "Tiempo de espera agotado", e)
-                    // Mostrar mensaje de error al usuario
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    // Manejar otras excepciones
                     Log.e("yes", "Error desconocido", e)
-                    // Mostrar mensaje de error al usuario
                 }
             }
         }
@@ -250,23 +244,6 @@ class MyStockFragment : Fragment() {
         } else {
             Toast.makeText(context, "Producto no encontrado", Toast.LENGTH_SHORT).show()
         }
-        /*val stockProduct = if (product != null) {
-            StockProductModel(
-                id = product.code,
-                name = product.product.productName,
-                image = product.product.productImage
-            )
-        } else {
-            StockProductModel(
-                id = "error",
-                name = "Error: Producto no encontrado",
-                image = "" // Puedes usar una imagen predeterminada o dejarlo vacío
-            )
-        }
-
-        val intent = Intent(activity, MyStockProductScanActivity::class.java)
-        intent.putExtra("currentStockProduct", stockProduct)
-        startActivity(intent)*/
 
 
     }
@@ -341,7 +318,7 @@ class MyStockFragment : Fragment() {
     private fun initListeners() {
         btnScanBarcode.setOnClickListener {
             checkPermissionCamera()
-            //requestCameraPermission()
+
         }
 
         btnManualAdd.setOnClickListener {
@@ -533,8 +510,6 @@ class MyStockFragment : Fragment() {
                         categoryId = stockProduct.categoryId
                     )
                     val singleShoppingList = shoppingLists[0]
-                    println("name stock product: ${stockProduct.name}")
-                    println("category id stock product: ${stockProduct.categoryId}")
                     addExternalProductToList(product, singleShoppingList, null, stockProduct)
 
                 }
@@ -589,9 +564,6 @@ class MyStockFragment : Fragment() {
             )
         )[ShoppingListDetailViewModel::class.java]
 
-        println("product name: ${product.name}")
-        println("product category id: ${product.categoryId}")
-        println("shopping list id: ${shoppingList.id}")
 
         mShoppingListAddItemsViewModel.addProduct(product)
         observeProductIDAndAddToList(shoppingList, dialog, stockProduct)

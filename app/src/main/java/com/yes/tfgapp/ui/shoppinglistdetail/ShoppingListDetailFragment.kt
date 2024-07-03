@@ -166,9 +166,9 @@ class ShoppingListDetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val category = mShoppingListAddItemsViewModel.getCategoryById(id)
-                callback(category)  // Pasamos el resultado al callback
+                callback(category)
             } catch (e: Exception) {
-                callback(null)  // En caso de error, podríamos pasar null o manejar el error de otra forma
+                callback(null)
             }
         }
     }

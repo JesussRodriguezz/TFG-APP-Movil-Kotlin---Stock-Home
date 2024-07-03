@@ -130,10 +130,10 @@ class MyStockProductManualActivity : AppCompatActivity() {
         npYear.maxValue = currentYear + 100
 
         if (expireData == "__ / __ / ____") {
-            // Set NumberPickers to the current date
+
             val currentDate = Calendar.getInstance()
             npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
-            npMonth.value = currentDate.get(Calendar.MONTH) + 1 // Months are 0-based
+            npMonth.value = currentDate.get(Calendar.MONTH) + 1
             npYear.value = currentDate.get(Calendar.YEAR)
         } else {
             // Parse expireData
@@ -145,12 +145,12 @@ class MyStockProductManualActivity : AppCompatActivity() {
                     calendar.time = it
 
                     npDay.value = calendar.get(Calendar.DAY_OF_MONTH)
-                    npMonth.value = calendar.get(Calendar.MONTH) + 1 // Months are 0-based
+                    npMonth.value = calendar.get(Calendar.MONTH) + 1
                     npYear.value = calendar.get(Calendar.YEAR)
                 }
             } catch (e: ParseException) {
                 e.printStackTrace()
-                // Set NumberPickers to the current date if parsing fails
+
                 val currentDate = Calendar.getInstance()
                 npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
                 npMonth.value = currentDate.get(Calendar.MONTH) + 1
@@ -164,7 +164,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
             val year = npYear.value
 
             expireData = "$day/$month/$year"
-            println("expireData: $expireData")
+
 
             val formattedDate = formatDate(day, month, year)
 
@@ -174,7 +174,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
-            println("CANCELAR")
+
             dialog.dismiss()
         }
     }
@@ -200,7 +200,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         binding.btn1Week.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 7)
             binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn1Week,
                 listOf(binding.btn2Weeks, binding.btn1Month, binding.btn2Months)
@@ -211,7 +211,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         binding.btn2Weeks.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 14)
             binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn2Weeks,
                 listOf(binding.btn1Week, binding.btn1Month, binding.btn2Months)
@@ -221,7 +221,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         binding.btn1Month.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 30)
             binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn1Month,
                 listOf(binding.btn1Week, binding.btn2Weeks, binding.btn2Months)
@@ -231,7 +231,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
         binding.btn2Months.setOnClickListener {
             expireData = addDaysToDate(getCurrentDate(), 90)
             binding.tvChangeExpireData.text = formatDate(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(expireData)!!)
-            //binding.tvChangeExpireData.text = expireData
+
             updateButtonStates(
                 binding.btn2Months,
                 listOf(binding.btn1Week, binding.btn1Month, binding.btn2Weeks)
@@ -366,8 +366,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
             )
         }
 
-        //Toast.makeText(this, "Producto agregado: $name", Toast.LENGTH_SHORT).show()
-        //mStockViewModel.addProduct(stockProduct)
+
 
         mStockViewModel.addProductIfNotExistsSameName(stockProduct) { productAdded ->
             runOnUiThread {
@@ -417,8 +416,7 @@ class MyStockProductManualActivity : AppCompatActivity() {
             isPhotoSelected = false
             selectedIconResource = selectedIcon
 
-            //val categoryId = FixedCategories.getCategoryIdByIcon(selectedIcon)
-            //val categoryName = FixedCategories.getCategoryNameById(categoryId)
+
 
             val categoryId = iconToCategoryMap[selectedIcon]?.id ?: 14
             val categoryName = iconToCategoryMap[selectedIcon]?.name ?: "Otros"

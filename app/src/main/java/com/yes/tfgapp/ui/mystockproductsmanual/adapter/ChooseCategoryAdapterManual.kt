@@ -27,7 +27,7 @@ class ChooseCategoryAdapterManual(
                 if (position != RecyclerView.NO_POSITION) {
                     val item = categoriesList[position]
                     val previousItem = categoriesList[selectedItemPosition]
-                    previousItem.isSelected = false  // Desmarcar el anterior
+                    previousItem.isSelected = false
                     item.isSelected = true  // Marcar el actual
                     selectedItemPosition = position  // Actualizar la posición seleccionada
                     onChangeCategory()
@@ -64,7 +64,7 @@ class ChooseCategoryAdapterManual(
 
 
     fun setCategoriesListModified(categories: List<CategoryModel>, myCategoryId: Int) {
-        println("Category ID: $myCategoryId")
+
         val list = categories.toMutableList()
         val myCategoryIndex = list.indexOfFirst { it.id == myCategoryId }
         if (myCategoryIndex != -1) {

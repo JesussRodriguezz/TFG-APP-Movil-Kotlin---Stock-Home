@@ -42,7 +42,7 @@ class ShoppingListViewModel(application: Application) : AndroidViewModel(applica
             }
             sharedPreferences.edit().putBoolean("firstTime", false).apply()
         }
-        //Hacemos que todas las categorias inicialmente esten deseleccionadas
+
         viewModelScope.launch(Dispatchers.IO) {
             categoryRepository.updateAllCategories(false)
         }

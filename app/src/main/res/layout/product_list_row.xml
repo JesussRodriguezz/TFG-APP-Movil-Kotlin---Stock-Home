@@ -8,7 +8,7 @@
 
     <TextView
         style="@style/ProductsListTextStyle"
-        android:layout_width="330dp"
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:id="@+id/tvProductName"
         tools:text="Product Nameeeeeeeeeeeeeeeee"

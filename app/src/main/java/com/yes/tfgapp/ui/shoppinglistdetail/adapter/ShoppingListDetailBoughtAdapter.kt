@@ -58,7 +58,7 @@ class ShoppingListDetailBoughtAdapter(
                         isBought = false
                     )
                     setProductIsNotBought(productShoppingList)
-                    println("Product bought")
+
                 }
             }
 

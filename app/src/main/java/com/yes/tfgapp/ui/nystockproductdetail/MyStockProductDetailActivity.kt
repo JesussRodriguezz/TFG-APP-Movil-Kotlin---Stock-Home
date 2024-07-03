@@ -48,10 +48,7 @@ class MyStockProductDetailActivity : AppCompatActivity() {
     }
 
 
-    /*getCategoryById(stockProduct.categoryId){category ->
-        binding.ivCategoryIcon.setImageResource(category!!.icon)
-        binding.tvCategoryName.text = category.name
-    }*/
+
 
     @SuppressLint("SetTextI18n")
     private fun initUI() {
@@ -202,53 +199,6 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         }
 
 
-        /*
-                binding.cvCategory.setOnClickListener {
-                    binding.rvCategories.visibility = View.VISIBLE
-                    binding.llCategorySuggested.visibility = View.GONE
-                    binding.divider3.visibility = View.GONE
-                    binding.divider4.visibility = View.VISIBLE
-                    binding.ibDropUp.visibility = View.VISIBLE
-
-                    val constraintSet = ConstraintSet()
-                    constraintSet.clone(binding.constraintLayout)
-
-                    // Cambia la restricción de layout_constraintTop_toBottomOf de llNutrients
-                    constraintSet.connect(
-                        R.id.llNutrients, // ID de la vista cuyo constraint se quiere cambiar
-                        ConstraintSet.TOP, // Lado al que queremos conectar
-                        R.id.divider4, // ID de la vista a la que queremos conectar
-                        ConstraintSet.BOTTOM // Lado de la vista a la que queremos conectar
-                    )
-
-                    // Aplica las nuevas restricciones al ConstraintLayout
-                    constraintSet.applyTo(binding.constraintLayout)
-
-                }
-                binding.ibDropUp.setOnClickListener{
-                    binding.rvCategories.visibility = View.GONE
-                    binding.llCategorySuggested.visibility = View.VISIBLE
-                    binding.divider3.visibility = View.VISIBLE
-                    binding.divider4.visibility = View.GONE
-                    binding.ibDropUp.visibility = View.GONE
-
-                    val constraintSet = ConstraintSet()
-                    constraintSet.clone(binding.constraintLayout)
-
-                    // Establece la restricción de layout_constraintTop_toBottomOf de llNutrients
-                    constraintSet.connect(
-                        R.id.llNutrients, // ID de la vista cuyo constraint se quiere cambiar
-                        ConstraintSet.TOP, // Lado al que queremos conectar
-                        R.id.divider3, // ID de la vista a la que queremos conectar
-                        ConstraintSet.BOTTOM, // Lado de la vista a la que queremos conectar
-                        0 // Margen
-                    )
-
-                    // Aplica las nuevas restricciones al ConstraintLayout
-                    constraintSet.applyTo(binding.constraintLayout)
-
-                }*/
-
         binding.cvChangeExpireData.setOnClickListener {
             showChangeExpireDataDialog()
         }
@@ -316,10 +266,10 @@ class MyStockProductDetailActivity : AppCompatActivity() {
     private fun toggleVisibility(view: View, arrow: ImageButton?) {
         if (view.visibility == View.GONE) {
             view.visibility = View.VISIBLE
-            arrow?.setImageResource(R.drawable.ic_drop_down_arrow) // Cambia el icono a ic_dropdown
+            arrow?.setImageResource(R.drawable.ic_drop_down_arrow)
         } else {
             view.visibility = View.GONE
-            arrow?.setImageResource(R.drawable.ic_right_arrow) // Cambia el icono a ic_right_arrow
+            arrow?.setImageResource(R.drawable.ic_right_arrow)
         }
     }
 
@@ -358,13 +308,13 @@ class MyStockProductDetailActivity : AppCompatActivity() {
         npYear.maxValue = currentYear + 100
 
         if (expireData == "__ / __ / ____") {
-            // Set NumberPickers to the current date
+
             val currentDate = Calendar.getInstance()
             npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
-            npMonth.value = currentDate.get(Calendar.MONTH) + 1 // Months are 0-based
+            npMonth.value = currentDate.get(Calendar.MONTH) + 1
             npYear.value = currentDate.get(Calendar.YEAR)
         } else {
-            // Parse expireData
+
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             try {
                 val expireDate = dateFormat.parse(expireData)
@@ -373,12 +323,12 @@ class MyStockProductDetailActivity : AppCompatActivity() {
                     calendar.time = it
 
                     npDay.value = calendar.get(Calendar.DAY_OF_MONTH)
-                    npMonth.value = calendar.get(Calendar.MONTH) + 1 // Months are 0-based
+                    npMonth.value = calendar.get(Calendar.MONTH) + 1
                     npYear.value = calendar.get(Calendar.YEAR)
                 }
             } catch (e: ParseException) {
                 e.printStackTrace()
-                // Set NumberPickers to the current date if parsing fails
+
                 val currentDate = Calendar.getInstance()
                 npDay.value = currentDate.get(Calendar.DAY_OF_MONTH)
                 npMonth.value = currentDate.get(Calendar.MONTH) + 1

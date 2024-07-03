@@ -87,6 +87,13 @@
     <string name="ivaddicon">ivAddIcon</string>
     <string name="efaddstockitem_">efAddStockItem</string>
     <string name="ibsettings">ibSettings</string>
+    <string name="category_name">Nombre categoria</string>
+    <string name="ya_consum_o_tir_el_producto">Ya consumí o tiré el producto</string>
+    <string name="eliminar_el_producto_directamente">Eliminar el producto directamente</string>
+    <string name="a_adirlo_a_lista_de_compra">Añadirlo a lista de compra</string>
+    <string name="nombre_categoria">Nombre categoria</string>
+    <string name="a_n_no_has_a_adido_ning_n_producto">¡Aún no has añadido ningún producto!</string>
+    <string name="pulsa_el_bot_n_para_a_adir_uno">Pulsa el botón para añadir uno</string>
 
     <!--CONTENT DESCRIPTIONS-->
 

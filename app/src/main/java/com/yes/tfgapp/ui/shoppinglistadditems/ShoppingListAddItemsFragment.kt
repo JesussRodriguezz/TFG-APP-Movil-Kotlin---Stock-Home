@@ -102,7 +102,7 @@ class ShoppingListAddItemsFragment : Fragment() {
 
 
     override fun onResume() {
-        //unselectAllCategories()
+
         super.onResume()
         (activity as MainActivity).setToolbarTitle(args.CurrentShoppingList.name)
         (activity as MainActivity).activeButtonBack()
@@ -164,10 +164,10 @@ class ShoppingListAddItemsFragment : Fragment() {
 
         mShoppingListAddItemsViewModel.readAllDataProduct.observe(viewLifecycleOwner) { products ->
             if (products.isNotEmpty()) {
-                // Ordenar alfabéticamente los productos por su nombre
+
                 val sortedProducts = products.sortedBy { it.name }
 
-                // Establecer la lista ordenada en el adaptador
+
                 productsAdapter.setProductList(sortedProducts)
                 productsAdapter.notifyDataSetChanged()
 
@@ -184,7 +184,7 @@ class ShoppingListAddItemsFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnCreateCategory.setOnClickListener {
-            //showNewCategoryDialog()
+
             animateButtonClick(binding.btnCreateCategory) {
                 showNewCategoryDialog()
             }
@@ -217,7 +217,7 @@ class ShoppingListAddItemsFragment : Fragment() {
 
         val btnSaveCategory = dialog.findViewById<View>(R.id.btnCreateCategory)
         btnSaveCategory.setOnClickListener {
-            //createNewCategory(dialog)
+
             animateButtonClick(btnSaveCategory) {
                 createNewCategory(dialog)
             }
@@ -306,16 +306,16 @@ class ShoppingListAddItemsFragment : Fragment() {
     }
 
     private fun updateCategories(category: CategoryModel) {
-        // Cambia el estado de is selected de la categoría
+
         val updatedCategory = category.copy(isSelected = !category.isSelected)
         mShoppingListAddItemsViewModel.updateCategory(updatedCategory)
 
-        // Cambia el resto de categorías a no seleccionadas
+
         mShoppingListAddItemsViewModel.readAllDataCategory.value?.map {
             if (it.id == updatedCategory.id) {
-                updatedCategory // Mantén la categoría actualizada
+                updatedCategory
             } else {
-                it.copy(isSelected = false) // Cambia el resto de las categorías a no seleccionadas
+                it.copy(isSelected = false)
             }
         }?.let { updatedCategories ->
             mShoppingListAddItemsViewModel.updateCategories(updatedCategories)
@@ -413,18 +413,18 @@ class ShoppingListAddItemsFragment : Fragment() {
             val selectedTasks =
                 mShoppingListAddItemsViewModel.readAllDataProduct.value?.filter { it.categoryId == category.id }
 
-            // Ordenar alfabéticamente los productos seleccionados por su nombre
+
             val sortedSelectedTasks = selectedTasks?.sortedBy { it.name }
 
-            // Establecer la lista ordenada en el adaptador
+
             productsAdapter.setProductList(sortedSelectedTasks!!)
             productsAdapter.notifyDataSetChanged()
         } else {
-            // Ordenar alfabéticamente todos los productos por su nombre
+
             val allProducts = mShoppingListAddItemsViewModel.readAllDataProduct.value
             val sortedAllProducts = allProducts?.sortedBy { it.name }
 
-            // Establecer la lista ordenada en el adaptador
+
             productsAdapter.setProductList(sortedAllProducts!!)
             productsAdapter.notifyDataSetChanged()
         }

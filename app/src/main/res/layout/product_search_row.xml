@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/tvProductName"
         style="@style/ProductsListTextStyle"
-        android:layout_width="270dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
         android:paddingStart="16dp"

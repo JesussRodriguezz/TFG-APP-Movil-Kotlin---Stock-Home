@@ -64,20 +64,20 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
             android:layout_marginHorizontal="16dp"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
             android:gravity="center"
-            android:text="¡Aún no has añadido ningún producto!"/>
+            android:text="@string/a_n_no_has_a_adido_ning_n_producto"/>
         <TextView
             android:id="@+id/tvNoStock2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
             android:layout_marginTop="16dp"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_gravity="center_horizontal"
-            android:text="Pulsa el botón para añadir uno"/>
+            android:text="@string/pulsa_el_bot_n_para_a_adir_uno"/>
     </LinearLayout>
 
 

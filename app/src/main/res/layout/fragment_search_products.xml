@@ -79,7 +79,7 @@
             <Button
                 android:id="@+id/btnLocalSearch"
                 style="@style/SmallButtonTextStyle"
-                android:layout_width="118dp"
+                android:layout_width="100dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:backgroundTint="@color/accentRed"
@@ -94,7 +94,7 @@
             <Button
                 android:id="@+id/btnExternalSearch"
                 style="@style/SmallButtonTextStyle"
-                android:layout_width="118dp"
+                android:layout_width="100dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:backgroundTint="@color/primaryGrey"

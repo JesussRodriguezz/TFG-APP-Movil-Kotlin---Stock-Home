@@ -51,9 +51,9 @@ class ShoppingListAdapter(
             binding.progressBar.setDividerColorResource(progressBarColor)
             binding.ibSettings.setOnClickListener {
                 val rotation = ObjectAnimator.ofFloat(binding.ibSettings, "rotation", 0f, 180f)
-                rotation.duration = 400 // Duración de la animación en milisegundos
+                rotation.duration = 400
                 rotation.interpolator =
-                    AccelerateDecelerateInterpolator() // Interpolador para una animación suave
+                    AccelerateDecelerateInterpolator()
                 rotation.start()
                 onClickOpenConfiguration(currentItem)
             }

@@ -66,7 +66,6 @@ class ShoppingListFragment : Fragment() {
         mShoppingListViewModel = ViewModelProvider(this)[ShoppingListViewModel::class.java]
         mShoppingListViewModel.readAllData.observe(viewLifecycleOwner) { shoppingList ->
             adapter.setData(shoppingList)
-            // Ajustar visibilidad del LinearLayout
             if (shoppingList.isEmpty()) {
                 binding.llNoLists.visibility = View.VISIBLE
             } else {
@@ -211,10 +210,10 @@ class ShoppingListFragment : Fragment() {
 
     private fun initListeners() {
         binding.extendedFab.setOnClickListener {
-            // Animación de rotación de 360 grados
+
             val rotation = ObjectAnimator.ofFloat(binding.extendedFab, "rotation", 0f, 180f)
-            rotation.duration = 400 // Duración de la animación en milisegundos
-            rotation.interpolator = AccelerateDecelerateInterpolator() // Interpolador para una animación suave
+            rotation.duration = 400
+            rotation.interpolator = AccelerateDecelerateInterpolator()
             rotation.start()
             showDialogNewList()
         }
@@ -268,7 +267,7 @@ class ShoppingListFragment : Fragment() {
         )[ShoppingListDetailViewModel::
         class.java]
 
-        //devuelve el tamaño de la lista de productos de la lista de la compra
+
         return mShoppingListDetailViewModel.allProductsShoppingList.size
     }
 
